@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PhD Master Workspace · Modular Supabase</title>
+  <title>PhD Master Workspace · Pastel Modular v12</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script src="./assets/js/config/tailwind.config.js"></script>
-  <link rel="stylesheet" href="./assets/css/app.css">
-  <link rel="stylesheet" href="./assets/css/mobile.css">
-  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="./assets/css/base.css">
+
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css">
+  <link rel="stylesheet" href="./assets/css/accounting.css">
+
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
   <div id="appLayout" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-6">
     <aside id="sidebar" class="soft-card p-4 lg:sticky lg:top-6 h-fit">
       <div class="flex items-center gap-3 mb-4">
         <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-dopamine-orange to-dopamine-pink text-white flex items-center justify-center shadow-soft">
-          <i class="fa-solid fa-graduation-cap text-xl"></i>
+          <span class="cute-mascot" aria-hidden="true">🐻</span>
         </div>
         <div>
-          <div class="font-black text-lg leading-tight">PhD Master<br>Workspace</div>
-          <div class="text-xs text-calm-mute">整合自律 · 进度 · 科研</div>
+          <div class="font-black text-lg leading-tight">PhD Master<br>Workspace <span class="cute-version">v12</span></div>
+          <div class="text-xs text-calm-mute">温柔自律 · 稳定推进 · 好好生活</div>
         </div>
       </div>
 
@@ -35,6 +37,7 @@
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="workflow-section"><span>项目看板</span><i class="fa-solid fa-diagram-project"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="thesis-section"><span>博士毕业论文进度</span><i class="fa-solid fa-book-open"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="submission-section"><span>投稿管理</span><i class="fa-regular fa-paper-plane"></i></button>
+        <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="accounting-section"><span>记账管理</span><i class="fa-solid fa-wallet"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="habit-section"><span>健康管理</span><i class="fa-solid fa-heart-pulse"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="care-section"><span>心灵关怀</span><i class="fa-solid fa-seedling"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="mentor-section"><span>向上管理导师</span><i class="fa-solid fa-user-tie"></i></button>
@@ -51,10 +54,35 @@
         <div class="flex justify-between"><span>习惯完成度</span><span id="sbHabit" class="font-black text-dopamine-mint">0%</span></div>
         <div class="flex justify-between"><span>支持页记录</span><span id="sbReview" class="font-black text-dopamine-sky">0</span></div>
         <div class="flex justify-between"><span>投稿进行中</span><span id="sbSubmission" class="font-black text-dopamine-pink">0</span></div>
+        <div class="flex justify-between"><span>本月支出</span><span id="sbExpense" class="font-black text-rose-500">¥0</span></div>
+      </div>
+
+      <div class="cute-cheer-card" aria-label="每日鼓励">
+        <div>每一点进步<br>都值得被看见 ✨</div>
+        <div class="cute-cheer-emoji">🐰🌱</div>
       </div>
     </aside>
 
     <main class="min-w-0">
+
+      <header class="cute-topbar soft-card">
+        <div class="cute-topbar-copy">
+          <div class="cute-eyebrow">MY PHD DAY</div>
+          <h1 id="cuteGreeting">你好呀，博士生！🌸</h1>
+          <p>今天也要元气满满，向着目标稳稳前进哦～</p>
+        </div>
+        <div class="cute-topbar-actions">
+          <div class="cute-info-pill">
+            <i class="fa-regular fa-calendar"></i>
+            <span id="cuteTopbarDate">今天</span>
+          </div>
+          <div class="cute-info-pill cute-sync-pill">
+            <span class="cute-sync-dot"></span>
+            <span>云端同步</span>
+          </div>
+          <div class="cute-avatar" aria-hidden="true">👩🏻‍💻</div>
+        </div>
+      </header>
       <section id="home-section" class="space-y-6">
         <div class="soft-card p-5 md:p-6">
           <div class="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
@@ -364,7 +392,7 @@
           <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
               <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-pen-nib text-dopamine-orange"></i> 论文信息</h2>
-              <p class="text-sm text-calm-mute mt-1">本地缓存 + Supabase 云端同步（仍建议定期导出 JSON 备份）。</p>
+              <p class="text-sm text-calm-mute mt-1">本机缓存并自动同步云端（仍可在“数据管理”导出备份）。</p>
             </div>
             <button id="btnSaveThesisMeta" class="px-4 py-3 rounded-2xl bg-dopamine-orange text-white font-black">保存信息</button>
           </div>
@@ -549,6 +577,86 @@
             <button id="btnAddSubmissionLog" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-orange text-white font-black">添加推进日志</button>
           </div>
           <div id="submissionLogList" class="space-y-3"></div>
+        </div>
+      </section>
+
+
+
+      <section id="accounting-section" class="section-hidden space-y-6">
+        <div class="soft-card p-5 md:p-6">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-wallet text-dopamine-pink"></i> 记账管理</h1>
+              <p class="text-calm-mute mt-1">记录日常收支、设置月度预算，了解博士生活里的钱都去了哪里。</p>
+            </div>
+            <div class="flex flex-wrap gap-2 items-center">
+              <input id="accountingMonth" type="month" class="px-3 py-2 rounded-2xl border border-calm-line bg-white">
+              <button id="btnAccountingCurrentMonth" class="px-3 py-2 rounded-2xl bg-white border border-calm-line font-semibold">本月</button>
+              <select id="accountingCurrency" class="px-3 py-2 rounded-2xl border border-calm-line bg-white font-semibold">
+                <option value="CNY">CNY · 人民币</option>
+                <option value="MOP">MOP · 澳门元</option>
+                <option value="HKD">HKD · 港币</option>
+                <option value="SGD">SGD · 新加坡元</option>
+                <option value="USD">USD · 美元</option>
+              </select>
+            </div>
+          </div>
+          <div id="accountingSummary" class="grid grid-cols-2 xl:grid-cols-4 gap-3 mt-5"></div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_420px] gap-6">
+          <div class="soft-card p-5 md:p-6">
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <div><h2 class="text-xl font-black">记一笔</h2><p class="text-sm text-calm-mute mt-1">金额始终填写正数，由类型决定收入或支出。</p></div>
+              <span class="text-3xl" aria-hidden="true">🧾</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+              <label class="block"><div class="text-sm font-bold mb-1">类型</div><select id="accountingType" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="expense">支出</option><option value="income">收入</option></select></label>
+              <label class="block"><div class="text-sm font-bold mb-1">金额</div><input id="accountingAmount" type="number" min="0.01" step="0.01" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：38.50"></label>
+              <label class="block"><div class="text-sm font-bold mb-1">日期</div><input id="accountingDate" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label>
+              <label class="block"><div class="text-sm font-bold mb-1">分类</div><select id="accountingCategory" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></select></label>
+              <label class="block"><div class="text-sm font-bold mb-1">账户 / 支付方式</div><select id="accountingAccount" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="cash">💵 现金</option><option value="bank" selected>🏦 银行卡</option><option value="mobile">📱 电子钱包</option><option value="credit">💳 信用卡</option><option value="other">🪙 其他账户</option></select></label>
+              <label class="block"><div class="text-sm font-bold mb-1">备注</div><input id="accountingNote" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：午餐 / 论文版面费"></label>
+            </div>
+            <button id="btnAddAccountingTransaction" class="mt-4 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black"><i class="fa-solid fa-plus mr-1"></i> 保存这笔记录</button>
+          </div>
+
+          <div class="soft-card p-5 md:p-6">
+            <div class="flex items-center justify-between gap-3 mb-4"><div><h2 class="text-xl font-black">月度预算</h2><p class="text-sm text-calm-mute mt-1">先设总预算，再细分常用支出分类。</p></div><span class="text-3xl">🐷</span></div>
+            <div id="accountingBudgetOverview" class="p-4 mb-4"></div>
+            <div class="grid grid-cols-[minmax(0,1fr)_110px] gap-2">
+              <input id="accountingMonthlyBudget" type="number" min="0" step="0.01" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="本月总预算">
+              <button id="btnSaveAccountingBudget" class="px-3 py-3 rounded-2xl bg-dopamine-purple text-white font-black">保存</button>
+            </div>
+            <div class="border-t border-calm-line mt-5 pt-4">
+              <div class="font-black mb-3">分类预算</div>
+              <div class="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_120px_90px] gap-2">
+                <select id="accountingBudgetCategory" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></select>
+                <input id="accountingCategoryBudgetAmount" type="number" min="0" step="0.01" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="额度">
+                <button id="btnSaveCategoryBudget" class="px-3 py-3 rounded-2xl bg-dopamine-mint text-white font-black">添加</button>
+              </div>
+              <div id="accountingCategoryBudgetList" class="space-y-2 mt-4 max-h-[300px] overflow-auto scroll-thin"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div class="soft-card p-5"><div class="font-black mb-3">每日收支趋势</div><div class="h-72"><canvas id="accountingTrendChart"></canvas></div></div>
+          <div class="soft-card p-5"><div class="font-black mb-3">支出分类分布</div><div class="h-72"><canvas id="accountingCategoryChart"></canvas></div></div>
+        </div>
+
+        <div class="soft-card p-5 md:p-6">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
+            <div><h2 class="text-xl font-black">收支明细</h2><p class="text-sm text-calm-mute mt-1">按月份、类型、分类、账户或关键词筛选。</p></div>
+            <div class="flex items-center gap-2"><span id="accountingTransactionCount" class="pill bg-dopamine-pink/10 text-dopamine-pink">0 条</span><button id="btnExportAccountingCsv" class="px-3 py-2 rounded-2xl bg-white border border-calm-line font-bold text-sm"><i class="fa-solid fa-file-csv mr-1"></i>导出 CSV</button></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[130px_180px_160px_minmax(0,1fr)] gap-2 mb-4">
+            <select id="accountingFilterType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="">全部类型</option><option value="expense">支出</option><option value="income">收入</option></select>
+            <select id="accountingFilterCategory" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></select>
+            <select id="accountingFilterAccount" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="">全部账户</option><option value="cash">现金</option><option value="bank">银行卡</option><option value="mobile">电子钱包</option><option value="credit">信用卡</option><option value="other">其他账户</option></select>
+            <input id="accountingFilterQuery" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="搜索备注、分类或账户">
+          </div>
+          <div id="accountingTransactionList" class="space-y-2 max-h-[620px] overflow-auto scroll-thin"></div>
         </div>
       </section>
 
@@ -1178,28 +1286,31 @@
     </div>
   </dialog>
 
-    <script defer src="./assets/js/core/constants.js"></script>
-  <script defer src="./assets/js/core/utils.js"></script>
-  <script defer src="./assets/js/core/state.js"></script>
-  <script defer src="./assets/js/core/runtime.js"></script>
-  <script defer src="./assets/js/modules/home.js"></script>
-  <script defer src="./assets/js/modules/tasks.js"></script>
-  <script defer src="./assets/js/modules/workflow.js"></script>
-  <script defer src="./assets/js/modules/thesis.js"></script>
-  <script defer src="./assets/js/modules/submissions.js"></script>
-  <script defer src="./assets/js/modules/habits.js"></script>
-  <script defer src="./assets/js/modules/care.js"></script>
-  <script defer src="./assets/js/modules/mentor.js"></script>
-  <script defer src="./assets/js/modules/review.js"></script>
-  <script defer src="./assets/js/modules/achievements.js"></script>
-  <script defer src="./assets/js/modules/dashboard.js"></script>
-  <script defer src="./assets/js/modules/settings.js"></script>
-  <script defer src="./assets/js/ui/dialog.js"></script>
-  <script defer src="./assets/js/modules/misc.js"></script>
-  <script defer src="./assets/js/app/app.js"></script>
-  <script defer src="./assets/js/core/bootstrap.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="./assets/js/cloud/supabase_sync.js"></script>
-  <script defer src="./assets/js/ui/mobile.js"></script>
+    <script src="./assets/js/core/constants.js"></script>
+  <script src="./assets/js/core/utils.js"></script>
+  <script src="./assets/js/core/preferences.js"></script>
+  <script src="./assets/js/core/normalizers.js"></script>
+  <script src="./assets/js/core/state.js"></script>
+  <script src="./assets/js/modules/thesis.js"></script>
+  <script src="./assets/js/modules/home.js"></script>
+  <script src="./assets/js/modules/tasks.js"></script>
+  <script src="./assets/js/modules/focus-schedule.js"></script>
+  <script src="./assets/js/modules/workflow.js"></script>
+  <script src="./assets/js/modules/habits.js"></script>
+  <script src="./assets/js/modules/care.js"></script>
+  <script src="./assets/js/modules/mentor.js"></script>
+  <script src="./assets/js/modules/review.js"></script>
+  <script src="./assets/js/modules/submissions.js"></script>
+  <script src="./assets/js/modules/accounting.js"></script>
+  <script src="./assets/js/modules/achievements.js"></script>
+  <script src="./assets/js/modules/dashboard.js"></script>
+  <script src="./assets/js/modules/settings.js"></script>
+  <script src="./assets/js/ui/dialogs.js"></script>
+  <script src="./assets/js/app/render.js"></script>
+  <script src="./assets/js/app/bootstrap.js"></script>
+<!-- PHD_WORKSPACE_SUPABASE_SYNC -->
+  <script src="./assets/js/config/supabase.config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/cloud/supabase-sync.js"></script>
 </body>
 </html>
