@@ -25,3 +25,9 @@
 ## 云端说明
 
 仍然使用原来的 `workspace_state.state` JSONB 保存完整工作台状态，因此不需要修改 Supabase 数据表结构。
+
+## v12.1.1 云同步加载修复
+
+- 新增稳定运行时桥接 `assets/js/app/runtime-bridge.js`。
+- 修复模块化脚本与 Supabase 同步插件的初始化接口。
+- 为本地静态资源增加缓存版本号，避免 GitHub Pages 新旧文件混用。

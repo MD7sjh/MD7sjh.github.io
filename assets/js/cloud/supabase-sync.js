@@ -3,7 +3,7 @@
  * 模块位置：assets/js/cloud/supabase-sync.js
  *
  * 说明：
- * 1. 该文件必须在原工作台脚本执行完后加载。
+ * 1. 该文件通过 runtime-bridge.js 连接模块化工作台。
  * 2. Supabase Publishable Key 本来就是给浏览器使用的；真正的数据安全依赖 RLS。
  * 3. 当前同步方式是一名用户对应一条 JSONB 数据，适合个人工作台。
  */
@@ -28,18 +28,26 @@
     return;
   }
 
-  // 这些变量和函数来自原始“博士工作台 2.0.html”。
+  // 模块化版本通过稳定桥接对象提供状态与保存接口。
+  const app = window.PHD_WORKSPACE_APP;
   if (
-    typeof STORAGE_KEY === 'undefined' ||
-    typeof state === 'undefined' ||
-    typeof saveState !== 'function' ||
-    typeof loadState !== 'function' ||
-    typeof renderAll !== 'function'
+    !app ||
+    !app.storageKey ||
+    !app.state ||
+    typeof app.loadState !== 'function' ||
+    typeof app.renderAll !== 'function' ||
+    typeof app.getSaveState !== 'function' ||
+    typeof app.setSaveState !== 'function'
   ) {
-    console.error('[Cloud Sync] 未找到原工作台的全局状态或函数。');
-    alert('云同步插件必须放在原工作台脚本之后加载。');
+    console.error('[Cloud Sync] 工作台运行时桥接未加载。请检查 assets/js/app/runtime-bridge.js 及 index.html 的脚本顺序。');
+    alert('工作台核心脚本未完整加载。请重新上传整个 assets 文件夹，并强制刷新页面。');
     return;
   }
+
+  const STORAGE_KEY = app.storageKey;
+  const state = app.state;
+  const loadState = app.loadState;
+  const renderAll = app.renderAll;
 
   const client = window.supabase.createClient(
     SUPABASE_URL,
@@ -57,7 +65,7 @@
   window.phdSupabase = client;
 
   const SYNC_META_KEY = `${STORAGE_KEY}__supabase_sync_meta`;
-  const originalSaveState = saveState;
+  const originalSaveState = app.getSaveState();
 
   let currentUser = null;
   let saveTimer = null;
@@ -477,14 +485,14 @@
   }
 
   // 保留原网页所有 saveState() 调用，同时额外安排云端同步。
-  saveState = function patchedSaveState(...args) {
+  app.setSaveState(function patchedSaveState(...args) {
     const result = originalSaveState.apply(this, args);
     dirty = true;
     localRevision += 1;
     setStatus(currentUser ? '等待同步…' : '仅保存在本机', currentUser ? 'busy' : 'warn');
     scheduleCloudSave();
     return result;
-  };
+  });
 
   async function loadCloudForCurrentUser() {
     if (!currentUser) return;
