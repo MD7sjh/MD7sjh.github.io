@@ -413,7 +413,11 @@
 
     originalSaveState();
     dirty = false;
-    renderAll();
+    try {
+      renderAll();
+    } catch (error) {
+      throw new Error(`云端数据已读取，但页面渲染失败：${error.message || error}`);
+    }
   }
 
   async function queryCloudRow() {
