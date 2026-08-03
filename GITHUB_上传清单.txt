@@ -1,0 +1,15 @@
+上传到 GitHub 仓库根目录：
+
+必须：
+- index.html
+- .nojekyll
+- assets/（完整文件夹）
+
+建议：
+- README.md
+- ARCHITECTURE.md
+- CHANGELOG_v14.md
+- supabase/
+
+更新时最稳妥：先删除旧 assets/，再上传新版 assets/ 和 index.html。
+Supabase 不需要重新建表。

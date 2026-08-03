@@ -1,0 +1,165 @@
+{
+  "version": "14.0.0",
+  "files": {
+    ".gitignore": {
+      "bytes": 74,
+      "sha256": "99191418715749fd844aac2eb066c67a5b770fa74967fce7e4c8a0f7fffd0568"
+    },
+    ".nojekyll": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ARCHITECTURE.md": {
+      "bytes": 963,
+      "sha256": "35eba9c162a34f36448c419ecbbd2cb2aa853381dcc039f2ef97612f567f56ca"
+    },
+    "CHANGELOG_v14.md": {
+      "bytes": 561,
+      "sha256": "9d9d218b4b2379de19065e3b41514613ea87f84ceb95468acfa453a09e9b98f7"
+    },
+    "FILE_MANIFEST.json": {
+      "bytes": 5866,
+      "sha256": "09aaee8ac4f5af29c3041b57566ca754af8575e4d4500905774b5344199c4dda"
+    },
+    "GITHUB_上传清单.txt": {
+      "bytes": 296,
+      "sha256": "b9e9950755e88c356d6128fcf3db86241751971cd9dc9728746a50affac1ffb8"
+    },
+    "README.md": {
+      "bytes": 971,
+      "sha256": "418dc0c4c065fc640bdbdef1605214a4221c02a5c5b11aaa58c4d61a69016e87"
+    },
+    "assets/css/accounting.css": {
+      "bytes": 1227,
+      "sha256": "1d44abf3ff7e0260a29c64c0d1543159348418a8ae9a203c05cb233118f7b3b0"
+    },
+    "assets/css/base.css": {
+      "bytes": 3725,
+      "sha256": "e2278e83b66a0f404e68478a03d10106f205b1f6510e305070594358b227e28e"
+    },
+    "assets/css/pastel-theme.css": {
+      "bytes": 10345,
+      "sha256": "4a6df799e516e5847ea1ce02c9c0e46a108ce21bfa58b990068f92574acb76a2"
+    },
+    "assets/css/research-ideas.css": {
+      "bytes": 1698,
+      "sha256": "82cf8b925c9ef34ac3d1425bbd1aea3bd5ff82a70f9805607d4d9a230c71eb6d"
+    },
+    "assets/css/savings.css": {
+      "bytes": 1196,
+      "sha256": "79042d6a6acfdfb679e3e5314d0864fcdde335467cd340b94da02efa82d3643e"
+    },
+    "assets/js/app/bootstrap.js": {
+      "bytes": 5513,
+      "sha256": "48d040a34073f1a0ce84c7de4ec99f241c72fc4f997738aa38ef7b65bf31f0d2"
+    },
+    "assets/js/app/render.js": {
+      "bytes": 693,
+      "sha256": "c0dd1745adbf0670153a151d1704dea99b86b084a67f866d2f938e207c8c29d0"
+    },
+    "assets/js/app/runtime-bridge.js": {
+      "bytes": 583,
+      "sha256": "328bcc2323727625ef6b65975dc4a8d7651c2331d0c45435fa7d34eae99f9ae8"
+    },
+    "assets/js/cloud/supabase-sync.js": {
+      "bytes": 23940,
+      "sha256": "2eeb65f4a513dd5bebe0267e61f10412e5495f8dda9b112b5da32d8e0f75eadf"
+    },
+    "assets/js/config/supabase.config.js": {
+      "bytes": 347,
+      "sha256": "1168d4d34ff1abb38f716b561935350373a47be6b88c922e2ab9eeddf480e07c"
+    },
+    "assets/js/config/tailwind.config.js": {
+      "bytes": 594,
+      "sha256": "977858538c16e5833b305f7a182510bcea4a50cab52a7f5692ecaf399e2390ff"
+    },
+    "assets/js/core/constants.js": {
+      "bytes": 10566,
+      "sha256": "fae11a8a9175cc0e4f431857db3db8f3c3da125379a0fb22a3ecc82650c27123"
+    },
+    "assets/js/core/normalizers.js": {
+      "bytes": 24828,
+      "sha256": "22d13e0f790b6d4d98254500d15020553c882321712be6754f864aa32284c7e3"
+    },
+    "assets/js/core/preferences.js": {
+      "bytes": 2053,
+      "sha256": "d2a7c30a22575d2e5fba6756836d53192676633d5e1770501017e3212afd12b3"
+    },
+    "assets/js/core/state.js": {
+      "bytes": 9425,
+      "sha256": "62afcda856c6fb14969138359bf946d113530bb9d366da103bca16302ef1fab8"
+    },
+    "assets/js/core/utils.js": {
+      "bytes": 4808,
+      "sha256": "bd0b017939ebd8735bb9d71936ece4eeccf08f3d24935297dfb70d7203273290"
+    },
+    "assets/js/modules/accounting.js": {
+      "bytes": 18922,
+      "sha256": "7833e60efa29ed33941523123db14569a494f71184cd9ea28e74ca68550050bc"
+    },
+    "assets/js/modules/dashboard.js": {
+      "bytes": 14246,
+      "sha256": "698a48993d1bd82c530cf7eb4619f9ba8fd2e1eb8ede09789541e43872cd361e"
+    },
+    "assets/js/modules/focus-schedule.js": {
+      "bytes": 7125,
+      "sha256": "962bdf357a74391283435b3bd078696a64662173b57440936d7375e2aad70fae"
+    },
+    "assets/js/modules/home.js": {
+      "bytes": 9334,
+      "sha256": "713936ff9cef17cfdf874d526fef0c6d96f4bcbc76b6cdba84edc5c48785abf3"
+    },
+    "assets/js/modules/mentor.js": {
+      "bytes": 13078,
+      "sha256": "b597a49dfd2089920127d40b4ad84453a80f6c94d028071e9851e8c66c27576d"
+    },
+    "assets/js/modules/research-ideas.js": {
+      "bytes": 30671,
+      "sha256": "b8304dc89ebe94796d99b3ccb8d5071db5edf2bd1cf0e919bb5ed2fd225e0ecc"
+    },
+    "assets/js/modules/review.js": {
+      "bytes": 15348,
+      "sha256": "39801d899f5218a1d3b582a0e5a52f5bbe6be578b8275f3ebb4974aa7e6cf1db"
+    },
+    "assets/js/modules/savings.js": {
+      "bytes": 22849,
+      "sha256": "b13dda6383602600d179da6b6f5a04d9565724103d2c9efea98c8045e6241fc6"
+    },
+    "assets/js/modules/settings.js": {
+      "bytes": 6502,
+      "sha256": "01077d4e3cbd5a13ea0f68b383317666c67464318ef71376332f803a4966000b"
+    },
+    "assets/js/modules/submissions.js": {
+      "bytes": 11327,
+      "sha256": "9d08f1e0bc0334dbefcb90d8db6b7e1ec1b8502d03ed6244c9b4e6bb2ac57345"
+    },
+    "assets/js/modules/tasks.js": {
+      "bytes": 12735,
+      "sha256": "8894338b94557dc6cdd683cbe218e1d8c1892be76905e2503a32bf43f3fb9f54"
+    },
+    "assets/js/modules/thesis.js": {
+      "bytes": 10373,
+      "sha256": "8f75aa0d6a8038a1dbe25ccd2fa0d02a42bc863753272e7c6738cec5689bf415"
+    },
+    "assets/js/modules/workflow.js": {
+      "bytes": 24119,
+      "sha256": "2ce7537fd6b3018141063779ffcf1b7908a1ef90ff5c13b941d463f12471e0f1"
+    },
+    "assets/js/ui/dialogs.js": {
+      "bytes": 13067,
+      "sha256": "518cff565a94ffaa4f52443c9fe1b7bcae39abe921dcd36785ab8e2148e1f089"
+    },
+    "index.html": {
+      "bytes": 96538,
+      "sha256": "99cd4cb79b8a25bcb4a40e134065a492f2e086a858535980e3773ec50d75006f"
+    },
+    "supabase/setup.sql": {
+      "bytes": 1296,
+      "sha256": "93f92aaacc3659416419cf8e5575121a4d6499e215187ddd76aee064d496f052"
+    },
+    "本地预览.bat": {
+      "bytes": 88,
+      "sha256": "04ad998559f7535b7642a4843160d47e9688d694be55412294cfd3add6535035"
+    }
+  }
+}

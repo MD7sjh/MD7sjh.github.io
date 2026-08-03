@@ -1,0 +1,178 @@
+/* Local state loading, persistence, and shared selectors. */
+'use strict';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return {
+      attendance: normalizeAttendance(parsed.attendance),
+      timeBlocks: parsed.timeBlocks && typeof parsed.timeBlocks === 'object' ? parsed.timeBlocks : {},
+      tasks: normalizeTasksState(parsed.tasks),
+      projects: normalizeProjectsState(parsed.projects),
+      focus: parsed.focus && typeof parsed.focus === 'object' ? { active: parsed.focus.active || null, sessions: Array.isArray(parsed.focus.sessions) ? parsed.focus.sessions : [] } : { active:null, sessions:[] },
+      reflections: normalizeReflectionMap(parsed.reflections),
+      mentor: normalizeMentorState(parsed.mentor),
+      reviewDaily: normalizeDailyReviewState(parsed.reviewDaily, parsed.reflections),
+      submissions: normalizeSubmissions(parsed.submissions),
+      researchIdeas: normalizeResearchIdeasState(parsed.researchIdeas || parsed.ideas),
+      accounting: normalizeAccountingState(parsed.accounting),
+      savings: normalizeSavingsState(parsed.savings),
+      thesis: normalizeThesisState(parsed.thesis)
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      attendance:{},
+      timeBlocks:{},
+      tasks:[],
+      projects:[],
+      focus:{active:null,sessions:[]},
+      reflections:{},
+      mentor:normalizeMentorState({}),
+      reviewDaily:normalizeDailyReviewState({}, {}),
+      submissions:[],
+      researchIdeas: normalizeResearchIdeasState({}),
+      accounting: normalizeAccountingState({}),
+      savings: normalizeSavingsState({}),
+      thesis: defaultThesisState()
+    };
+  }
+}
+
+const state = loadState();
+let workflowSelectedProjectId = '';
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function getDayAttendance(date=todayStr()) {
+  if (!state.attendance[date]) state.attendance[date] = { logs:[], leaves:[] };
+  return state.attendance[date];
+}
+function getDayTimeBlocks(date=todayStr()) {
+  if (!state.timeBlocks[date]) state.timeBlocks[date] = [];
+  return state.timeBlocks[date];
+}
+function projectById(id='') { return state.projects.find(item => item.id === id) || null; }
+function mentorEntryOn(date=todayStr()) { return normalizeMentorEntry(state.mentor?.entries?.[date]); }
+function dailyReviewEntryOn(date=todayStr()) { return normalizeDailyReviewEntry(state.reviewDaily?.entries?.[date]); }
+function activeTask() { return state.tasks.find(t => t.status === 'active') || null; }
+function taskOpen(task) { return task && task.status !== 'done' && task.gtdBucket !== 'done'; }
+function openTasksList() { return state.tasks.filter(taskOpen); }
+function tasksForProject(projectId='') { return state.tasks.filter(item => item.projectId === projectId); }
+function nextActionTasks() { return state.tasks.filter(item => taskOpen(item) && item.gtdBucket === 'next'); }
+function focusMinutesOn(date=todayStr()) { return state.focus.sessions.filter(s => s.date===date).reduce((sum,s)=>sum + (Number(s.minutes)||0), 0); }
+function reviewPriorityCount(entry) {
+  const clean = normalizeDailyReviewEntry(entry);
+  return clean.tomorrow.filter(item => String(item || '').trim()).length;
+}
+function reviewTemplateCount(entry) {
+  const clean = normalizeDailyReviewEntry(entry);
+  return [
+    clean.accomplishments,
+    clean.unfinished,
+    clean.insights,
+    clean.obstacles,
+    reviewPriorityCount(clean) ? 'tomorrow' : ''
+  ].filter(item => String(item || '').trim()).length;
+}
+function reviewContentCount(entry) {
+  const clean = normalizeDailyReviewEntry(entry);
+  return reviewTemplateCount(clean) + (clean.energyNote.trim() ? 1 : 0);
+}
+function mentorCountOn(date=todayStr()) {
+  const entry = mentorEntryOn(date);
+  return entry.updatedAt || entry.topic || entry.evidence || entry.ask || entry.risk || entry.feedback || entry.commitment || entry.confirmation || entry.followupDate || entry.boundary || entry.nextAction || entry.status !== 'drafting' || entry.channel || entry.pressure !== 3 || entry.clarity !== 3 || entry.promiseStatus !== 'open' ? 1 : 0;
+}
+function reviewCountOn(date=todayStr()) {
+  const entry = dailyReviewEntryOn(date);
+  return entry.updatedAt || reviewContentCount(entry) > 0 ? 1 : 0;
+}
+function supportPageCountOn(date=todayStr()) { return mentorCountOn(date) + reviewCountOn(date); }
+function mentorPendingItems(baseDate=todayStr()) {
+  return Object.entries(state.mentor?.entries || {})
+    .map(([date]) => ({ date, entry: mentorEntryOn(date) }))
+    .filter(item => item.entry.commitment.trim() && item.entry.promiseStatus !== 'resolved')
+    .sort((a, b) => (a.entry.followupDate || '9999-99-99').localeCompare(b.entry.followupDate || '9999-99-99') || b.date.localeCompare(a.date));
+}
+function mentorOverdueCount(baseDate=todayStr()) {
+  return mentorPendingItems(baseDate).filter(item => item.entry.followupDate && item.entry.followupDate < baseDate).length;
+}
+function runningSubmissionCount() { return state.submissions.filter(s => !['已接收','已见刊/已收录','搁置/拒稿'].includes(s.stage)).length; }
+
+function researchIdeaById(id='') {
+  return state.researchIdeas?.ideas?.find(item => item.id === id) || null;
+}
+function researchIdeasCreatedInRange(startDate, endDate) {
+  return (state.researchIdeas?.ideas || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt), startDate, endDate));
+}
+function researchIdeasUpdatedInRange(startDate, endDate) {
+  return (state.researchIdeas?.ideas || []).filter(item => isDateInRange(dateFromDateTime(item.updatedAt), startDate, endDate));
+}
+function researchIdeaSourcesCount() {
+  return (state.researchIdeas?.ideas || []).reduce((sum, item) => sum + (item.sources?.length || 0), 0);
+}
+function researchIdeaReferencesCount() {
+  return (state.researchIdeas?.ideas || []).reduce((sum, item) => sum + (item.references?.length || 0), 0);
+}
+function activeResearchIdeaCount() {
+  return (state.researchIdeas?.ideas || []).filter(item => !['adopted','archived'].includes(item.status)).length;
+}
+function researchIdeaSourcesInRange(startDate, endDate) {
+  return (state.researchIdeas?.ideas || []).flatMap(item => (item.sources || []).filter(source => isDateInRange(dateFromDateTime(source.createdAt), startDate, endDate)).map(source => ({ idea:item, source })));
+}
+function researchIdeaReferencesInRange(startDate, endDate) {
+  return (state.researchIdeas?.ideas || []).flatMap(item => (item.references || []).filter(reference => isDateInRange(dateFromDateTime(reference.createdAt), startDate, endDate)).map(reference => ({ idea:item, reference })));
+}
+function accountingMonthKey(date=todayStr()) { return String(date || todayStr()).slice(0, 7); }
+function accountingTransactionsInMonth(month=accountingMonthKey()) {
+  return (state.accounting?.transactions || []).filter(item => String(item.date || '').startsWith(month));
+}
+function accountingMonthTotals(month=accountingMonthKey()) {
+  const transactions = accountingTransactionsInMonth(month);
+  const income = transactions.filter(item => item.type === 'income').reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  const expense = transactions.filter(item => item.type === 'expense').reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  return { income, expense, balance: income - expense, count: transactions.length };
+}
+
+function savingsGoalById(id='') { return state.savings?.goals?.find(item => item.id === id) || null; }
+function savingsEntriesForGoal(goalId='') {
+  return (state.savings?.entries || []).filter(item => item.goalId === goalId);
+}
+function savingsGoalSavedAmount(goalOrId) {
+  const goal = typeof goalOrId === 'string' ? savingsGoalById(goalOrId) : goalOrId;
+  if (!goal) return 0;
+  const movement = savingsEntriesForGoal(goal.id).reduce((sum, item) => {
+    return sum + (item.type === 'withdrawal' ? -Number(item.amount || 0) : Number(item.amount || 0));
+  }, 0);
+  return Math.max(0, Math.round((Number(goal.initialAmount || 0) + movement) * 100) / 100);
+}
+function savingsTotals() {
+  const goals = state.savings?.goals || [];
+  const target = goals.reduce((sum, goal) => sum + Number(goal.targetAmount || 0), 0);
+  const saved = goals.reduce((sum, goal) => sum + savingsGoalSavedAmount(goal), 0);
+  const remaining = goals.reduce((sum, goal) => sum + Math.max(0, Number(goal.targetAmount || 0) - savingsGoalSavedAmount(goal)), 0);
+  return {
+    target,
+    saved,
+    remaining,
+    active: goals.filter(goal => goal.status === 'active').length,
+    completed: goals.filter(goal => goal.status === 'completed').length,
+    count: goals.length
+  };
+}
+function savingsEntriesInRange(startDate, endDate) {
+  return (state.savings?.entries || []).filter(item => isDateInRange(item.date, startDate, endDate));
+}
+function totalAttendanceMinutes(date=todayStr()) { return (state.attendance[date]?.logs || []).reduce((sum,log)=>sum + (log.end ? minutesBetween(log.start, log.end) : 0), 0); }
+function todayOpenLogs(date=todayStr()) { return getDayAttendance(date).logs.filter(log => !log.end); }
+function ensureTaskCleanup() {
+  state.tasks = normalizeTasksState(state.tasks);
+  state.projects = normalizeProjectsState(state.projects);
+}
+ensureTaskCleanup();
+function setInputIfIdle(id, value) {
+  const el = $(id);
+  if (!el) return;
+  if (document.activeElement === el) return;
+  const v = String(value ?? '');
+  if (el.value !== v) el.value = v;
+}
