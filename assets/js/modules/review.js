@@ -74,11 +74,11 @@ function buildDailyDigest(date=todayStr()) {
   const scheduleCount = scheduleBlocks.length;
   const scheduleMinutes = scheduleBlocks.reduce((sum, item) => sum + minutesBetween(item.start, item.end), 0);
 
-  const thesisLogs = (state.thesis?.logs || []).filter(item => item.date === date);
-  const thesisMinutes = thesisLogs.reduce((sum, item) => sum + (Number(item.minutes) || 0), 0);
-  const thesisWords = thesisLogs.reduce((sum, item) => sum + (Number(item.words) || 0), 0);
-  const milestoneDone = (state.thesis?.milestones || []).filter(item => dateFromDateTime(item.doneAt) === date).length;
-  const chapterUpdated = (state.thesis?.chapters || []).filter(item => dateFromDateTime(item.updatedAt) === date).length;
+  const paperLogs = paperAllLogs().filter(item => item.log.date === date);
+  const paperMinutes = paperLogs.reduce((sum, item) => sum + (Number(item.log.minutes) || 0), 0);
+  const paperWords = paperLogs.reduce((sum, item) => sum + (Number(item.log.words) || 0), 0);
+  const milestoneDone = (state.papers?.items || []).flatMap(item => item.milestones || []).filter(item => dateFromDateTime(item.doneAt) === date).length;
+  const sectionUpdated = (state.papers?.items || []).flatMap(item => item.sections || []).filter(item => dateFromDateTime(item.updatedAt) === date).length;
 
   const ideaCreated = researchIdeasCreatedInRange(date, date);
   const ideaUpdated = researchIdeasUpdatedInRange(date, date).filter(item => dateFromDateTime(item.createdAt) !== date);
@@ -97,19 +97,23 @@ function buildDailyDigest(date=todayStr()) {
   const savingsDeposit = savingsToday.filter(item => item.type === 'deposit').reduce((sum,item)=>sum+item.amount,0);
   const savingsWithdrawal = savingsToday.filter(item => item.type === 'withdrawal').reduce((sum,item)=>sum+item.amount,0);
 
-  const mentor = mentorEntryOn(date);
+  const travelPlansToday = (state.travel?.plans || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelNotesToday = (state.travel?.notes || []).filter(item => dateFromDateTime(item.createdAt) === date);
+
+  const upward = upwardEntryOn(date);
   const review = dailyReviewEntryOn(date);
-  const mentorStatus = mentorStatusMeta(mentor.status);
+  const upwardStatus = upwardStatusMeta(upward.status);
   const reviewEnergy = reviewEnergyMeta(review.energy);
 
   const cards = [
     { label:'总览首页', value:`${workLogs.length} 段 / ${focusSessions.length} 次`, color:'text-dopamine-orange' },
     { label:'科研思路', value:(ideaCreated.length + ideaUpdated.length) ? `${ideaCreated.length} 新 / ${ideaUpdated.length} 更` : '无更新', color:'text-dopamine-purple' },
-    { label:'论文进度', value:`${thesisLogs.length} 条`, color:'text-dopamine-purple' },
+    { label:'论文进度', value:`${paperLogs.length} 条`, color:'text-dopamine-purple' },
     { label:'投稿管理', value:`${submissionMoves} 动`, color:'text-dopamine-sky' },
     { label:'记账管理', value:accountingToday.length ? `${accountingToday.length} 笔` : '未记录', color:'text-dopamine-pink' },
     { label:'攒钱规划', value:savingsToday.length ? `${savingsToday.length} 笔` : '未记录', color:'text-dopamine-mint' },
-    { label:'导师沟通', value: mentorCountOn(date) ? `${mentorStatus.emoji} ${mentorStatus.label}` : '未记录', color:'text-dopamine-purple' },
+    { label:'旅行规划', value:(travelPlansToday.length + travelNotesToday.length) ? `${travelPlansToday.length} 计划 / ${travelNotesToday.length} 碎片` : '无新增', color:'text-dopamine-sky' },
+    { label:'向上管理', value: upwardCountOn(date) ? `${upwardStatus.emoji} ${upwardStatus.label}` : '未记录', color:'text-dopamine-purple' },
     { label:'每日复盘', value: reviewCountOn(date) ? `${reviewEnergy.emoji} ${reviewTemplateCount(review)}/5` : '未写', color:'text-dopamine-yellow' }
   ];
 
@@ -128,10 +132,10 @@ function buildDailyDigest(date=todayStr()) {
       `新增参考资料：${ideaReferences.length} 条`,
       `当前推进中思路：${activeResearchIdeaCount()} 个`
     ]},
-    { title:'博士毕业论文进度', lines:[
-      `推进日志：${thesisLogs.length} 条，共 ${formatMinutes(thesisMinutes)}${thesisWords ? `，${thesisWords} 字` : ''}`,
+    { title:'论文进度', lines:[
+      `推进日志：${paperLogs.length} 条，共 ${formatMinutes(paperMinutes)}${paperWords ? `，${paperWords} 字` : ''}`,
       `完成里程碑：${milestoneDone} 个`,
-      `更新章节：${chapterUpdated} 个`
+      `更新内容部分：${sectionUpdated} 个`
     ]},
     { title:'投稿管理', lines:[
       `新增项目：${submissionCreated} 个`,
@@ -152,14 +156,15 @@ function buildDailyDigest(date=todayStr()) {
       `取出：${formatSavingsMoney(savingsWithdrawal)}`,
       `今日净攒入：${formatSavingsMoney(savingsDeposit - savingsWithdrawal)}`
     ] : ['今天还没有为未来愿望存入记录。'] },
-    { title:'向上管理导师', lines:mentorCountOn(date) ? [
-      `沟通状态：${mentorStatus.emoji} ${mentorStatus.label}`,
-      `压力 / 清晰度：${mentor.pressure}/5 · ${mentor.clarity}/5`,
-      `明确请求：${mentor.ask ? '已写' : '未写'}`,
-      `导师反馈 / 决策：${mentor.feedback ? '已写' : '未写'}`,
-      `导师承诺留痕：${mentor.commitment ? '已写' : '未写'}`,
-      `下一步动作：${mentor.nextAction ? '已写' : '未写'}${mentor.nextActionTaskId ? ' · 已加入任务总表' : ''}`
-    ] : ['今天还没有整理导师沟通。'] },
+    { title:'旅行规划', lines:[`新增旅行计划：${travelPlansToday.length} 个`,`新增旅行碎片：${travelNotesToday.length} 条`,`当前进行中计划：${activeTravelPlans().length} 个`] },
+    { title:'向上管理', lines:upwardCountOn(date) ? [
+      `沟通状态：${upwardStatus.emoji} ${upwardStatus.label}`,
+      `压力 / 清晰度：${upward.pressure}/5 · ${upward.clarity}/5`,
+      `明确请求：${upward.ask ? '已写' : '未写'}`,
+      `对方反馈 / 决策：${upward.feedback ? '已写' : '未写'}`,
+      `承诺留痕：${upward.commitment ? '已写' : '未写'}`,
+      `下一步动作：${upward.nextAction ? '已写' : '未写'}${upward.nextActionTaskId ? ' · 已加入任务总表' : ''}`
+    ] : ['今天还没有整理向上管理沟通。'] },
     { title:'每日复盘', lines:reviewCountOn(date) ? [
       `状态 / 能量：${reviewEnergy.emoji} ${reviewEnergy.label}${review.energyNote ? `｜${review.energyNote}` : ''}`,
       `今日核心成果：${review.accomplishments || '未写'}`,
@@ -171,7 +176,7 @@ function buildDailyDigest(date=todayStr()) {
     ] : ['今天还没有保存结构化复盘。'] }
   ];
 
-  const markdown = [`# ${date} PhD 每日复盘与记录统计`,'',...sections.flatMap(section => [`## ${section.title}`,...section.lines.map(line => `- ${line}`),''])].join('\n').trim();
+  const markdown = [`# ${date} 每日复盘与记录统计`,'',...sections.flatMap(section => [`## ${section.title}`,...section.lines.map(line => `- ${line}`),''])].join('\n').trim();
   return { cards, sections, markdown };
 }
 function downloadReviewMarkdown() {
@@ -181,7 +186,7 @@ function downloadReviewMarkdown() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `phd_daily_review_${date}.md`;
+  a.download = `personal_workspace_review_${date}.md`;
   a.click();
   URL.revokeObjectURL(url);
 }

@@ -3,39 +3,42 @@
 
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    let sourceKey = STORAGE_KEY;
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      for (const legacyKey of (typeof LEGACY_STORAGE_KEYS !== 'undefined' ? LEGACY_STORAGE_KEYS : [])) {
+        const legacyRaw = localStorage.getItem(legacyKey);
+        if (legacyRaw) { raw = legacyRaw; sourceKey = legacyKey; break; }
+      }
+    }
     const parsed = raw ? JSON.parse(raw) : {};
-    return {
+    const normalized = {
       attendance: normalizeAttendance(parsed.attendance),
       timeBlocks: parsed.timeBlocks && typeof parsed.timeBlocks === 'object' ? parsed.timeBlocks : {},
       tasks: normalizeTasksState(parsed.tasks),
       projects: normalizeProjectsState(parsed.projects),
       focus: parsed.focus && typeof parsed.focus === 'object' ? { active: parsed.focus.active || null, sessions: Array.isArray(parsed.focus.sessions) ? parsed.focus.sessions : [] } : { active:null, sessions:[] },
       reflections: normalizeReflectionMap(parsed.reflections),
-      mentor: normalizeMentorState(parsed.mentor),
+      upward: normalizeUpwardState(parsed.upward, parsed.mentor),
       reviewDaily: normalizeDailyReviewState(parsed.reviewDaily, parsed.reflections),
       submissions: normalizeSubmissions(parsed.submissions),
       researchIdeas: normalizeResearchIdeasState(parsed.researchIdeas || parsed.ideas),
       accounting: normalizeAccountingState(parsed.accounting),
       savings: normalizeSavingsState(parsed.savings),
-      thesis: normalizeThesisState(parsed.thesis)
+      travel: normalizeTravelState(parsed.travel),
+      papers: normalizePapersState(parsed.papers, parsed.thesis)
     };
+    if (raw && sourceKey !== STORAGE_KEY) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    }
+    return normalized;
   } catch (err) {
     console.error(err);
     return {
-      attendance:{},
-      timeBlocks:{},
-      tasks:[],
-      projects:[],
-      focus:{active:null,sessions:[]},
-      reflections:{},
-      mentor:normalizeMentorState({}),
-      reviewDaily:normalizeDailyReviewState({}, {}),
-      submissions:[],
-      researchIdeas: normalizeResearchIdeasState({}),
-      accounting: normalizeAccountingState({}),
-      savings: normalizeSavingsState({}),
-      thesis: defaultThesisState()
+      attendance:{}, timeBlocks:{}, tasks:[], projects:[], focus:{active:null,sessions:[]}, reflections:{},
+      upward:normalizeUpwardState({}, {}), reviewDaily:normalizeDailyReviewState({}, {}), submissions:[],
+      researchIdeas:normalizeResearchIdeasState({}), accounting:normalizeAccountingState({}), savings:normalizeSavingsState({}),
+      travel:normalizeTravelState({}), papers:normalizePapersState({}, {})
     };
   }
 }
@@ -52,7 +55,7 @@ function getDayTimeBlocks(date=todayStr()) {
   return state.timeBlocks[date];
 }
 function projectById(id='') { return state.projects.find(item => item.id === id) || null; }
-function mentorEntryOn(date=todayStr()) { return normalizeMentorEntry(state.mentor?.entries?.[date]); }
+function upwardEntryOn(date=todayStr()) { return normalizeUpwardEntry(state.upward?.entries?.[date]); }
 function dailyReviewEntryOn(date=todayStr()) { return normalizeDailyReviewEntry(state.reviewDaily?.entries?.[date]); }
 function activeTask() { return state.tasks.find(t => t.status === 'active') || null; }
 function taskOpen(task) { return task && task.status !== 'done' && task.gtdBucket !== 'done'; }
@@ -66,83 +69,72 @@ function reviewPriorityCount(entry) {
 }
 function reviewTemplateCount(entry) {
   const clean = normalizeDailyReviewEntry(entry);
-  return [
-    clean.accomplishments,
-    clean.unfinished,
-    clean.insights,
-    clean.obstacles,
-    reviewPriorityCount(clean) ? 'tomorrow' : ''
-  ].filter(item => String(item || '').trim()).length;
+  return [clean.accomplishments, clean.unfinished, clean.insights, clean.obstacles, reviewPriorityCount(clean) ? 'tomorrow' : ''].filter(item => String(item || '').trim()).length;
 }
-function reviewContentCount(entry) {
-  const clean = normalizeDailyReviewEntry(entry);
-  return reviewTemplateCount(clean) + (clean.energyNote.trim() ? 1 : 0);
-}
-function mentorCountOn(date=todayStr()) {
-  const entry = mentorEntryOn(date);
-  return entry.updatedAt || entry.topic || entry.evidence || entry.ask || entry.risk || entry.feedback || entry.commitment || entry.confirmation || entry.followupDate || entry.boundary || entry.nextAction || entry.status !== 'drafting' || entry.channel || entry.pressure !== 3 || entry.clarity !== 3 || entry.promiseStatus !== 'open' ? 1 : 0;
+function reviewContentCount(entry) { const clean = normalizeDailyReviewEntry(entry); return reviewTemplateCount(clean) + (clean.energyNote.trim() ? 1 : 0); }
+function upwardCountOn(date=todayStr()) {
+  const entry = upwardEntryOn(date);
+  return entry.updatedAt || entry.personName || entry.organization || entry.topic || entry.evidence || entry.ask || entry.risk || entry.feedback || entry.commitment || entry.confirmation || entry.followupDate || entry.boundary || entry.nextAction || entry.status !== 'drafting' || entry.channel || entry.pressure !== 3 || entry.clarity !== 3 || entry.promiseStatus !== 'open' ? 1 : 0;
 }
 function reviewCountOn(date=todayStr()) {
   const entry = dailyReviewEntryOn(date);
   return entry.updatedAt || reviewContentCount(entry) > 0 ? 1 : 0;
 }
-function supportPageCountOn(date=todayStr()) { return mentorCountOn(date) + reviewCountOn(date); }
-function mentorPendingItems(baseDate=todayStr()) {
-  return Object.entries(state.mentor?.entries || {})
-    .map(([date]) => ({ date, entry: mentorEntryOn(date) }))
+function supportPageCountOn(date=todayStr()) { return upwardCountOn(date) + reviewCountOn(date); }
+function upwardPendingItems(baseDate=todayStr()) {
+  return Object.entries(state.upward?.entries || {})
+    .map(([date]) => ({ date, entry: upwardEntryOn(date) }))
     .filter(item => item.entry.commitment.trim() && item.entry.promiseStatus !== 'resolved')
     .sort((a, b) => (a.entry.followupDate || '9999-99-99').localeCompare(b.entry.followupDate || '9999-99-99') || b.date.localeCompare(a.date));
 }
-function mentorOverdueCount(baseDate=todayStr()) {
-  return mentorPendingItems(baseDate).filter(item => item.entry.followupDate && item.entry.followupDate < baseDate).length;
-}
+function upwardOverdueCount(baseDate=todayStr()) { return upwardPendingItems(baseDate).filter(item => item.entry.followupDate && item.entry.followupDate < baseDate).length; }
 function runningSubmissionCount() { return state.submissions.filter(s => !['已接收','已见刊/已收录','搁置/拒稿'].includes(s.stage)).length; }
 
-function researchIdeaById(id='') {
-  return state.researchIdeas?.ideas?.find(item => item.id === id) || null;
+function researchIdeaById(id='') { return state.researchIdeas?.ideas?.find(item => item.id === id) || null; }
+function researchIdeasCreatedInRange(startDate, endDate) { return (state.researchIdeas?.ideas || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt), startDate, endDate)); }
+function researchIdeasUpdatedInRange(startDate, endDate) { return (state.researchIdeas?.ideas || []).filter(item => isDateInRange(dateFromDateTime(item.updatedAt), startDate, endDate)); }
+function researchIdeaSourcesCount() { return (state.researchIdeas?.ideas || []).reduce((sum, item) => sum + (item.sources?.length || 0), 0); }
+function researchIdeaReferencesCount() { return (state.researchIdeas?.ideas || []).reduce((sum, item) => sum + (item.references?.length || 0), 0); }
+function activeResearchIdeaCount() { return (state.researchIdeas?.ideas || []).filter(item => !['adopted','archived'].includes(item.status)).length; }
+function researchIdeaSourcesInRange(startDate, endDate) { return (state.researchIdeas?.ideas || []).flatMap(item => (item.sources || []).filter(source => isDateInRange(dateFromDateTime(source.createdAt), startDate, endDate)).map(source => ({ idea:item, source }))); }
+function researchIdeaReferencesInRange(startDate, endDate) { return (state.researchIdeas?.ideas || []).flatMap(item => (item.references || []).filter(reference => isDateInRange(dateFromDateTime(reference.createdAt), startDate, endDate)).map(reference => ({ idea:item, reference }))); }
+
+function paperById(id='') { return state.papers?.items?.find(item => item.id === id) || null; }
+function activePapers() { return (state.papers?.items || []).filter(item => !['accepted','archived'].includes(item.status)); }
+function paperAllLogs() { return (state.papers?.items || []).flatMap(paper => (paper.logs || []).map(log => ({ paper, log }))); }
+function paperLogsInRange(startDate,endDate) { return paperAllLogs().filter(item => isDateInRange(item.log.date,startDate,endDate)); }
+function paperOverallProgressValue(paper) {
+  if (!paper) return 0;
+  const milestones = paper.milestones || [];
+  const sections = paper.sections || [];
+  const m = milestones.length ? milestones.filter(item => item.done).length / milestones.length : 0;
+  const s = sections.length ? sections.reduce((sum,item) => sum + Number(item.progress || 0),0) / (100 * sections.length) : 0;
+  return Math.round((m * .35 + s * .65) * 100);
 }
-function researchIdeasCreatedInRange(startDate, endDate) {
-  return (state.researchIdeas?.ideas || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt), startDate, endDate));
+function papersAverageProgress() {
+  const items = state.papers?.items || [];
+  return items.length ? Math.round(items.reduce((sum,item) => sum + paperOverallProgressValue(item),0) / items.length) : 0;
 }
-function researchIdeasUpdatedInRange(startDate, endDate) {
-  return (state.researchIdeas?.ideas || []).filter(item => isDateInRange(dateFromDateTime(item.updatedAt), startDate, endDate));
-}
-function researchIdeaSourcesCount() {
-  return (state.researchIdeas?.ideas || []).reduce((sum, item) => sum + (item.sources?.length || 0), 0);
-}
-function researchIdeaReferencesCount() {
-  return (state.researchIdeas?.ideas || []).reduce((sum, item) => sum + (item.references?.length || 0), 0);
-}
-function activeResearchIdeaCount() {
-  return (state.researchIdeas?.ideas || []).filter(item => !['adopted','archived'].includes(item.status)).length;
-}
-function researchIdeaSourcesInRange(startDate, endDate) {
-  return (state.researchIdeas?.ideas || []).flatMap(item => (item.sources || []).filter(source => isDateInRange(dateFromDateTime(source.createdAt), startDate, endDate)).map(source => ({ idea:item, source })));
-}
-function researchIdeaReferencesInRange(startDate, endDate) {
-  return (state.researchIdeas?.ideas || []).flatMap(item => (item.references || []).filter(reference => isDateInRange(dateFromDateTime(reference.createdAt), startDate, endDate)).map(reference => ({ idea:item, reference })));
-}
+
+function travelPlanById(id='') { return state.travel?.plans?.find(item => item.id === id) || null; }
+function activeTravelPlans() { return (state.travel?.plans || []).filter(item => !['completed','paused'].includes(item.status)); }
+function travelNotesInRange(startDate,endDate) { return (state.travel?.notes || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
+function travelPlansCreatedInRange(startDate,endDate) { return (state.travel?.plans || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
+
 function accountingMonthKey(date=todayStr()) { return String(date || todayStr()).slice(0, 7); }
-function accountingTransactionsInMonth(month=accountingMonthKey()) {
-  return (state.accounting?.transactions || []).filter(item => String(item.date || '').startsWith(month));
-}
+function accountingTransactionsInMonth(month=accountingMonthKey()) { return (state.accounting?.transactions || []).filter(item => String(item.date || '').startsWith(month)); }
 function accountingMonthTotals(month=accountingMonthKey()) {
   const transactions = accountingTransactionsInMonth(month);
   const income = transactions.filter(item => item.type === 'income').reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
   const expense = transactions.filter(item => item.type === 'expense').reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
   return { income, expense, balance: income - expense, count: transactions.length };
 }
-
 function savingsGoalById(id='') { return state.savings?.goals?.find(item => item.id === id) || null; }
-function savingsEntriesForGoal(goalId='') {
-  return (state.savings?.entries || []).filter(item => item.goalId === goalId);
-}
+function savingsEntriesForGoal(goalId='') { return (state.savings?.entries || []).filter(item => item.goalId === goalId); }
 function savingsGoalSavedAmount(goalOrId) {
   const goal = typeof goalOrId === 'string' ? savingsGoalById(goalOrId) : goalOrId;
   if (!goal) return 0;
-  const movement = savingsEntriesForGoal(goal.id).reduce((sum, item) => {
-    return sum + (item.type === 'withdrawal' ? -Number(item.amount || 0) : Number(item.amount || 0));
-  }, 0);
+  const movement = savingsEntriesForGoal(goal.id).reduce((sum, item) => sum + (item.type === 'withdrawal' ? -Number(item.amount || 0) : Number(item.amount || 0)), 0);
   return Math.max(0, Math.round((Number(goal.initialAmount || 0) + movement) * 100) / 100);
 }
 function savingsTotals() {
@@ -150,29 +142,14 @@ function savingsTotals() {
   const target = goals.reduce((sum, goal) => sum + Number(goal.targetAmount || 0), 0);
   const saved = goals.reduce((sum, goal) => sum + savingsGoalSavedAmount(goal), 0);
   const remaining = goals.reduce((sum, goal) => sum + Math.max(0, Number(goal.targetAmount || 0) - savingsGoalSavedAmount(goal)), 0);
-  return {
-    target,
-    saved,
-    remaining,
-    active: goals.filter(goal => goal.status === 'active').length,
-    completed: goals.filter(goal => goal.status === 'completed').length,
-    count: goals.length
-  };
+  return { target, saved, remaining, active:goals.filter(goal => goal.status === 'active').length, completed:goals.filter(goal => goal.status === 'completed').length, count:goals.length };
 }
-function savingsEntriesInRange(startDate, endDate) {
-  return (state.savings?.entries || []).filter(item => isDateInRange(item.date, startDate, endDate));
-}
+function savingsEntriesInRange(startDate, endDate) { return (state.savings?.entries || []).filter(item => isDateInRange(item.date, startDate, endDate)); }
 function totalAttendanceMinutes(date=todayStr()) { return (state.attendance[date]?.logs || []).reduce((sum,log)=>sum + (log.end ? minutesBetween(log.start, log.end) : 0), 0); }
 function todayOpenLogs(date=todayStr()) { return getDayAttendance(date).logs.filter(log => !log.end); }
-function ensureTaskCleanup() {
-  state.tasks = normalizeTasksState(state.tasks);
-  state.projects = normalizeProjectsState(state.projects);
-}
+function ensureTaskCleanup() { state.tasks = normalizeTasksState(state.tasks); state.projects = normalizeProjectsState(state.projects); }
 ensureTaskCleanup();
 function setInputIfIdle(id, value) {
-  const el = $(id);
-  if (!el) return;
-  if (document.activeElement === el) return;
-  const v = String(value ?? '');
-  if (el.value !== v) el.value = v;
+  const el = $(id); if (!el || document.activeElement === el) return;
+  const v = String(value ?? ''); if (el.value !== v) el.value = v;
 }

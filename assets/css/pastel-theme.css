@@ -228,8 +228,8 @@ button:active { transform: translateY(0) scale(.985); }
 .checkin-btn { border: 1px solid rgba(255,255,255,.76); }
 
 #homeQuickLinks > *, #homeThemeStats > *, #dashboardStats > *,
-#thesisThemeStats > *, #submissionStats > *, #researchIdeaSummary > *,
-#mentorThemeStats > *, #reviewThemeStats > * {
+#paperThemeStats > *, #submissionStats > *, #researchIdeaSummary > *,
+#upwardThemeStats > *, #reviewThemeStats > * {
   transition: transform .18s ease, box-shadow .18s ease;
 }
 #homeQuickLinks > *:hover, #homeThemeStats > *:hover { transform: translateY(-3px); }

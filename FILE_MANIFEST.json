@@ -1,169 +1,226 @@
 {
-  "version": "14.0.1",
+  "version": "15.0.0",
+  "generated": "2026-08-10",
   "files": [
     {
       "path": ".gitignore",
-      "bytes": 74
+      "size": 107,
+      "sha256": "d9757b761b58adc26a9b8dc34b93fc0efc2ed05f75291280ec5ad7e7b3050bed"
     },
     {
       "path": ".nojekyll",
-      "bytes": 0
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
       "path": "ARCHITECTURE.md",
-      "bytes": 963
+      "size": 2448,
+      "sha256": "25731d6df63d90c98fbcc0accfb81ce5921938cb855a21e23abf7a52c41c5030"
     },
     {
-      "path": "CHANGELOG_v14.0.1.md",
-      "bytes": 473
-    },
-    {
-      "path": "CHANGELOG_v14.md",
-      "bytes": 561
+      "path": "CHANGELOG_v15.md",
+      "size": 951,
+      "sha256": "caeecd363e6e47937ad5801e21efbfa9b1db080c049c1b03fea31c673c0eb7e8"
     },
     {
       "path": "GITHUB_上传清单.txt",
-      "bytes": 296
+      "size": 628,
+      "sha256": "3dc8e60d6ecd27769590a027e117445079b51f5303676e664120b79fbcf7fc51"
     },
     {
       "path": "README.md",
-      "bytes": 971
+      "size": 1962,
+      "sha256": "78dd64b29d4206b32a525294349be68c933d917b5f00e3949129cbecef8e1021"
     },
     {
       "path": "assets/css/accounting.css",
-      "bytes": 1227
+      "size": 1227,
+      "sha256": "1d44abf3ff7e0260a29c64c0d1543159348418a8ae9a203c05cb233118f7b3b0"
     },
     {
       "path": "assets/css/base.css",
-      "bytes": 3725
+      "size": 3725,
+      "sha256": "e2278e83b66a0f404e68478a03d10106f205b1f6510e305070594358b227e28e"
+    },
+    {
+      "path": "assets/css/papers.css",
+      "size": 452,
+      "sha256": "7823f06f03b025fc06910583f31f31cc1056c6b53df2b32e5ab47f0d2ed859d1"
     },
     {
       "path": "assets/css/pastel-theme.css",
-      "bytes": 10345
+      "size": 10344,
+      "sha256": "f3f342da8d8ab44398333509647ac7c34f5c4c9d5f6e7d61ce3f43bfe65ce087"
     },
     {
       "path": "assets/css/research-ideas.css",
-      "bytes": 1698
+      "size": 1698,
+      "sha256": "82cf8b925c9ef34ac3d1425bbd1aea3bd5ff82a70f9805607d4d9a230c71eb6d"
     },
     {
       "path": "assets/css/savings.css",
-      "bytes": 1196
+      "size": 1196,
+      "sha256": "79042d6a6acfdfb679e3e5314d0864fcdde335467cd340b94da02efa82d3643e"
+    },
+    {
+      "path": "assets/css/travel.css",
+      "size": 425,
+      "sha256": "b982cb0a682a7c2d66131ab286f517fe1a6357fb85569956de91cdaa8abb7cb2"
     },
     {
       "path": "assets/js/app/bootstrap.js",
-      "bytes": 5513
+      "size": 4980,
+      "sha256": "b27ed03a190ac49bfd6a344467b0d86ba49f13530b6a54e39d010aa50904690e"
     },
     {
       "path": "assets/js/app/render.js",
-      "bytes": 693
+      "size": 711,
+      "sha256": "cff28cd367610d228f5e5d1ee1411caecedf06fc21f1bff9dbbe5f20b59a9927"
     },
     {
       "path": "assets/js/app/runtime-bridge.js",
-      "bytes": 583
+      "size": 666,
+      "sha256": "7abdbe174ab42f579921db923a3cefbbb98b7dbfcf6290c8aa124d47f9187c88"
     },
     {
       "path": "assets/js/cloud/supabase-sync.js",
-      "bytes": 24080
+      "size": 26125,
+      "sha256": "d119d61cd89dbce5fda614abdd3405a6f2a1bb02f0c621aec3d6bc4b2d8148be"
     },
     {
       "path": "assets/js/config/supabase.config.js",
-      "bytes": 347
+      "size": 494,
+      "sha256": "00a999c9de2e7a3d78df678dfdd38997a2e876474c1d6db8b81618a17acfab7d"
     },
     {
       "path": "assets/js/config/tailwind.config.js",
-      "bytes": 594
+      "size": 594,
+      "sha256": "977858538c16e5833b305f7a182510bcea4a50cab52a7f5692ecaf399e2390ff"
     },
     {
       "path": "assets/js/core/constants.js",
-      "bytes": 10566
+      "size": 13592,
+      "sha256": "3771ebfc3a0cb772be1758ea73a6781ad653155a7f16385f75ea2e98059c6e2e"
     },
     {
       "path": "assets/js/core/meta.js",
-      "bytes": 532
+      "size": 1212,
+      "sha256": "1646600f8e4068fdde7ed31a375b2adf7791a017f5e33c0efd4959b29ffacca3"
     },
     {
       "path": "assets/js/core/normalizers.js",
-      "bytes": 24828
+      "size": 30456,
+      "sha256": "1bcd435076f4e79891a030aed883671e5a42a7bc296354b917ee979ac4236e6d"
     },
     {
       "path": "assets/js/core/preferences.js",
-      "bytes": 2053
+      "size": 2450,
+      "sha256": "e56e15d2fd4a4c93694fc064b8c047a844853ee37b3ffa46f14295f01a1780a1"
     },
     {
       "path": "assets/js/core/state.js",
-      "bytes": 9425
+      "size": 11572,
+      "sha256": "acbf06e29dac7f2742b23513c5fafde219bfda10d762c577496f616d07457ff4"
     },
     {
       "path": "assets/js/core/utils.js",
-      "bytes": 4808
+      "size": 4808,
+      "sha256": "bd0b017939ebd8735bb9d71936ece4eeccf08f3d24935297dfb70d7203273290"
     },
     {
       "path": "assets/js/modules/accounting.js",
-      "bytes": 18922
+      "size": 18922,
+      "sha256": "7833e60efa29ed33941523123db14569a494f71184cd9ea28e74ca68550050bc"
     },
     {
       "path": "assets/js/modules/dashboard.js",
-      "bytes": 14246
+      "size": 8684,
+      "sha256": "70292b2c9e45d50bcf108d8417f12aa6a71dff1fedbbf42fbb257bc723e0ab4b"
     },
     {
       "path": "assets/js/modules/focus-schedule.js",
-      "bytes": 7125
+      "size": 7125,
+      "sha256": "962bdf357a74391283435b3bd078696a64662173b57440936d7375e2aad70fae"
     },
     {
       "path": "assets/js/modules/home.js",
-      "bytes": 9334
+      "size": 9916,
+      "sha256": "7e6818f4a79e945d70539ee53f01b47eae0fb49de4b1eb285b5a670bcfa1da29"
     },
     {
-      "path": "assets/js/modules/mentor.js",
-      "bytes": 13078
+      "path": "assets/js/modules/papers.js",
+      "size": 16435,
+      "sha256": "92b016449cc8622edc5d3917509451b94ad8e44bef7e0d5a37efdd1920ff0fd7"
+    },
+    {
+      "path": "assets/js/modules/profile.js",
+      "size": 1638,
+      "sha256": "c7c19b1d9fc58ece2b9fdf8f6f24838e4d84f5873ee9ede509571fd15dc95c10"
     },
     {
       "path": "assets/js/modules/research-ideas.js",
-      "bytes": 30671
+      "size": 30671,
+      "sha256": "b8304dc89ebe94796d99b3ccb8d5071db5edf2bd1cf0e919bb5ed2fd225e0ecc"
     },
     {
       "path": "assets/js/modules/review.js",
-      "bytes": 15348
+      "size": 16039,
+      "sha256": "cb8bfaa3f78f19cc5fc70d2a6f8baad96d49859670025e3b01263c213cc5b9ff"
     },
     {
       "path": "assets/js/modules/savings.js",
-      "bytes": 22849
+      "size": 22849,
+      "sha256": "b13dda6383602600d179da6b6f5a04d9565724103d2c9efea98c8045e6241fc6"
     },
     {
       "path": "assets/js/modules/settings.js",
-      "bytes": 6502
+      "size": 5724,
+      "sha256": "2c4402054153fa61aa97547e4a4cf2756fd74eaee3a79ad181da45f2c84e15f5"
     },
     {
       "path": "assets/js/modules/submissions.js",
-      "bytes": 11327
+      "size": 11327,
+      "sha256": "9d08f1e0bc0334dbefcb90d8db6b7e1ec1b8502d03ed6244c9b4e6bb2ac57345"
     },
     {
       "path": "assets/js/modules/tasks.js",
-      "bytes": 12735
+      "size": 12854,
+      "sha256": "8ae120d365c262f536989970726e260f899bf66028c9c238e1275b373bba946e"
     },
     {
-      "path": "assets/js/modules/thesis.js",
-      "bytes": 10373
+      "path": "assets/js/modules/travel.js",
+      "size": 9633,
+      "sha256": "98f65d52ebdc51caf463c4cf77b79beffd12018d3688d4a74412f44ac6911930"
+    },
+    {
+      "path": "assets/js/modules/upward-management.js",
+      "size": 10326,
+      "sha256": "25f6483ca28b6c12785a249adb98c03d77a59669860e0d02acfd7c0cf7ff095a"
     },
     {
       "path": "assets/js/modules/workflow.js",
-      "bytes": 24119
+      "size": 23255,
+      "sha256": "3ed19bd24f91eb5fac3930e56f0c13a7a6eac1652a5a56c14430124344cd9d95"
     },
     {
       "path": "assets/js/ui/dialogs.js",
-      "bytes": 13067
+      "size": 9651,
+      "sha256": "d49118e893ce9afe3b6feee6f4c9c8cf4ccff0c1936fdd1e3379a3422e154ed3"
     },
     {
       "path": "index.html",
-      "bytes": 96598
+      "size": 101284,
+      "sha256": "5632378033a047840226887f02feed2c20be05a2d9b9ccc9358a6bf403b86b93"
     },
     {
       "path": "supabase/setup.sql",
-      "bytes": 1296
+      "size": 1294,
+      "sha256": "c5fe45799011b7ac2aa0b063dfa6c60da31e2058dcb31d609f45d0de314951d4"
     },
     {
       "path": "本地预览.bat",
-      "bytes": 88
+      "size": 88,
+      "sha256": "04ad998559f7535b7642a4843160d47e9688d694be55412294cfd3add6535035"
     }
   ]
 }

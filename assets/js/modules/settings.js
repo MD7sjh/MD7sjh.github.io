@@ -1,91 +1,24 @@
 /* JSON backup/import and data management. */
 'use strict';
-
-function renderSettingsRangeStats() {
-  const range = getStatsRange(todayStr());
-  if ($('settingsStatsRangeLabel')) $('settingsStatsRangeLabel').textContent = range.label;
-  const createdTasks = state.tasks.filter(item => item.createdAt && isDateInRange(dateFromDateTime(item.createdAt),range.start,range.end)).length;
-  const doneTasks = state.tasks.filter(item => item.doneAt && isDateInRange(dateFromDateTime(item.doneAt),range.start,range.end)).length;
-  const newIdeas = researchIdeasCreatedInRange(range.start,range.end).length;
-  const updatedIdeas = researchIdeasUpdatedInRange(range.start,range.end).length;
-  const ideaRefs = researchIdeaReferencesInRange(range.start,range.end).length;
-  const newSubs = state.submissions.filter(item => item.createdAt && isDateInRange(dateFromDateTime(item.createdAt),range.start,range.end)).length;
-  const thesisLogs = (state.thesis?.logs || []).filter(item => isDateInRange(item.date,range.start,range.end)).length;
-  const mentorLogs = range.dates.reduce((sum,date) => sum + mentorCountOn(date),0);
-  const moneyItems = (state.accounting?.transactions || []).filter(item => isDateInRange(item.date,range.start,range.end));
-  const moneyExpense = moneyItems.filter(item => item.type === 'expense').reduce((sum,item) => sum + item.amount,0);
-  const savingsItems = savingsEntriesInRange(range.start,range.end);
-  const savingsNet = savingsItems.reduce((sum,item) => sum + (item.type === 'withdrawal' ? -item.amount : item.amount),0);
-  const cards = [
-    { label:`${statsModeText()}新增任务`, value:createdTasks, color:'text-dopamine-pink' },
-    { label:`${statsModeText()}完成任务`, value:doneTasks, color:'text-dopamine-mint' },
-    { label:`${statsModeText()}新增思路`, value:newIdeas, color:'text-dopamine-purple' },
-    { label:`${statsModeText()}思路更新`, value:updatedIdeas, color:'text-dopamine-sky' },
-    { label:`${statsModeText()}新增参考`, value:ideaRefs, color:'text-dopamine-pink' },
-    { label:`${statsModeText()}新增投稿`, value:newSubs, color:'text-dopamine-sky' },
-    { label:`${statsModeText()}论文日志`, value:thesisLogs, color:'text-dopamine-purple' },
-    { label:`${statsModeText()}导师沟通`, value:mentorLogs, color:'text-dopamine-orange' },
-    { label:`${statsModeText()}记账笔数`, value:moneyItems.length, color:'text-dopamine-pink' },
-    { label:`${statsModeText()}支出`, value:formatAccountingMoney(moneyExpense,{compact:true}), color:'text-rose-600' },
-    { label:`${statsModeText()}攒钱记录`, value:savingsItems.length, color:'text-dopamine-mint' },
-    { label:`${statsModeText()}净攒入`, value:formatSavingsMoney(savingsNet,{compact:true}), color:savingsNet >= 0 ? 'text-emerald-600' : 'text-rose-600' }
-  ];
-  $('settingsRangeStats').innerHTML = cards.map(item => `<div class="rounded-2xl bg-white border border-calm-line px-3 py-3"><div class="text-xs text-calm-mute">${item.label}</div><div class="text-xl font-black mt-1 ${item.color}">${escapeHtml(String(item.value))}</div></div>`).join('');
+function renderSettingsRangeStats(){
+  const range=getStatsRange(todayStr()); $('settingsStatsRangeLabel').textContent=range.label;
+  const createdTasks=state.tasks.filter(i=>i.createdAt&&isDateInRange(dateFromDateTime(i.createdAt),range.start,range.end)).length;
+  const doneTasks=state.tasks.filter(i=>i.doneAt&&isDateInRange(dateFromDateTime(i.doneAt),range.start,range.end)).length;
+  const newIdeas=researchIdeasCreatedInRange(range.start,range.end).length, ideaRefs=researchIdeaReferencesInRange(range.start,range.end).length;
+  const newSubs=state.submissions.filter(i=>i.createdAt&&isDateInRange(dateFromDateTime(i.createdAt),range.start,range.end)).length;
+  const paperLogs=paperLogsInRange(range.start,range.end).length, upwardLogs=range.dates.reduce((s,d)=>s+upwardCountOn(d),0);
+  const travelPlans=travelPlansCreatedInRange(range.start,range.end).length, travelNotes=travelNotesInRange(range.start,range.end).length;
+  const money=(state.accounting?.transactions||[]).filter(i=>isDateInRange(i.date,range.start,range.end)), expense=money.filter(i=>i.type==='expense').reduce((s,i)=>s+i.amount,0);
+  const saving=savingsEntriesInRange(range.start,range.end), savingNet=saving.reduce((s,i)=>s+(i.type==='withdrawal'?-i.amount:i.amount),0);
+  const cards=[[`${statsModeText()}新增任务`,createdTasks,'text-dopamine-pink'],[`${statsModeText()}完成任务`,doneTasks,'text-dopamine-mint'],[`${statsModeText()}新增思路`,newIdeas,'text-dopamine-purple'],[`${statsModeText()}新增参考`,ideaRefs,'text-dopamine-pink'],[`${statsModeText()}新增投稿`,newSubs,'text-dopamine-sky'],[`${statsModeText()}论文日志`,paperLogs,'text-dopamine-purple'],[`${statsModeText()}向上管理`,upwardLogs,'text-dopamine-orange'],[`${statsModeText()}旅行计划`,travelPlans,'text-dopamine-sky'],[`${statsModeText()}旅行碎片`,travelNotes,'text-dopamine-pink'],[`${statsModeText()}记账笔数`,money.length,'text-dopamine-pink'],[`${statsModeText()}支出`,formatAccountingMoney(expense,{compact:true}),'text-rose-600'],[`${statsModeText()}净攒入`,formatSavingsMoney(savingNet,{compact:true}),savingNet>=0?'text-emerald-600':'text-rose-600']];
+  $('settingsRangeStats').innerHTML=cards.map(([label,value,color])=>`<div class="rounded-2xl bg-white border border-calm-line px-3 py-3"><div class="text-xs text-calm-mute">${label}</div><div class="text-xl font-black mt-1 ${color}">${escapeHtml(String(value))}</div></div>`).join('');
 }
-function refreshSettings() {
-  const raw = localStorage.getItem(STORAGE_KEY) || '{}';
-  $('jsonEditor').value = raw;
-  $('storageSizeText').textContent = bytesToKB(new Blob([raw]).size);
-  $('settingsRefreshTime').textContent = nowDateTime();
-  $('settingsSummary').innerHTML = [
-    ['工作打卡',Object.values(state.attendance).reduce((sum,day) => sum + (day.logs?.length || 0),0)],
-    ['请假记录',Object.values(state.attendance).reduce((sum,day) => sum + (day.leaves?.length || 0),0)],
-    ['任务数',state.tasks.length],['项目数',state.projects.length],['专注记录',state.focus.sessions.length],
-    ['科研思路',state.researchIdeas?.ideas?.length || 0],['思路来源',researchIdeaSourcesCount()],['参考资料',researchIdeaReferencesCount()],
-    ['导师沟通',Object.keys(state.mentor?.entries || {}).filter(date => mentorCountOn(date)).length],
-    ['每日复盘',Object.keys(state.reviewDaily?.entries || {}).filter(date => reviewCountOn(date)).length],
-    ['投稿项目',state.submissions.length],['论文日志',state.thesis?.logs?.length || 0],
-    ['记账记录',state.accounting?.transactions?.length || 0],['攒钱目标',state.savings?.goals?.length || 0],['攒钱记录',state.savings?.entries?.length || 0]
-  ].map(([label,value]) => `<div class="rounded-2xl bg-white border border-calm-line px-3 py-3"><div class="text-xs text-calm-mute">${label}</div><div class="text-xl font-black">${value}</div></div>`).join('');
+function refreshSettings(){
+  const raw=localStorage.getItem(STORAGE_KEY)||'{}';$('jsonEditor').value=raw;$('storageSizeText').textContent=bytesToKB(new Blob([raw]).size);$('settingsRefreshTime').textContent=nowDateTime();
+  const summary=[['工作打卡',Object.values(state.attendance).reduce((s,d)=>s+(d.logs?.length||0),0)],['请假记录',Object.values(state.attendance).reduce((s,d)=>s+(d.leaves?.length||0),0)],['任务数',state.tasks.length],['项目数',state.projects.length],['专注记录',state.focus.sessions.length],['科研思路',state.researchIdeas?.ideas?.length||0],['参考资料',researchIdeaReferencesCount()],['论文数',state.papers?.items?.length||0],['论文日志',paperAllLogs().length],['投稿项目',state.submissions.length],['向上管理',Object.keys(state.upward?.entries||{}).filter(d=>upwardCountOn(d)).length],['每日复盘',Object.keys(state.reviewDaily?.entries||{}).filter(d=>reviewCountOn(d)).length],['旅行计划',state.travel?.plans?.length||0],['旅行碎片',state.travel?.notes?.length||0],['记账记录',state.accounting?.transactions?.length||0],['攒钱目标',state.savings?.goals?.length||0],['攒钱记录',state.savings?.entries?.length||0]];
+  $('settingsSummary').innerHTML=summary.map(([label,value])=>`<div class="rounded-2xl bg-white border border-calm-line px-3 py-3"><div class="text-xs text-calm-mute">${label}</div><div class="text-xl font-black">${value}</div></div>`).join('');
 }
-function exportJson() {
-  const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url; anchor.download = `phd_workspace_backup_${todayStr()}.json`; anchor.click();
-  URL.revokeObjectURL(url);
-}
-async function copyJson() {
-  await navigator.clipboard.writeText(JSON.stringify(state,null,2));
-  alert('已复制到剪贴板。');
-}
-function importJsonText(raw) {
-  try {
-    const parsed = JSON.parse(raw);
-    const next = {
-      attendance:normalizeAttendance(parsed.attendance),
-      timeBlocks:parsed.timeBlocks && typeof parsed.timeBlocks === 'object' ? parsed.timeBlocks : {},
-      tasks:normalizeTasksState(parsed.tasks),
-      projects:normalizeProjectsState(parsed.projects),
-      focus:parsed.focus && typeof parsed.focus === 'object' ? { active:parsed.focus.active || null, sessions:Array.isArray(parsed.focus.sessions) ? parsed.focus.sessions : [] } : { active:null,sessions:[] },
-      mentor:normalizeMentorState(parsed.mentor),
-      reviewDaily:normalizeDailyReviewState(parsed.reviewDaily,parsed.reflections),
-      submissions:normalizeSubmissions(parsed.submissions),
-      researchIdeas:normalizeResearchIdeasState(parsed.researchIdeas || parsed.ideas),
-      accounting:normalizeAccountingState(parsed.accounting),
-      savings:normalizeSavingsState(parsed.savings),
-      thesis:normalizeThesisState(parsed.thesis)
-    };
-    Object.keys(state).forEach(key => delete state[key]);
-    Object.assign(state,next);
-    saveState(); renderAll(); alert('导入完成。旧版已移除模块的字段不会再导入。');
-  } catch (error) {
-    console.error(error);
-    alert('JSON 导入失败，请检查格式。');
-  }
-}
-function clearAllData() {
-  if (!confirm('确定清空全部数据吗？此操作不可撤销。')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  location.reload();
-}
+function exportJson(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`personal_workspace_backup_${todayStr()}.json`;a.click();URL.revokeObjectURL(url);}
+async function copyJson(){await navigator.clipboard.writeText(JSON.stringify(state,null,2));alert('已复制到剪贴板。');}
+function importJsonText(raw){try{const parsed=JSON.parse(raw);const next={attendance:normalizeAttendance(parsed.attendance),timeBlocks:parsed.timeBlocks&&typeof parsed.timeBlocks==='object'?parsed.timeBlocks:{},tasks:normalizeTasksState(parsed.tasks),projects:normalizeProjectsState(parsed.projects),focus:parsed.focus&&typeof parsed.focus==='object'?{active:parsed.focus.active||null,sessions:Array.isArray(parsed.focus.sessions)?parsed.focus.sessions:[]}:{active:null,sessions:[]},upward:normalizeUpwardState(parsed.upward,parsed.mentor),reviewDaily:normalizeDailyReviewState(parsed.reviewDaily,parsed.reflections),submissions:normalizeSubmissions(parsed.submissions),researchIdeas:normalizeResearchIdeasState(parsed.researchIdeas||parsed.ideas),accounting:normalizeAccountingState(parsed.accounting),savings:normalizeSavingsState(parsed.savings),travel:normalizeTravelState(parsed.travel),papers:normalizePapersState(parsed.papers,parsed.thesis)};Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,next);saveState();renderAll();alert('导入完成。旧版论文与导师数据会自动迁移到新结构。');}catch(error){console.error(error);alert('JSON 导入失败，请检查格式。');}}
+function clearAllData(){if(!confirm('确定清空全部数据吗？此操作不可撤销。'))return;localStorage.removeItem(STORAGE_KEY);location.reload();}

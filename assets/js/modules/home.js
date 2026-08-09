@@ -8,6 +8,9 @@ function navTo(sectionId) {
   if (sectionId === 'accounting-section') renderAccounting();
   if (sectionId === 'savings-section') renderSavings();
   if (sectionId === 'research-ideas-section') renderResearchIdeas();
+  if (sectionId === 'paper-section') renderPapers();
+  if (sectionId === 'travel-section') renderTravel();
+  if (sectionId === 'upward-section') renderUpward();
   if (sectionId === 'dashboard-section') renderDashboard();
   if (sectionId === 'settings-section') refreshSettings();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -18,17 +21,14 @@ function updateClock() {
   $('sidebarNowDate').textContent = dateText;
   $('sidebarNowTime').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   if ($('cuteTopbarDate')) $('cuteTopbarDate').textContent = dateText;
-  if ($('cuteGreeting')) {
-    const hour = d.getHours();
-    const hello = hour < 6 ? '夜深啦，博士生！🌙' : hour < 12 ? '早上好，博士生！🌷' : hour < 18 ? '下午好，博士生！🌼' : '晚上好，博士生！✨';
-    $('cuteGreeting').textContent = hello;
-  }
+  if (typeof renderWorkspaceGreeting === 'function') renderWorkspaceGreeting(d);
 }
 function renderSidebarSnapshot() {
   $('sbFocus').textContent = formatMinutes(focusMinutesOn());
   $('sbTask').textContent = activeTask()?.title || '无';
   if ($('sbResearchIdeas')) $('sbResearchIdeas').textContent = String(activeResearchIdeaCount());
   $('sbReview').textContent = String(supportPageCountOn());
+  if ($('sbTravel')) $('sbTravel').textContent = String(activeTravelPlans().length);
   $('sbSubmission').textContent = String(runningSubmissionCount());
   if ($('sbExpense')) $('sbExpense').textContent = formatAccountingMoney(accountingMonthTotals().expense, { compact:true });
   if ($('sbSavings')) $('sbSavings').textContent = formatSavingsMoney(savingsTotals().saved, { compact:true });
@@ -40,8 +40,9 @@ function renderHomeQuickLinks() {
     { target:'accounting-section', label:'记账管理', value:`本月 ${formatAccountingMoney(accountingMonthTotals().expense, { compact:true })}`, color:'text-dopamine-pink', icon:'fa-wallet' },
     { target:'savings-section', label:'攒钱规划', value:`已攒 ${formatSavingsMoney(savingsTotals().saved, { compact:true })}`, color:'text-dopamine-mint', icon:'fa-piggy-bank' },
     { target:'research-ideas-section', label:'科研思路', value:`${activeResearchIdeaCount()} 个推进中`, color:'text-dopamine-purple', icon:'fa-lightbulb' },
-    { target:'thesis-section', label:'论文进度', value:`${thesisOverallProgress()}%`, color:'text-dopamine-purple', icon:'fa-book-open' },
-    { target:'mentor-section', label:'导师沟通', value: mentorCountOn() ? '已梳理' : '待整理', color:'text-dopamine-purple', icon:'fa-user-tie' },
+    { target:'paper-section', label:'论文进度', value:`${state.papers?.items?.length || 0} 篇 · ${papersAverageProgress()}%`, color:'text-dopamine-purple', icon:'fa-book-open' },
+    { target:'travel-section', label:'旅行规划', value:`${activeTravelPlans().length} 个进行中`, color:'text-dopamine-sky', icon:'fa-plane-departure' },
+    { target:'upward-section', label:'向上管理', value: upwardCountOn() ? '已梳理' : '待整理', color:'text-dopamine-purple', icon:'fa-user-tie' },
     { target:'review-section', label:'今日复盘', value: reviewCountOn() ? '已写' : '待写', color:'text-dopamine-pink', icon:'fa-heart' },
     { target:'dashboard-section', label:'数据看板', value:'查看趋势', color:'text-dopamine-purple', icon:'fa-chart-line' },
     { target:'settings-section', label:'数据管理', value:'备份 / 导入', color:'text-dopamine-orange', icon:'fa-database' }
@@ -63,7 +64,9 @@ function renderHomeThemeStats() {
   const ideasCreated = researchIdeasCreatedInRange(range.start, range.end).length;
   const ideasUpdated = researchIdeasUpdatedInRange(range.start, range.end).length;
   const ideaReferences = researchIdeaReferencesInRange(range.start, range.end).length;
-  const mentorEntries = range.dates.reduce((sum, d) => sum + mentorCountOn(d), 0);
+  const upwardEntries = range.dates.reduce((sum, d) => sum + upwardCountOn(d), 0);
+  const travelNew = travelPlansCreatedInRange(range.start, range.end).length;
+  const travelNotes = travelNotesInRange(range.start, range.end).length;
   const reviewEntries = range.dates.reduce((sum, d) => sum + reviewCountOn(d), 0);
   const doneTasks = state.tasks.filter(t => t.doneAt && isDateInRange(dateFromDateTime(t.doneAt), range.start, range.end)).length;
   const newSubs = state.submissions.filter(s => s.createdAt && isDateInRange(dateFromDateTime(s.createdAt), range.start, range.end)).length;
@@ -75,7 +78,9 @@ function renderHomeThemeStats() {
     { label:`${statsModeText()}新增思路`, value: ideasCreated, color:'text-dopamine-purple' },
     { label:`${statsModeText()}思路更新`, value: ideasUpdated, color:'text-dopamine-sky' },
     { label:`${statsModeText()}新增参考`, value: ideaReferences, color:'text-dopamine-pink' },
-    { label:`${statsModeText()}导师沟通`, value: mentorEntries, color:'text-dopamine-purple' },
+    { label:`${statsModeText()}向上管理`, value: upwardEntries, color:'text-dopamine-purple' },
+    { label:`${statsModeText()}旅行计划`, value: travelNew, color:'text-dopamine-sky' },
+    { label:`${statsModeText()}旅行碎片`, value: travelNotes, color:'text-dopamine-pink' },
     { label:`${statsModeText()}复盘`, value: reviewEntries, color:'text-dopamine-pink' },
     { label:`${statsModeText()}完成任务`, value: doneTasks, color:'text-dopamine-purple' },
     { label:`${statsModeText()}新增投稿`, value: newSubs, color:'text-dopamine-sky' },

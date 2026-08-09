@@ -1,4 +1,6 @@
-上传到 GitHub 仓库根目录：
+Personal Workspace v15 · GitHub 上传清单
+
+上传到仓库根目录：
 
 必须：
 - index.html
@@ -8,8 +10,19 @@
 建议：
 - README.md
 - ARCHITECTURE.md
-- CHANGELOG_v14.md
+- CHANGELOG_v15.md
+- FILE_MANIFEST.json
 - supabase/
 
-更新时最稳妥：先删除旧 assets/，再上传新版 assets/ 和 index.html。
-Supabase 不需要重新建表。
+更新步骤：
+1. 先删除 GitHub 中旧的 assets/。
+2. 上传新版 assets/ 和 index.html。
+3. Commit changes。
+4. 等待 GitHub Pages 部署完成。
+5. 浏览器 Ctrl + F5 强制刷新；手机可先用无痕窗口验证。
+
+Supabase：
+- 不需要重新建表。
+- 不需要重新注册账号。
+- 不需要迁移云端 JSON。
+- 旧 thesis / mentor 数据由网页自动迁移。

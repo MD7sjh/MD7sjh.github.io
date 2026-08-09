@@ -1,7 +1,8 @@
 /* Shared constants and mutable UI runtime state. */
 'use strict';
 
-const STORAGE_KEY = 'phd_master_workspace_merged_v1';
+const STORAGE_KEY = 'personal_workspace_state_v1';
+const LEGACY_STORAGE_KEYS = ['phd_master_workspace_merged_v1'];
 const SUBMISSION_COLUMNS = ['选题中','写作中','待投稿','已投稿','审稿中','返修中','已接收','已见刊/已收录','搁置/拒稿'];
 const STAGE_COLORS = {
   '选题中':'#9B5DE5','写作中':'#FF8C42','待投稿':'#4D9DE0','已投稿':'#43AA8B','审稿中':'#3b82f6','返修中':'#f97316','已接收':'#10b981','已见刊/已收录':'#059669','搁置/拒稿':'#9ca3af'
@@ -45,20 +46,79 @@ const PROJECT_STATUS_OPTIONS = [
   { value:'paused', label:'暂停' },
   { value:'done', label:'已完成' }
 ];
-const MENTOR_STATUS_OPTIONS = [
-  { value:'drafting', emoji:'📝', label:'准备汇报' },
-  { value:'reported', emoji:'📤', label:'已汇报' },
+const UPWARD_STATUS_OPTIONS = [
+  { value:'drafting', emoji:'📝', label:'准备沟通' },
+  { value:'reported', emoji:'📤', label:'已汇报 / 已发送' },
   { value:'meeting', emoji:'🗣️', label:'已沟通 / 已开会' },
   { value:'waiting', emoji:'⏳', label:'等待反馈' },
   { value:'blocked', emoji:'🚩', label:'需要主动推进' }
 ];
-const MENTOR_PROMISE_STATUS_OPTIONS = [
+const UPWARD_PROMISE_STATUS_OPTIONS = [
   { value:'open', label:'待核对', color:'bg-yellow-100 text-yellow-800' },
   { value:'confirmed', label:'已确认待兑现', color:'bg-sky-100 text-sky-700' },
   { value:'remind', label:'需再次提醒', color:'bg-rose-100 text-rose-700' },
   { value:'resolved', label:'已落实', color:'bg-emerald-100 text-emerald-700' }
 ];
-const MENTOR_CHANNEL_OPTIONS = ['', '面谈', '邮件 / 微信', '文稿批注', '组会', '其他'];
+const UPWARD_CHANNEL_OPTIONS = ['', '面谈', '邮件 / 微信', '文稿批注', '会议', '电话 / 视频', '其他'];
+const UPWARD_ROLE_OPTIONS = [
+  { value:'advisor', label:'导师 / PI' },
+  { value:'manager', label:'直属领导 / Manager' },
+  { value:'boss', label:'老板 / 负责人' },
+  { value:'project_lead', label:'项目负责人' },
+  { value:'client', label:'客户 / 合作方负责人' },
+  { value:'other', label:'其他上级 / 关键对象' }
+];
+
+const PAPER_TYPES = [
+  { value:'conference', label:'Conference', icon:'🎤' },
+  { value:'journal', label:'Journal', icon:'📚' },
+  { value:'workshop', label:'Workshop', icon:'🧩' },
+  { value:'thesis', label:'Thesis / 学位论文', icon:'🎓' },
+  { value:'report', label:'Technical Report', icon:'📑' },
+  { value:'other', label:'其他', icon:'📝' }
+];
+const PAPER_STATUSES = [
+  { value:'idea', label:'构思中', color:'bg-pink-100 text-pink-700' },
+  { value:'drafting', label:'写作中', color:'bg-sky-100 text-sky-700' },
+  { value:'experiment', label:'实验 / 分析中', color:'bg-amber-100 text-amber-700' },
+  { value:'polishing', label:'修改 / 润色中', color:'bg-purple-100 text-purple-700' },
+  { value:'submitted', label:'已投稿 / 已提交', color:'bg-blue-100 text-blue-700' },
+  { value:'revision', label:'返修中', color:'bg-orange-100 text-orange-700' },
+  { value:'accepted', label:'已接收 / 已完成', color:'bg-emerald-100 text-emerald-700' },
+  { value:'archived', label:'归档 / 暂缓', color:'bg-gray-100 text-gray-600' }
+];
+const PAPER_SECTION_STATUSES = [
+  { value:'draft', label:'草稿' },
+  { value:'revise', label:'修改' },
+  { value:'done', label:'完成' }
+];
+const PAPER_LOG_TYPES = [
+  { value:'writing', label:'写作', icon:'📝' },
+  { value:'revise', label:'修改', icon:'✍️' },
+  { value:'experiment', label:'实验', icon:'🧪' },
+  { value:'analysis', label:'分析', icon:'📊' },
+  { value:'meeting', label:'讨论 / 会议', icon:'👥' },
+  { value:'submission', label:'投稿材料', icon:'📮' },
+  { value:'other', label:'其他', icon:'📌' }
+];
+
+const TRAVEL_PLAN_STATUSES = [
+  { value:'idea', label:'想去 / 灵感', color:'bg-pink-100 text-pink-700' },
+  { value:'planning', label:'规划中', color:'bg-sky-100 text-sky-700' },
+  { value:'booked', label:'已预订 / 待出发', color:'bg-purple-100 text-purple-700' },
+  { value:'completed', label:'已完成', color:'bg-emerald-100 text-emerald-700' },
+  { value:'paused', label:'暂缓', color:'bg-gray-100 text-gray-600' }
+];
+const TRAVEL_NOTE_TYPES = [
+  { value:'idea', label:'零碎想法', icon:'💭' },
+  { value:'place', label:'想去地点', icon:'📍' },
+  { value:'food', label:'吃喝', icon:'🍜' },
+  { value:'stay', label:'住宿', icon:'🏡' },
+  { value:'transport', label:'交通', icon:'🚆' },
+  { value:'todo', label:'待办 / 准备', icon:'✅' },
+  { value:'link', label:'链接 / 攻略', icon:'🔗' },
+  { value:'other', label:'其他', icon:'✨' }
+];
 const REVIEW_ENERGY_OPTIONS = [
   { value:'high', emoji:'☀️', label:'高：可以攻坚', short:'高', color:'text-dopamine-orange' },
   { value:'medium', emoji:'😐', label:'中：稳定推进', short:'中', color:'text-dopamine-sky' },
@@ -161,7 +221,7 @@ const RESEARCH_IDEA_PRIORITIES = [
 const RESEARCH_IDEA_SOURCE_TYPES = [
   { value:'paper', label:'论文阅读', icon:'📄' },
   { value:'experiment', label:'实验现象', icon:'🧪' },
-  { value:'discussion', label:'导师 / 同伴讨论', icon:'💬' },
+  { value:'discussion', label:'讨论 / 交流', icon:'💬' },
   { value:'reviewer', label:'审稿意见', icon:'📝' },
   { value:'dataset', label:'数据集 / Benchmark', icon:'🗂️' },
   { value:'project', label:'既有项目 / 代码', icon:'💻' },
@@ -178,8 +238,8 @@ const RESEARCH_IDEA_REFERENCE_TYPES = [
 ];
 
 const $ = (id) => document.getElementById(id);
-const sections = ['home-section','workflow-section','research-ideas-section','thesis-section','submission-section','accounting-section','savings-section','mentor-section','review-section','dashboard-section','settings-section'];
-const charts = { focus:null, attendance:null, thesis:null, support:null, submission:null, accountingTrend:null, accountingCategory:null, savingsTrend:null, savingsProgress:null, researchIdeaStatus:null, researchIdeaSources:null, researchIdeaDashboard:null };
+const sections = ['home-section','workflow-section','research-ideas-section','paper-section','submission-section','accounting-section','savings-section','travel-section','upward-section','review-section','dashboard-section','settings-section'];
+const charts = { focus:null, attendance:null, papers:null, support:null, submission:null, accountingTrend:null, accountingCategory:null, savingsTrend:null, savingsProgress:null, researchIdeaStatus:null, researchIdeaSources:null, researchIdeaDashboard:null, travelStatus:null, travelNotes:null };
 const PREF_SIDEBAR_HIDDEN_KEY = `${STORAGE_KEY}__sidebar_hidden`;
 const PREF_STATS_MODE_KEY = `${STORAGE_KEY}__stats_mode`;
 let currentSection = 'home-section';

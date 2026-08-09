@@ -55,43 +55,13 @@ function nearestSubmissionDeadline() {
     .sort((a, b) => a.deadline.localeCompare(b.deadline))[0]?.deadline || '';
 }
 function workflowModuleProjectConfig(source) {
-  const today = todayStr();
-  if (source === 'thesis') {
-    const openMilestone = (state.thesis?.milestones || []).filter(item => !item.done).sort((a, b) => (a.due || '9999-99-99').localeCompare(b.due || '9999-99-99'))[0];
-    return {
-      title: '博士毕业论文推进',
-      outcome: `把毕业论文推进到可答辩版本（当前总体进度 ${thesisOverallProgress()}%）`,
-      area: 'writing',
-      deadline: state.thesis?.meta?.targetDate || openMilestone?.due || '',
-      note: 'module:thesis',
-      taskTitle: openMilestone ? `推进论文里程碑：${openMilestone.name}` : '推进论文：更新章节或补一条推进日志',
-      taskDue: openMilestone?.due || state.thesis?.meta?.targetDate || ''
-    };
-  }
   if (source === 'submission') {
     const active = state.submissions.filter(item => !['已接收','已见刊/已收录','搁置/拒稿'].includes(item.stage));
-    const next = active.filter(item => item.deadline).sort((a, b) => a.deadline.localeCompare(b.deadline))[0] || active[0];
-    return {
-      title: '投稿与发表管线',
-      outcome: `推进 ${active.length} 个进行中投稿，优先处理临近截止与返修`,
-      area: 'submission',
-      deadline: nearestSubmissionDeadline(),
-      note: 'module:submission',
-      taskTitle: next ? `推进投稿：${next.title}` : '检查投稿管线：补充下一步动作',
-      taskDue: next?.deadline || ''
-    };
+    const next = active.filter(item => item.deadline).sort((a,b)=>a.deadline.localeCompare(b.deadline))[0] || active[0];
+    return { title:'投稿与发表管线', outcome:`推进 ${active.length} 个进行中投稿，优先处理临近截止与返修`, area:'submission', deadline:nearestSubmissionDeadline(), note:'module:submission', taskTitle:next?`推进投稿：${next.title}`:'检查投稿管线：补充下一步动作', taskDue:next?.deadline||'' };
   }
-  const pending = mentorPendingItems(today);
-  const next = pending[0];
-  return {
-    title: '导师沟通与承诺跟进',
-    outcome: `记录导师说过的话、跟进 ${pending.length} 条未落实承诺，避免计划漂移`,
-    area: 'admin',
-    deadline: next?.entry?.followupDate || '',
-    note: 'module:mentor',
-    taskTitle: next ? `跟进导师承诺：${next.entry.commitment.slice(0, 32)}` : '整理导师沟通记录并确认下一步',
-    taskDue: next?.entry?.followupDate || ''
-  };
+  const pending = upwardPendingItems(todayStr()); const next=pending[0];
+  return { title:'向上管理与承诺跟进', outcome:`跟进 ${pending.length} 条未落实承诺，并固定关键反馈与下一步`, area:'admin', deadline:next?.entry?.followupDate||'', note:'module:upward', taskTitle:next?`跟进承诺：${next.entry.commitment.slice(0,32)}`:'整理向上沟通记录并确认下一步', taskDue:next?.entry?.followupDate||'' };
 }
 function ensureWorkflowModuleProject(source, shouldRender=true) {
   const config = workflowModuleProjectConfig(source);
@@ -131,7 +101,7 @@ function createWorkflowModuleTask(source) {
     todayBucket: 'should',
     dueDate: config.taskDue,
     estimate: 30,
-    context: source === 'mentor' ? '沟通' : source === 'submission' ? '投稿' : '论文',
+    context: source === 'upward' ? '沟通' : source === 'submission' ? '投稿' : '工作',
     note: config.note
   });
   saveState();

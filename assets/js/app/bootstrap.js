@@ -6,11 +6,7 @@ function bindEvents() {
   document.querySelectorAll('.stats-mode-btn').forEach(btn => btn.onclick = () => setStatsMode(btn.dataset.statsMode));
   $('btnSidebarToggle').onclick = toggleSidebar;
 
-  $('btnSaveThesisMeta').onclick = saveThesisMeta;
-  $('btnAddThesisMilestone').onclick = addThesisMilestone;
-  $('btnAddThesisChapter').onclick = addThesisChapter;
-  $('btnAddThesisLog').onclick = addThesisLog;
-  $('thesisLogDate').value = todayStr();
+  bindPaperEvents();
 
   $('btnCheckinStart').onclick = addWorkLog;
   $('btnCheckinEnd').onclick = endWorkLog;
@@ -57,11 +53,7 @@ function bindEvents() {
 
 
 
-  $('mentorDate').value = todayStr();
-  $('mentorDate').onchange = renderAll;
-  $('btnMentorToday').onclick = () => { $('mentorDate').value = todayStr(); renderAll(); };
-  $('btnSaveMentor').onclick = saveMentorEntry;
-  $('btnDeleteMentor').onclick = () => { if (confirm('确定清空这天的导师沟通记录吗？')) deleteMentorEntry(); };
+  bindUpwardEvents();
 
   $('reviewDate').value = todayStr();
   $('reviewDate').onchange = renderAll;
@@ -83,6 +75,7 @@ function bindEvents() {
 
   bindAccountingEvents();
   bindSavingsEvents();
+  bindTravelEvents();
   bindResearchIdeaEvents();
 
   $('dashboardRange').onchange = () => {

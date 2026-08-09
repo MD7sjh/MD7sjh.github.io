@@ -43,9 +43,16 @@ function toggleSidebar() {
   applySidebarHidden(sidebarHidden);
 }
 function loadPrefs() {
-  const storedMode = localStorage.getItem(PREF_STATS_MODE_KEY);
+  let storedMode = localStorage.getItem(PREF_STATS_MODE_KEY);
+  let storedSidebar = localStorage.getItem(PREF_SIDEBAR_HIDDEN_KEY);
+  if (storedMode == null || storedSidebar == null) {
+    for (const legacyKey of (typeof LEGACY_STORAGE_KEYS !== 'undefined' ? LEGACY_STORAGE_KEYS : [])) {
+      if (storedMode == null) storedMode = localStorage.getItem(`${legacyKey}__stats_mode`);
+      if (storedSidebar == null) storedSidebar = localStorage.getItem(`${legacyKey}__sidebar_hidden`);
+    }
+  }
   statsMode = ['day','week','month'].includes(storedMode) ? storedMode : 'day';
-  sidebarHidden = localStorage.getItem(PREF_SIDEBAR_HIDDEN_KEY) === '1';
+  sidebarHidden = storedSidebar === '1';
   applySidebarHidden(sidebarHidden);
   syncStatsModeButtons();
   syncDashboardRangeToStatsMode();

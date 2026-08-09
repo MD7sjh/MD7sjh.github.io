@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PhD Master Workspace · Pastel Modular v14</title>
+  <title>Personal Workspace · Pastel Modular v15</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="./assets/js/config/tailwind.config.js?v=14.0.1"></script>
-  <link rel="stylesheet" href="./assets/css/base.css?v=14.0.1">
+  <script src="./assets/js/config/tailwind.config.js?v=15.0.0"></script>
+  <link rel="stylesheet" href="./assets/css/base.css?v=15.0.0">
 
-  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=14.0.1">
-  <link rel="stylesheet" href="./assets/css/accounting.css?v=14.0.1">
-  <link rel="stylesheet" href="./assets/css/savings.css?v=14.0.1">
-  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=14.0.1">
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=15.0.0">
+  <link rel="stylesheet" href="./assets/css/accounting.css?v=15.0.0">
+  <link rel="stylesheet" href="./assets/css/savings.css?v=15.0.0">
+  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=15.0.0">
+  <link rel="stylesheet" href="./assets/css/travel.css?v=15.0.0">
+  <link rel="stylesheet" href="./assets/css/papers.css?v=15.0.0">
 
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
@@ -24,8 +26,8 @@
           <span class="cute-mascot" aria-hidden="true">🐻</span>
         </div>
         <div>
-          <div class="font-black text-lg leading-tight">PhD Master<br>Workspace <span class="cute-version">v14</span></div>
-          <div class="text-xs text-calm-mute">温柔自律 · 沉淀思路 · 稳定推进</div>
+          <div class="font-black text-lg leading-tight">Personal<br>Workspace <span class="cute-version">v15</span></div>
+          <div class="text-xs text-calm-mute">工作 · 科研 · 生活 · 未来</div>
         </div>
       </div>
 
@@ -38,11 +40,12 @@
         <button class="nav-btn active w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="home-section"><span>总览首页</span><i class="fa-solid fa-house"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="workflow-section"><span>项目看板</span><i class="fa-solid fa-diagram-project"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="research-ideas-section"><span>科研思路</span><i class="fa-solid fa-lightbulb"></i></button>
-        <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="thesis-section"><span>博士毕业论文进度</span><i class="fa-solid fa-book-open"></i></button>
+        <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="paper-section"><span>论文进度</span><i class="fa-solid fa-book-open"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="submission-section"><span>投稿管理</span><i class="fa-regular fa-paper-plane"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="accounting-section"><span>记账管理</span><i class="fa-solid fa-wallet"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="savings-section"><span>攒钱规划</span><i class="fa-solid fa-piggy-bank"></i></button>
-        <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="mentor-section"><span>向上管理导师</span><i class="fa-solid fa-user-tie"></i></button>
+        <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="travel-section"><span>旅行规划</span><i class="fa-solid fa-plane-departure"></i></button>
+        <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="upward-section"><span>向上管理</span><i class="fa-solid fa-user-tie"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="review-section"><span>每日复盘</span><i class="fa-regular fa-heart"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="dashboard-section"><span>数据看板</span><i class="fa-solid fa-chart-line"></i></button>
         <button class="nav-btn w-full text-left px-4 py-3 rounded-2xl font-bold flex items-center justify-between" data-target="settings-section"><span>数据看板设置 / 数据管理</span><i class="fa-solid fa-database"></i></button>
@@ -53,10 +56,11 @@
         <div class="flex justify-between"><span>专注时长</span><span id="sbFocus" class="font-black text-dopamine-orange">0 分钟</span></div>
         <div class="flex justify-between"><span>进行中任务</span><span id="sbTask" class="font-black text-dopamine-purple">无</span></div>
         <div class="flex justify-between"><span>科研思路</span><span id="sbResearchIdeas" class="font-black text-dopamine-purple">0</span></div>
-        <div class="flex justify-between"><span>导师 / 复盘</span><span id="sbReview" class="font-black text-dopamine-sky">0</span></div>
+        <div class="flex justify-between"><span>向上管理 / 复盘</span><span id="sbReview" class="font-black text-dopamine-sky">0</span></div>
         <div class="flex justify-between"><span>投稿进行中</span><span id="sbSubmission" class="font-black text-dopamine-pink">0</span></div>
         <div class="flex justify-between"><span>本月支出</span><span id="sbExpense" class="font-black text-rose-500">¥0</span></div>
         <div class="flex justify-between"><span>目标已攒</span><span id="sbSavings" class="font-black text-emerald-600">¥0</span></div>
+        <div class="flex justify-between"><span>旅行计划</span><span id="sbTravel" class="font-black text-dopamine-sky">0</span></div>
       </div>
 
       <div class="cute-cheer-card" aria-label="每日鼓励">
@@ -69,9 +73,9 @@
 
       <header class="cute-topbar soft-card">
         <div class="cute-topbar-copy">
-          <div class="cute-eyebrow">MY PHD DAY</div>
-          <h1 id="cuteGreeting">你好呀，博士生！🌸</h1>
-          <p>今天也要元气满满，向着目标稳稳前进哦～</p>
+          <div class="cute-eyebrow">MY PERSONAL WORKSPACE</div>
+          <h1 id="cuteGreeting">欢迎回来！🌸</h1>
+          <p>把工作、研究、生活和未来计划都放在一个舒服的空间里～</p>
         </div>
         <div class="cute-topbar-actions">
           <div class="cute-info-pill">
@@ -82,7 +86,7 @@
             <span class="cute-sync-dot"></span>
             <span>云端同步</span>
           </div>
-          <div class="cute-avatar" aria-hidden="true">👩🏻‍💻</div>
+          <div id="cuteAvatar" class="cute-avatar" aria-hidden="true">🙂</div>
         </div>
       </header>
       <section id="home-section" class="space-y-6">
@@ -293,7 +297,7 @@
               <div class="font-black mb-3">新建项目</div>
               <div class="space-y-2">
                 <input id="workflowProjectTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="项目名，如：Chapter 3 图表整理">
-                <input id="workflowProjectOutcome" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="完成结果，如：交出可发导师的版本">
+                <input id="workflowProjectOutcome" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="完成结果，如：交出可投稿 / 可交付的版本">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                   <select id="workflowProjectArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
                     <option value="research">科研 / 实验</option>
@@ -373,123 +377,33 @@
         </div>
       </section>
 
-      <section id="thesis-section" class="section-hidden space-y-6">
+      <section id="paper-section" class="section-hidden space-y-6">
         <div class="soft-card p-5 md:p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-            <div>
-              <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-book-open text-dopamine-purple"></i> 博士毕业论文进度</h1>
-              <p class="text-calm-mute mt-1">用里程碑 + 章节进度 + 推进日志，把论文推进做成日/周/月可统计的看板。</p>
-            </div>
-            <div class="inline-flex items-center rounded-full bg-white/80 border border-calm-line p-1">
-              <button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="day">每日</button>
-              <button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="week">每周</button>
-              <button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="month">每月</button>
-            </div>
+            <div><h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-book-open text-dopamine-purple"></i> 论文进度</h1><p class="text-calm-mute mt-1">同时管理 Conference、Journal、Workshop、学位论文或技术报告；每篇论文独立记录里程碑、内容进度与推进日志。</p></div>
+            <div class="inline-flex items-center rounded-full bg-white/80 border border-calm-line p-1"><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="day">每日</button><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="week">每周</button><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="month">每月</button></div>
           </div>
-          <div id="thesisStatsRangeLabel" class="text-sm text-calm-mute mb-3">-</div>
-          <div id="thesisThemeStats" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3"></div>
+          <div id="paperStatsRangeLabel" class="text-sm text-calm-mute mb-3">-</div><div id="paperThemeStats" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3"></div>
         </div>
-
-        <div class="soft-card p-5 md:p-6">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-            <div>
-              <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-pen-nib text-dopamine-orange"></i> 论文信息</h2>
-              <p class="text-sm text-calm-mute mt-1">本机缓存并自动同步云端（仍可在“数据管理”导出备份）。</p>
-            </div>
-            <button id="btnSaveThesisMeta" class="px-4 py-3 rounded-2xl bg-dopamine-orange text-white font-black">保存信息</button>
+        <div class="grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)] gap-6">
+          <div class="space-y-6">
+            <div class="soft-card p-5"><div class="font-black text-lg mb-3">新增论文</div><div class="space-y-2"><input id="paperNewTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="论文名称 / 工作标题"><div class="grid grid-cols-2 gap-2"><select id="paperNewType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="conference">Conference</option><option value="journal">Journal</option><option value="workshop">Workshop</option><option value="thesis">Thesis / 学位论文</option><option value="report">Technical Report</option><option value="other">其他</option></select><input id="paperNewDeadline" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></div><input id="paperNewVenue" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="目标 Venue / 期刊 / 会议"><button id="btnAddPaper" class="w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">创建论文</button></div></div>
+            <div class="soft-card p-5"><div class="font-black mb-3">论文列表</div><div id="paperList" class="space-y-3 max-h-[720px] overflow-auto scroll-thin"></div></div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mt-4">
-            <label class="small-stat p-4">
-              <div class="text-sm text-calm-mute font-bold mb-2">论文题目（可留空）</div>
-              <input id="thesisMetaTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：XXX 研究">
-            </label>
-            <label class="small-stat p-4">
-              <div class="text-sm text-calm-mute font-bold mb-2">目标答辩日期</div>
-              <input id="thesisMetaTargetDate" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-            </label>
-            <label class="small-stat p-4">
-              <div class="text-sm text-calm-mute font-bold mb-2">当前版本</div>
-              <input id="thesisMetaVersion" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：v3 / 2026-04-15">
-            </label>
-            <label class="small-stat p-4">
-              <div class="text-sm text-calm-mute font-bold mb-2">备注</div>
-              <input id="thesisMetaNote" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：本周先把实验图补齐">
-            </label>
-          </div>
-          <div class="mt-4 small-stat p-4">
-            <div class="flex items-center justify-between gap-3">
-              <div>
-                <div class="text-sm text-calm-mute">总体进度</div>
-                <div id="thesisOverallText" class="text-2xl font-black">0%</div>
+          <div>
+            <div id="paperDetailEmpty" class="soft-card p-8 text-center text-calm-mute">先创建或选择一篇论文，再记录详细进度。</div>
+            <div id="paperDetailContent" class="space-y-6 hidden">
+              <div class="soft-card p-5 md:p-6"><div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3"><div><div class="text-sm text-calm-mute">当前论文</div><h2 id="paperSelectedName" class="text-xl font-black mt-1">-</h2></div><div class="flex gap-2"><button id="btnDeletePaper" class="px-4 py-3 rounded-2xl bg-rose-100 text-rose-600 font-black">删除</button><button id="btnSavePaperMeta" class="px-4 py-3 rounded-2xl bg-dopamine-orange text-white font-black">保存信息</button></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mt-4"><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">论文名称</div><input id="paperMetaTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">类型</div><select id="paperMetaType" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="conference">Conference</option><option value="journal">Journal</option><option value="workshop">Workshop</option><option value="thesis">Thesis / 学位论文</option><option value="report">Technical Report</option><option value="other">其他</option></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">Venue</div><input id="paperMetaVenue" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">截止日期</div><input id="paperMetaDeadline" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">状态</div><select id="paperMetaStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">构思中</option><option value="drafting">写作中</option><option value="experiment">实验 / 分析中</option><option value="polishing">修改 / 润色中</option><option value="submitted">已投稿 / 已提交</option><option value="revision">返修中</option><option value="accepted">已接收 / 已完成</option><option value="archived">归档 / 暂缓</option></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">当前版本</div><input id="paperMetaVersion" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="v2 / camera-ready"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">关联投稿项目</div><select id="paperMetaSubmissionId" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">备注</div><input id="paperMetaNote" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label></div>
+                <div class="mt-4 small-stat p-4"><div class="flex items-center justify-between gap-3"><div><div class="text-sm text-calm-mute">总体进度</div><div id="paperOverallText" class="text-2xl font-black">0%</div></div><div id="paperOverallHint" class="text-sm text-calm-mute">-</div></div><div class="mt-3 h-3 rounded-full bg-gray-100 overflow-hidden"><div id="paperOverallBar" class="h-full bg-gradient-to-r from-dopamine-purple to-dopamine-sky" style="width:0%"></div></div></div>
               </div>
-              <div id="thesisOverallHint" class="text-sm text-calm-mute">基于“里程碑完成度 + 章节进度”估算</div>
-            </div>
-            <div class="mt-3 h-3 rounded-full bg-gray-100 overflow-hidden">
-              <div id="thesisOverallBar" class="h-full bg-gradient-to-r from-dopamine-orange to-dopamine-pink" style="width:0%"></div>
+              <div class="grid grid-cols-1 xl:grid-cols-2 gap-6"><div class="soft-card p-5"><div class="font-black text-lg mb-3">里程碑</div><div class="grid grid-cols-[minmax(0,1fr)_140px] gap-2"><input id="paperMilestoneName" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：完成主要实验"><input id="paperMilestoneDue" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></div><button id="btnAddPaperMilestone" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">添加里程碑</button><div id="paperMilestoneList" class="mt-4 space-y-2"></div></div><div class="soft-card p-5"><div class="font-black text-lg mb-3">内容 / 章节进度</div><div class="grid grid-cols-[minmax(0,1fr)_140px] gap-2"><input id="paperSectionName" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：Method / Related Work"><select id="paperSectionStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="draft">草稿</option><option value="revise">修改</option><option value="done">完成</option></select></div><button id="btnAddPaperSection" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-mint text-white font-black">添加内容部分</button><div id="paperSectionList" class="mt-4 space-y-3"></div></div></div>
+              <div class="soft-card p-5 md:p-6"><div class="font-black text-lg mb-3">论文推进日志</div><div class="grid grid-cols-1 md:grid-cols-6 gap-2"><input id="paperLogDate" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><select id="paperLogType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="writing">写作</option><option value="revise">修改</option><option value="experiment">实验</option><option value="analysis">分析</option><option value="meeting">讨论 / 会议</option><option value="submission">投稿材料</option><option value="other">其他</option></select><input id="paperLogMinutes" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="分钟"><input id="paperLogWords" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="字数"><input id="paperLogNote" class="px-3 py-3 rounded-2xl border border-calm-line bg-white md:col-span-2" placeholder="今天推进了什么"><button id="btnAddPaperLog" class="md:col-span-6 px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加日志</button></div><div id="paperLogList" class="mt-4 space-y-2 max-h-[360px] overflow-auto scroll-thin"></div></div>
             </div>
           </div>
-        </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div class="soft-card p-5">
-            <div class="flex items-center justify-between gap-4 mb-4">
-              <div>
-                <h2 class="text-xl font-black">里程碑</h2>
-                <p class="text-sm text-calm-mute mt-1">勾选完成；可记录截止日期。</p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
-              <input id="thesisMilestoneName" class="px-3 py-3 rounded-2xl border border-calm-line bg-white sm:col-span-2" placeholder="新增里程碑，如：预答辩 PPT 定稿">
-              <input id="thesisMilestoneDue" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-            </div>
-            <button id="btnAddThesisMilestone" class="w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">添加里程碑</button>
-            <div id="thesisMilestoneList" class="mt-4 space-y-2"></div>
-          </div>
-
-          <div class="soft-card p-5">
-            <div class="flex items-center justify-between gap-4 mb-4">
-              <div>
-                <h2 class="text-xl font-black">章节进度</h2>
-                <p class="text-sm text-calm-mute mt-1">拖动进度条快速更新。</p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
-              <input id="thesisChapterName" class="px-3 py-3 rounded-2xl border border-calm-line bg-white sm:col-span-2" placeholder="新增章节，如：第 3 章 方法">
-              <select id="thesisChapterStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                <option value="draft">草稿</option>
-                <option value="revise">修改</option>
-                <option value="done">完成</option>
-              </select>
-            </div>
-            <button id="btnAddThesisChapter" class="w-full px-4 py-3 rounded-2xl bg-dopamine-mint text-white font-black">添加章节</button>
-            <div id="thesisChapterList" class="mt-4 space-y-3"></div>
-          </div>
-        </div>
-
-        <div class="soft-card p-5 md:p-6">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-            <div>
-              <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-feather-pointed text-dopamine-sky"></i> 论文推进日志</h2>
-              <p class="text-sm text-calm-mute mt-1">记录写作/修改投入（分钟、字数可选），用于日/周/月统计。</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-2 mb-2">
-            <input id="thesisLogDate" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-            <select id="thesisLogType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-              <option value="writing">写作</option>
-              <option value="revise">修改</option>
-              <option value="experiment">实验</option>
-              <option value="meeting">讨论/组会</option>
-              <option value="other">其他</option>
-            </select>
-            <input id="thesisLogMinutes" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="分钟">
-            <input id="thesisLogWords" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="字数（可选）">
-            <input id="thesisLogNote" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="备注，如：改完 2 张图">
-          </div>
-          <button id="btnAddThesisLog" class="w-full px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加日志</button>
-          <div id="thesisLogList" class="mt-4 space-y-2 max-h-[360px] overflow-auto scroll-thin"></div>
         </div>
       </section>
+
 
       <section id="submission-section" class="section-hidden space-y-6">
         <div class="soft-card p-5 md:p-6">
@@ -557,7 +471,7 @@
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
             <div>
               <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-feather-pointed text-dopamine-orange"></i> 投稿推进日志</h2>
-              <p class="text-sm text-calm-mute mt-1">每个投稿项目都可以像博士论文一样记录推进过程，并下载为 Markdown。</p>
+              <p class="text-sm text-calm-mute mt-1">每个投稿项目都可以独立记录推进过程，并下载为 Markdown。</p>
             </div>
             <button id="btnDownloadSubmissionMd" class="px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">下载 MD</button>
           </div>
@@ -589,7 +503,7 @@
           <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
               <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-wallet text-dopamine-pink"></i> 记账管理</h1>
-              <p class="text-calm-mute mt-1">记录日常收支、设置月度预算，了解博士生活里的钱都去了哪里。</p>
+              <p class="text-calm-mute mt-1">记录日常收支、设置月度预算，了解生活与工作里的钱都去了哪里。</p>
             </div>
             <div class="flex flex-wrap gap-2 items-center">
               <input id="accountingMonth" type="month" class="px-3 py-2 rounded-2xl border border-calm-line bg-white">
@@ -739,6 +653,14 @@
       </section>
 
 
+
+      <section id="travel-section" class="section-hidden space-y-6">
+        <div class="soft-card p-5 md:p-6"><div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"><div><h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-plane-departure text-dopamine-sky"></i> 旅行规划</h1><p class="text-calm-mute mt-1">既可以创建正式旅行计划，也可以把看到的地点、餐馆、酒店、路线、攻略和零碎想法先随手记下来。</p></div></div><div id="travelSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4"></div></div>
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6"><div class="soft-card p-5"><div class="font-black text-lg mb-3">新增旅行计划</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><input id="travelPlanTitle" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="计划名称，如：北海道冬季旅行"><input id="travelPlanDestination" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="目的地"><select id="travelPlanStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">想去 / 灵感</option><option value="planning">规划中</option><option value="booked">已预订 / 待出发</option><option value="completed">已完成</option><option value="paused">暂缓</option></select><input id="travelPlanCompanions" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="同行对象（可选）"><input id="travelPlanStart" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPlanEnd" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPlanBudget" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="预计预算"><select id="travelPlanCurrency" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="CNY">CNY · 人民币</option><option value="MOP">MOP · 澳门元</option><option value="HKD">HKD · 港币</option><option value="SGD">SGD · 新加坡元</option><option value="USD">USD · 美元</option></select><input id="travelPlanTags" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="标签：摄影、美食、温泉（逗号分隔）"><textarea id="travelPlanNote" rows="3" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="为什么想去、想体验什么、初步路线……"></textarea></div><button id="btnAddTravelPlan" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加旅行计划</button></div>
+          <div class="soft-card p-5"><div class="font-black text-lg mb-3">快速记录一个旅行碎片</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><select id="travelNotePlan" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></select><select id="travelNoteType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">💭 零碎想法</option><option value="place">📍 想去地点</option><option value="food">🍜 吃喝</option><option value="stay">🏡 住宿</option><option value="transport">🚆 交通</option><option value="todo">✅ 待办 / 准备</option><option value="link">🔗 链接 / 攻略</option><option value="other">✨ 其他</option></select><input id="travelNoteTitle" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="一个短标题（可选）"><textarea id="travelNoteContent" rows="4" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="想到什么就记什么，不要求完整"></textarea><input id="travelNoteUrl" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="链接（可选）"></div><button id="btnAddTravelNote" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black">保存旅行碎片</button></div></div>
+        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6"><div class="soft-card p-5"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="font-black text-lg">旅行计划</div><div class="flex gap-2"><select id="travelFilterStatus" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><option value="">全部状态</option><option value="idea">想去 / 灵感</option><option value="planning">规划中</option><option value="booked">已预订</option><option value="completed">已完成</option><option value="paused">暂缓</option></select><input id="travelFilterQuery" class="px-3 py-2 rounded-2xl border border-calm-line bg-white" placeholder="搜索计划"></div></div><div id="travelPlanList" class="space-y-3"></div></div><div class="soft-card p-5"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="font-black text-lg">零碎内容</div><div class="flex flex-wrap gap-2"><select id="travelFilterPlan" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"></select><select id="travelFilterType" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><option value="">全部类型</option><option value="idea">零碎想法</option><option value="place">想去地点</option><option value="food">吃喝</option><option value="stay">住宿</option><option value="transport">交通</option><option value="todo">待办</option><option value="link">链接 / 攻略</option><option value="other">其他</option></select><input id="travelNoteQuery" class="px-3 py-2 rounded-2xl border border-calm-line bg-white" placeholder="搜索碎片"></div></div><div id="travelNoteList" class="space-y-3"></div></div></div>
+      </section>
+
       <section id="research-ideas-section" class="section-hidden space-y-6">
         <div class="soft-card p-5 md:p-6">
           <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -831,170 +753,23 @@
         </div>
       </section>
 
-      <section id="mentor-section" class="section-hidden space-y-6">
-        <div class="soft-card p-5 md:p-6">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-            <div>
-              <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-user-tie text-dopamine-purple"></i> 向上管理导师</h1>
-              <p class="text-calm-mute mt-1">把汇报、等待反馈、导师承诺和下一步写清楚；尤其适合导师容易忘记自己说过的话或计划时使用。</p>
-            </div>
-            <div class="flex flex-wrap gap-2 items-center">
-              <input id="mentorDate" type="date" class="px-3 py-2 rounded-2xl border border-calm-line bg-white">
-              <button id="btnMentorToday" class="px-3 py-2 rounded-2xl bg-white border border-calm-line font-semibold">查看今天</button>
-              <div class="inline-flex items-center rounded-full bg-white/80 border border-calm-line p-1">
-                <button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="day">每日</button>
-                <button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="week">每周</button>
-                <button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="month">每月</button>
-              </div>
-            </div>
-          </div>
-          <div id="mentorStatsRangeLabel" class="text-sm text-calm-mute font-semibold mb-3">-</div>
-          <div id="mentorThemeStats" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3"></div>
-        </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_380px] gap-6">
-          <div class="soft-card p-5">
-            <div class="flex items-center justify-between gap-3 mb-4">
-              <div>
-                <h2 class="text-xl font-black">今日导师沟通记录</h2>
-                <div class="text-sm text-calm-mute mt-1">把“我准备了什么 / 我要问什么 / 下一步做什么”写清楚，先帮自己找回确定感。</div>
-              </div>
-              <button id="btnDeleteMentor" class="px-3 py-2 rounded-2xl bg-rose-100 text-rose-600 font-bold shrink-0">清空当天</button>
-            </div>
-            <div class="small-stat p-4 mb-4">
-              <div class="font-black mb-3">沟通状态</div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">当前状态</div>
-                  <select id="mentorStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                    <option value="drafting">准备汇报</option>
-                    <option value="reported">已汇报</option>
-                    <option value="meeting">已沟通 / 已开会</option>
-                    <option value="waiting">等待反馈</option>
-                    <option value="blocked">需要主动推进</option>
-                  </select>
-                </label>
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">沟通方式</div>
-                  <select id="mentorChannel" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                    <option value="">未指定</option>
-                    <option value="面谈">面谈</option>
-                    <option value="邮件 / 微信">邮件 / 微信</option>
-                    <option value="文稿批注">文稿批注</option>
-                    <option value="组会">组会</option>
-                    <option value="其他">其他</option>
-                  </select>
-                </label>
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">沟通压力</div>
-                  <select id="mentorPressure" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                    <option value="1">1 · 很低</option>
-                    <option value="2">2 · 可控</option>
-                    <option value="3">3 · 一般</option>
-                    <option value="4">4 · 偏高</option>
-                    <option value="5">5 · 很高</option>
-                  </select>
-                </label>
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">预期清晰度</div>
-                  <select id="mentorClarity" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                    <option value="1">1 · 很模糊</option>
-                    <option value="2">2 · 偏模糊</option>
-                    <option value="3">3 · 一般</option>
-                    <option value="4">4 · 比较清楚</option>
-                    <option value="5">5 · 很清楚</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <label class="block">
-                <div class="text-sm font-bold mb-1">这次沟通主题</div>
-                <textarea id="mentorTopic" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：实验结果、论文结构、投稿决策、时间节点"></textarea>
-              </label>
-              <label class="block">
-                <div class="text-sm font-bold mb-1">我已经准备好的进展 / 证据</div>
-                <textarea id="mentorEvidence" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：图表、实验对比、修改稿、问题清单"></textarea>
-              </label>
-              <label class="block">
-                <div class="text-sm font-bold mb-1">我希望导师给的支持 / 决策</div>
-                <textarea id="mentorAsk" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：确认方向、决定投稿 venue、给关键反馈"></textarea>
-              </label>
-              <label class="block">
-                <div class="text-sm font-bold mb-1">当前卡点 / 误解风险</div>
-                <textarea id="mentorRisk" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：反馈不够具体、我没有准备好、时间线不一致"></textarea>
-              </label>
-              <label class="block md:col-span-2">
-                <div class="text-sm font-bold mb-1">导师这次的反馈 / 决策</div>
-                <textarea id="mentorFeedback" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：同意先做 A；要求补 B 组对照；投稿 venue 暂定为 XX"></textarea>
-              </label>
-            </div>
-            <div class="small-stat p-4 mt-3">
-              <div class="font-black mb-3">防忘管理</div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">导师说过的话 / 承诺 / 计划</div>
-                  <textarea id="mentorCommitment" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="尽量写成接近原话：例如“下周我看完初稿”“先按这个方向做实验”"></textarea>
-                </label>
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">我复述确认 / 会后纪要</div>
-                  <textarea id="mentorConfirmation" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：我理解为先做 A，再补 B；若周五前无反馈我主动跟进"></textarea>
-                </label>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3">
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">下次核对日期</div>
-                  <input id="mentorFollowupDate" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                </label>
-                <label class="block">
-                  <div class="text-sm font-bold mb-1">追踪状态</div>
-                  <select id="mentorPromiseStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                    <option value="open">待核对</option>
-                    <option value="confirmed">已确认待兑现</option>
-                    <option value="remind">需再次提醒</option>
-                    <option value="resolved">已落实</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-            <label class="block mt-3">
-              <div class="text-sm font-bold mb-1">我要守住的边界 / 沟通策略</div>
-              <textarea id="mentorBoundary" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：先整理问题再发消息、先给可选方案、不在高压时立刻回应"></textarea>
-            </label>
-            <label class="block mt-3">
-              <div class="text-sm font-bold mb-1">下一次跟进动作 / 时间</div>
-              <textarea id="mentorNextAction" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="例如：周四前发 1 页摘要；若周五无反馈则主动预约 15 分钟沟通"></textarea>
-              <div class="text-xs text-calm-mute mt-1">保存后会自动加入“项目看板 / 任务总表”；若填写了下次核对日期，到那天也会进入“今日执行”。</div>
-            </label>
-            <button id="btnSaveMentor" class="mt-4 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">保存导师沟通记录</button>
-          </div>
-
-          <div class="space-y-6">
-            <div class="soft-card p-5">
-              <div class="font-black text-lg mb-1">今日沟通面板</div>
-              <div class="text-sm text-calm-mute mb-3">固定住等待什么、缺什么、下一步做什么，能明显减轻博士阶段常见的不确定感。</div>
-              <div id="mentorSummary" class="space-y-3 text-sm"></div>
-            </div>
-            <div class="soft-card p-5">
-              <div class="font-black text-lg mb-1">待追踪承诺</div>
-              <div class="text-sm text-calm-mute mb-3">当导师容易忘记自己说过的话时，把承诺、复述确认和核对日期固定下来，避免你只靠记忆承担风险。</div>
-              <div id="mentorPromiseList" class="space-y-2"></div>
-            </div>
-            <div class="soft-card p-5">
-              <div class="font-black text-lg mb-1">最近 7 天导师互动</div>
-              <div class="text-sm text-calm-mute mb-3">把汇报、等待反馈和主动推进连起来看，不必只靠记忆承受压力。</div>
-              <div id="mentorHistoryList" class="space-y-2"></div>
-            </div>
-          </div>
-        </div>
+      <section id="upward-section" class="section-hidden space-y-6">
+        <div class="soft-card p-5 md:p-6"><div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"><div><h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-user-tie text-dopamine-purple"></i> 向上管理</h1><p class="text-calm-mute mt-1">不限定导师：也可以记录领导、老板、项目负责人或其他关键对象的汇报、反馈、承诺与跟进。</p></div><div class="flex flex-wrap gap-2 items-center"><input id="upwardDate" type="date" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><button id="btnUpwardToday" class="px-3 py-2 rounded-2xl bg-white border border-calm-line font-semibold">查看今天</button><div class="inline-flex items-center rounded-full bg-white/80 border border-calm-line p-1"><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="day">每日</button><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="week">每周</button><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="month">每月</button></div></div></div><div id="upwardStatsRangeLabel" class="text-sm text-calm-mute font-semibold mb-3">-</div><div id="upwardThemeStats" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3"></div></div>
+        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1.05fr)_380px] gap-6"><div class="soft-card p-5"><div class="flex items-center justify-between gap-3 mb-4"><div><h2 class="text-xl font-black">今日向上沟通记录</h2><div class="text-sm text-calm-mute mt-1">把对象、背景、明确请求、反馈和后续动作写清楚，减少信息不对称和反复确认。</div></div><button id="btnDeleteUpward" class="px-3 py-2 rounded-2xl bg-rose-100 text-rose-600 font-bold shrink-0">清空当天</button></div>
+          <div class="small-stat p-4 mb-4"><div class="font-black mb-3">沟通对象与状态</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><label><div class="text-sm font-bold mb-1">对象名称</div><input id="upwardPersonName" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：张老师 / Alice / 王总"></label><label><div class="text-sm font-bold mb-1">对象角色</div><select id="upwardPersonRole" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="advisor">导师 / PI</option><option value="manager">直属领导 / Manager</option><option value="boss">老板 / 负责人</option><option value="project_lead">项目负责人</option><option value="client">客户 / 合作方负责人</option><option value="other">其他上级 / 关键对象</option></select></label><label><div class="text-sm font-bold mb-1">组织 / 团队</div><input id="upwardOrganization" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="实验室 / 公司 / 项目组"></label><label><div class="text-sm font-bold mb-1">当前状态</div><select id="upwardStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="drafting">准备沟通</option><option value="reported">已汇报 / 已发送</option><option value="meeting">已沟通 / 已开会</option><option value="waiting">等待反馈</option><option value="blocked">需要主动推进</option></select></label><label><div class="text-sm font-bold mb-1">沟通方式</div><select id="upwardChannel" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="">未指定</option><option value="面谈">面谈</option><option value="邮件 / 微信">邮件 / 微信</option><option value="文稿批注">文稿批注</option><option value="会议">会议</option><option value="电话 / 视频">电话 / 视频</option><option value="其他">其他</option></select></label><label><div class="text-sm font-bold mb-1">沟通压力 / 清晰度</div><div class="grid grid-cols-2 gap-2"><select id="upwardPressure" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="1">压力 1</option><option value="2">压力 2</option><option value="3" selected>压力 3</option><option value="4">压力 4</option><option value="5">压力 5</option></select><select id="upwardClarity" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="1">清晰 1</option><option value="2">清晰 2</option><option value="3" selected>清晰 3</option><option value="4">清晰 4</option><option value="5">清晰 5</option></select></div></label></div></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label><div class="text-sm font-bold mb-1">这次沟通主题</div><textarea id="upwardTopic" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">我准备好的进展 / 证据</div><textarea id="upwardEvidence" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">我希望对方给的支持 / 决策</div><textarea id="upwardAsk" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">当前卡点 / 风险</div><textarea id="upwardRisk" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label class="md:col-span-2"><div class="text-sm font-bold mb-1">对方反馈 / 决策</div><textarea id="upwardFeedback" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label></div>
+          <div class="small-stat p-4 mt-3"><div class="font-black mb-3">承诺与防忘管理</div><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label><div class="text-sm font-bold mb-1">对方说过的话 / 承诺 / 计划</div><textarea id="upwardCommitment" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">我复述确认 / 会后纪要</div><textarea id="upwardConfirmation" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3"><label><div class="text-sm font-bold mb-1">下次核对日期</div><input id="upwardFollowupDate" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label><div class="text-sm font-bold mb-1">追踪状态</div><select id="upwardPromiseStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="open">待核对</option><option value="confirmed">已确认待兑现</option><option value="remind">需再次提醒</option><option value="resolved">已落实</option></select></label></div></div>
+          <label class="block mt-3"><div class="text-sm font-bold mb-1">我要守住的边界 / 沟通策略</div><textarea id="upwardBoundary" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label class="block mt-3"><div class="text-sm font-bold mb-1">下一次跟进动作 / 时间</div><textarea id="upwardNextAction" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea><div class="text-xs text-calm-mute mt-1">保存后可自动沉淀到项目看板 / 任务总表。</div></label><button id="btnSaveUpward" class="mt-4 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">保存向上管理记录</button></div>
+          <div class="space-y-6"><div class="soft-card p-5"><div class="font-black text-lg mb-1">今日沟通面板</div><div id="upwardSummary" class="space-y-3 text-sm mt-3"></div></div><div class="soft-card p-5"><div class="font-black text-lg mb-1">待追踪承诺</div><div class="text-sm text-calm-mute mb-3">把口头计划、承诺与核对日期固定下来。</div><div id="upwardPromiseList" class="space-y-2"></div></div><div class="soft-card p-5"><div class="font-black text-lg mb-1">最近 7 天互动</div><div id="upwardHistoryList" class="space-y-2 mt-3"></div></div></div></div>
       </section>
+
 
       <section id="review-section" class="section-hidden space-y-6">
         <div class="soft-card p-5 md:p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-clipboard-check text-dopamine-pink"></i> 每日复盘</h1>
-              <p class="text-calm-mute mt-1">用 PhD 学术复盘模板记录具体产出、未竟分析、学术洞见、障碍对策和明日优先任务，并自动汇总当天记录。</p>
+              <p class="text-calm-mute mt-1">用结构化复盘模板记录具体产出、未竟事项、工作或学术洞见、障碍对策和明日优先任务，并自动汇总当天记录。</p>
             </div>
             <div class="flex flex-wrap gap-2 items-center">
               <input id="reviewDate" type="date" class="px-3 py-2 rounded-2xl border border-calm-line bg-white">
@@ -1015,7 +790,7 @@
             <div class="soft-card p-5">
               <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
                 <div>
-                  <h2 class="text-xl font-black">PhD 学术复盘</h2>
+                  <h2 class="text-xl font-black">个人工作 / 学术复盘</h2>
                   <p class="text-sm text-calm-mute mt-1">优先写“具体产出”和“下一步动作”，少写泛泛而谈的在做中。</p>
                 </div>
                 <div class="flex gap-2">
@@ -1070,7 +845,7 @@
               <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
                 <div>
                   <h2 class="text-xl font-black">当天记录统计</h2>
-                  <p class="text-sm text-calm-mute mt-1">自动汇总总览首页、科研思路、博士毕业论文进度、投稿管理、记账、攒钱规划、导师沟通和每日复盘当天的关键记录。</p>
+                  <p class="text-sm text-calm-mute mt-1">自动汇总总览首页、科研思路、论文进度、投稿管理、记账、攒钱规划、旅行规划、向上管理和每日复盘当天的关键记录。</p>
                 </div>
                 <button id="btnDownloadReviewMd" class="px-4 py-2 rounded-2xl bg-dopamine-sky text-white font-black">下载 Markdown</button>
               </div>
@@ -1095,7 +870,7 @@
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-chart-line text-dopamine-sky"></i> 数据看板</h1>
-              <p class="text-calm-mute mt-1">把执行、科研思路、论文、投稿、财务、导师沟通和复盘放进统一视角里看。</p>
+              <p class="text-calm-mute mt-1">把执行、科研思路、论文、投稿、财务、旅行、向上管理和复盘放进统一视角里看。</p>
             </div>
             <select id="dashboardRange" class="px-3 py-3 rounded-2xl border border-calm-line bg-white font-semibold">
               <option value="1">今日</option>
@@ -1131,10 +906,10 @@
             </div>
             <div class="small-stat p-4">
               <div class="font-black mb-3">论文投入</div>
-              <div class="h-72"><canvas id="thesisChart"></canvas></div>
+              <div class="h-72"><canvas id="paperChart"></canvas></div>
             </div>
             <div class="small-stat p-4">
-              <div class="font-black mb-3">导师沟通 / 每日复盘</div>
+              <div class="font-black mb-3">向上管理 / 每日复盘</div>
               <div class="h-72"><canvas id="supportChart"></canvas></div>
             </div>
             <div class="small-stat p-4">
@@ -1152,7 +927,7 @@
             <div class="space-y-4">
               <div class="small-stat p-4 text-sm space-y-2">
                 <div class="font-black">当前存储信息</div>
-                <div class="flex justify-between"><span>Storage Key</span><code class="text-xs">phd_master_workspace_merged_v1</code></div>
+                <div class="flex justify-between"><span>Storage Key</span><code class="text-xs">personal_workspace_state_v1</code></div>
                 <div class="flex justify-between"><span>数据大小</span><span id="storageSizeText">0 KB</span></div>
                 <div class="flex justify-between"><span>最后预览刷新</span><span id="settingsRefreshTime">-</span></div>
               </div>
@@ -1221,32 +996,34 @@
     </div>
   </dialog>
 
-    <script src="./assets/js/core/constants.js?v=14.0.1"></script>
-  <script src="./assets/js/core/utils.js?v=14.0.1"></script>
-  <script src="./assets/js/core/preferences.js?v=14.0.1"></script>
-  <script src="./assets/js/core/normalizers.js?v=14.0.1"></script>
-  <script src="./assets/js/core/meta.js?v=14.0.1"></script>
-  <script src="./assets/js/core/state.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/thesis.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/research-ideas.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/home.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/tasks.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/focus-schedule.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/workflow.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/mentor.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/review.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/submissions.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/accounting.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/savings.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/dashboard.js?v=14.0.1"></script>
-  <script src="./assets/js/modules/settings.js?v=14.0.1"></script>
-  <script src="./assets/js/ui/dialogs.js?v=14.0.1"></script>
-  <script src="./assets/js/app/render.js?v=14.0.1"></script>
-  <script src="./assets/js/app/runtime-bridge.js?v=14.0.1"></script>
-  <script src="./assets/js/app/bootstrap.js?v=14.0.1"></script>
-<!-- PHD_WORKSPACE_SUPABASE_SYNC -->
-  <script src="./assets/js/config/supabase.config.js?v=14.0.1"></script>
+    <script src="./assets/js/core/constants.js?v=15.0.0"></script>
+  <script src="./assets/js/core/utils.js?v=15.0.0"></script>
+  <script src="./assets/js/core/preferences.js?v=15.0.0"></script>
+  <script src="./assets/js/core/normalizers.js?v=15.0.0"></script>
+  <script src="./assets/js/core/meta.js?v=15.0.0"></script>
+  <script src="./assets/js/core/state.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/profile.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/papers.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/research-ideas.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/home.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/tasks.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/focus-schedule.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/workflow.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/upward-management.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/review.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/submissions.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/accounting.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/savings.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/travel.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/dashboard.js?v=15.0.0"></script>
+  <script src="./assets/js/modules/settings.js?v=15.0.0"></script>
+  <script src="./assets/js/ui/dialogs.js?v=15.0.0"></script>
+  <script src="./assets/js/app/render.js?v=15.0.0"></script>
+  <script src="./assets/js/app/runtime-bridge.js?v=15.0.0"></script>
+  <script src="./assets/js/app/bootstrap.js?v=15.0.0"></script>
+<!-- PERSONAL_WORKSPACE_SUPABASE_SYNC -->
+  <script src="./assets/js/config/supabase.config.js?v=15.0.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./assets/js/cloud/supabase-sync.js?v=14.0.1"></script>
+  <script src="./assets/js/cloud/supabase-sync.js?v=15.0.0"></script>
 </body>
 </html>

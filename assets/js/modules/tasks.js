@@ -52,11 +52,11 @@ function addUniqueProgressLog(list, sourceTaskId, payload) {
   list.unshift({ id: uid('plog'), sourceTaskId, at: nowDateTime(), ...payload });
   return true;
 }
-function thesisLogTypeForTask(task) {
+function paperLogTypeForTask(task) {
   const text = `${task.title || ''} ${task.context || ''} ${task.note || ''}`;
   if (/实验|数据|样本|分析/.test(text)) return 'experiment';
   if (/改|修|润色|revision|返修/i.test(text)) return 'revise';
-  if (/组会|讨论|meeting|导师/i.test(text)) return 'meeting';
+  if (/组会|讨论|meeting|导师|领导|老板|manager|boss/i.test(text)) return 'meeting';
   if (/写|章|论文|draft|chapter/i.test(text)) return 'writing';
   return 'other';
 }
@@ -82,17 +82,15 @@ function recordProjectProgressFromTask(task) {
     note
   });
   project.updatedAt = nowDateTime();
-
   const projectNote = String(project.note || '');
-  if (projectNote === 'module:thesis' || task.note === 'module:thesis') {
-    state.thesis.logs = Array.isArray(state.thesis.logs) ? state.thesis.logs : [];
-    addUniqueProgressLog(state.thesis.logs, task.id, {
-      date: doneDate,
-      type: thesisLogTypeForTask(task),
-      minutes,
-      words: 0,
-      note: `${note}${project.title ? `（${project.title}）` : ''}`
-    });
+  const paperMatch = projectNote.match(/^paper:(.+)$/) || String(task.note || '').match(/^paper:(.+)$/);
+  if (paperMatch) {
+    const paper = paperById(paperMatch[1]);
+    if (paper) {
+      paper.logs = Array.isArray(paper.logs) ? paper.logs : [];
+      addUniqueProgressLog(paper.logs, task.id, { date:doneDate, type:paperLogTypeForTask(task), minutes, words:0, note:`${note}${project.title ? `（${project.title}）` : ''}` });
+      paper.updatedAt = nowDateTime();
+    }
   }
 
   const submission = submissionForCompletedTask(task, project);

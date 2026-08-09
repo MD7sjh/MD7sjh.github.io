@@ -1,6 +1,15 @@
 /* Backward-compatible data normalization and default schemas. */
 'use strict';
 
+
+function migrateLegacyModuleNote(note='') {
+  const value = String(note || '');
+  if (value === 'module:mentor') return 'module:upward';
+  if (value === 'module:thesis') return 'module:papers';
+  return value;
+}
+
+
 function taskBucketMeta(bucket) {
   return GTD_BUCKETS.find(item => item.value === bucket) || GTD_BUCKETS[1];
 }
@@ -46,7 +55,7 @@ function normalizeTaskItem(item) {
     dueDate: String(item.dueDate || ''),
     estimate: Math.max(0, Number(item.estimate) || 0),
     context: String(item.context || ''),
-    note: String(item.note || item.notes || ''),
+    note: migrateLegacyModuleNote(item.note || item.notes || ''),
     createdAt: String(item.createdAt || nowDateTime()),
     startedAt: String(item.startedAt || ''),
     doneAt: String(item.doneAt || '')
@@ -83,7 +92,7 @@ function normalizeProjectItem(item) {
     status,
     startDate: String(item.startDate || dateFromDateTime(item.createdAt || nowDateTime()) || ''),
     deadline: String(item.deadline || ''),
-    note: String(item.note || ''),
+    note: migrateLegacyModuleNote(item.note || ''),
     logs: Array.isArray(item.logs) ? item.logs.map(normalizeProgressLog).filter(Boolean) : [],
     createdAt: String(item.createdAt || nowDateTime()),
     updatedAt: String(item.updatedAt || item.createdAt || nowDateTime())
@@ -235,8 +244,11 @@ function normalizeDailyReviewState(reviewDaily, legacyReflections) {
   Object.entries(sourceEntries).forEach(([date, entry]) => { merged[date] = normalizeDailyReviewEntry(entry); });
   return { entries: merged };
 }
-function defaultMentorEntry() {
+function defaultUpwardEntry() {
   return {
+    personName: '',
+    personRole: 'other',
+    organization: '',
     status: 'drafting',
     channel: '',
     pressure: 3,
@@ -257,14 +269,20 @@ function defaultMentorEntry() {
     updatedAt: ''
   };
 }
-function normalizeMentorEntry(raw) {
-  const base = defaultMentorEntry();
+function normalizeUpwardEntry(raw, { legacyAdvisor=false } = {}) {
+  const base = defaultUpwardEntry();
   if (!raw || typeof raw !== 'object') return { ...base };
-  const status = MENTOR_STATUS_OPTIONS.some(item => item.value === raw.status) ? raw.status : base.status;
+  const status = UPWARD_STATUS_OPTIONS.some(item => item.value === raw.status) ? raw.status : base.status;
   const channelRaw = String(raw.channel || '').trim().replace(/\s*\/\s*/g, ' / ');
-  const channel = MENTOR_CHANNEL_OPTIONS.includes(channelRaw) ? channelRaw : '';
-  const promiseStatus = MENTOR_PROMISE_STATUS_OPTIONS.some(item => item.value === raw.promiseStatus) ? raw.promiseStatus : base.promiseStatus;
+  const channel = UPWARD_CHANNEL_OPTIONS.includes(channelRaw) ? channelRaw : '';
+  const promiseStatus = UPWARD_PROMISE_STATUS_OPTIONS.some(item => item.value === raw.promiseStatus) ? raw.promiseStatus : base.promiseStatus;
+  const personRole = UPWARD_ROLE_OPTIONS.some(item => item.value === raw.personRole)
+    ? raw.personRole
+    : (legacyAdvisor ? 'advisor' : base.personRole);
   return {
+    personName: String(raw.personName || raw.name || ''),
+    personRole,
+    organization: String(raw.organization || raw.org || ''),
     status,
     channel,
     pressure: clamp(raw.pressure ?? raw.stress ?? 3, 1, 5),
@@ -285,74 +303,179 @@ function normalizeMentorEntry(raw) {
     updatedAt: String(raw.updatedAt || raw.at || '')
   };
 }
-function normalizeMentorState(mentor) {
-  const entries = mentor?.entries && typeof mentor.entries === 'object' ? mentor.entries : {};
+function normalizeUpwardState(upward, legacyMentor) {
+  const source = upward?.entries && typeof upward.entries === 'object'
+    ? upward.entries
+    : (legacyMentor?.entries && typeof legacyMentor.entries === 'object' ? legacyMentor.entries : {});
+  const usingLegacy = !(upward?.entries && typeof upward.entries === 'object') && !!(legacyMentor?.entries);
   const out = {};
-  Object.entries(entries).forEach(([date, entry]) => { out[date] = normalizeMentorEntry(entry); });
+  Object.entries(source).forEach(([date, entry]) => {
+    out[date] = normalizeUpwardEntry(entry, { legacyAdvisor: usingLegacy });
+  });
   return { entries: out };
 }
-function defaultThesisState() {
+
+function defaultPaperMilestones() {
+  return [
+    { id:uid('pms'), name:'研究问题 / 方案确定', due:'', done:false, doneAt:'', note:'' },
+    { id:uid('pms'), name:'核心实验 / 分析完成', due:'', done:false, doneAt:'', note:'' },
+    { id:uid('pms'), name:'初稿完成', due:'', done:false, doneAt:'', note:'' },
+    { id:uid('pms'), name:'内部修改 / 合作者确认', due:'', done:false, doneAt:'', note:'' },
+    { id:uid('pms'), name:'投稿 / 提交', due:'', done:false, doneAt:'', note:'' }
+  ];
+}
+function defaultPaperSections() {
+  return [
+    { id:uid('psec'), name:'Introduction', progress:0, status:'draft', updatedAt:'', note:'' },
+    { id:uid('psec'), name:'Related Work', progress:0, status:'draft', updatedAt:'', note:'' },
+    { id:uid('psec'), name:'Method', progress:0, status:'draft', updatedAt:'', note:'' },
+    { id:uid('psec'), name:'Experiments / Results', progress:0, status:'draft', updatedAt:'', note:'' },
+    { id:uid('psec'), name:'Conclusion', progress:0, status:'draft', updatedAt:'', note:'' }
+  ];
+}
+function normalizePaperMilestone(item) {
+  if (!item || typeof item !== 'object') return null;
   return {
-    meta: { title:'', targetDate:'', version:'', note:'' },
-    milestones: [
-      { id:'ms_proposal', name:'开题 / Proposal', due:'', done:false, doneAt:'', note:'' },
-      { id:'ms_midterm', name:'中期检查', due:'', done:false, doneAt:'', note:'' },
-      { id:'ms_predefense', name:'预答辩', due:'', done:false, doneAt:'', note:'' },
-      { id:'ms_submission', name:'论文提交', due:'', done:false, doneAt:'', note:'' },
-      { id:'ms_defense', name:'正式答辩', due:'', done:false, doneAt:'', note:'' }
-    ],
-    chapters: [
-      { id:'ch_intro', name:'引言 / Introduction', progress:0, status:'draft', updatedAt:'', note:'' },
-      { id:'ch_related', name:'相关工作 / Related Work', progress:0, status:'draft', updatedAt:'', note:'' },
-      { id:'ch_method', name:'方法 / Method', progress:0, status:'draft', updatedAt:'', note:'' },
-      { id:'ch_exp', name:'实验 / Experiments', progress:0, status:'draft', updatedAt:'', note:'' },
-      { id:'ch_conc', name:'结论 / Conclusion', progress:0, status:'draft', updatedAt:'', note:'' }
-    ],
-    logs: []
+    id:String(item.id || uid('pms')),
+    name:String(item.name || '未命名里程碑'),
+    due:String(item.due || ''),
+    done:!!item.done,
+    doneAt:String(item.doneAt || ''),
+    note:String(item.note || '')
   };
 }
-function normalizeThesisState(thesis) {
-  const def = defaultThesisState();
-  if (!thesis || typeof thesis !== 'object') return def;
-  const metaRaw = thesis.meta && typeof thesis.meta === 'object' ? thesis.meta : {};
-  const meta = {
-    title: String(metaRaw.title || ''),
-    targetDate: String(metaRaw.targetDate || ''),
-    version: String(metaRaw.version || ''),
-    note: String(metaRaw.note || '')
+function normalizePaperSection(item) {
+  if (!item || typeof item !== 'object') return null;
+  return {
+    id:String(item.id || uid('psec')),
+    name:String(item.name || '未命名部分'),
+    progress:clamp(item.progress || 0, 0, 100),
+    status:PAPER_SECTION_STATUSES.some(entry => entry.value === item.status) ? item.status : 'draft',
+    updatedAt:String(item.updatedAt || ''),
+    note:String(item.note || '')
   };
-  const milestones = Array.isArray(thesis.milestones)
-    ? thesis.milestones.map(item => ({
-      id: String(item?.id || uid('ms')),
-      name: String(item?.name || '未命名里程碑'),
-      due: String(item?.due || ''),
-      done: !!item?.done,
-      doneAt: String(item?.doneAt || ''),
-      note: String(item?.note || '')
-    }))
-    : def.milestones.map(v => ({ ...v }));
-  const chapters = Array.isArray(thesis.chapters)
-    ? thesis.chapters.map(item => ({
-      id: String(item?.id || uid('ch')),
-      name: String(item?.name || '未命名章节'),
-      progress: Math.max(0, Math.min(100, Number(item?.progress) || 0)),
-      status: ['draft','revise','done'].includes(item?.status) ? item.status : 'draft',
-      updatedAt: String(item?.updatedAt || ''),
-      note: String(item?.note || '')
-    }))
-    : def.chapters.map(v => ({ ...v }));
-  const logs = Array.isArray(thesis.logs)
-    ? thesis.logs.map(item => ({
-      id: String(item?.id || uid('thlog')),
-      date: String(item?.date || todayStr()),
-      type: ['writing','revise','experiment','meeting','other'].includes(item?.type) ? item.type : 'other',
-      minutes: Math.max(0, Number(item?.minutes) || 0),
-      words: Math.max(0, Number(item?.words) || 0),
-      note: String(item?.note || ''),
-      at: String(item?.at || item?.ts || nowDateTime())
-    }))
-    : [];
-  return { meta, milestones, chapters, logs };
+}
+function normalizePaperLog(item) {
+  if (!item || typeof item !== 'object') return null;
+  return {
+    id:String(item.id || uid('plog')),
+    date:String(item.date || dateFromDateTime(item.at) || todayStr()),
+    type:PAPER_LOG_TYPES.some(entry => entry.value === item.type) ? item.type : 'other',
+    minutes:Math.max(0, Number(item.minutes) || 0),
+    words:Math.max(0, Number(item.words) || 0),
+    note:String(item.note || ''),
+    sourceTaskId:String(item.sourceTaskId || item.taskId || ''),
+    at:String(item.at || item.createdAt || nowDateTime())
+  };
+}
+function normalizePaperItem(item) {
+  if (!item || typeof item !== 'object') return null;
+  const title = String(item.title || item.name || '').trim();
+  if (!title) return null;
+  const type = PAPER_TYPES.some(entry => entry.value === item.type) ? item.type : 'conference';
+  const status = PAPER_STATUSES.some(entry => entry.value === item.status) ? item.status : 'drafting';
+  return {
+    id:String(item.id || uid('paper')),
+    title,
+    type,
+    venue:String(item.venue || ''),
+    deadline:String(item.deadline || item.targetDate || ''),
+    status,
+    version:String(item.version || ''),
+    submissionId:String(item.submissionId || ''),
+    note:String(item.note || ''),
+    milestones:Array.isArray(item.milestones) ? item.milestones.map(normalizePaperMilestone).filter(Boolean) : defaultPaperMilestones(),
+    sections:Array.isArray(item.sections || item.chapters) ? (item.sections || item.chapters).map(normalizePaperSection).filter(Boolean) : defaultPaperSections(),
+    logs:Array.isArray(item.logs) ? item.logs.map(normalizePaperLog).filter(Boolean) : [],
+    createdAt:String(item.createdAt || nowDateTime()),
+    updatedAt:String(item.updatedAt || item.createdAt || nowDateTime())
+  };
+}
+function legacyThesisHasMeaningfulData(thesis) {
+  if (!thesis || typeof thesis !== 'object') return false;
+  const meta = thesis.meta || {};
+  if ([meta.title, meta.targetDate, meta.version, meta.note].some(value => String(value || '').trim())) return true;
+  if (Array.isArray(thesis.logs) && thesis.logs.length) return true;
+  if (Array.isArray(thesis.milestones) && thesis.milestones.some(item => item?.done || item?.due || item?.note)) return true;
+  if (Array.isArray(thesis.chapters) && thesis.chapters.some(item => Number(item?.progress) > 0 || item?.updatedAt || item?.note)) return true;
+  return false;
+}
+function migrateLegacyThesisToPaper(thesis) {
+  if (!legacyThesisHasMeaningfulData(thesis)) return null;
+  const meta = thesis.meta || {};
+  return normalizePaperItem({
+    id:'paper_legacy_thesis',
+    title:String(meta.title || '旧版论文进度'),
+    type:'thesis',
+    venue:'',
+    deadline:String(meta.targetDate || ''),
+    status:'drafting',
+    version:String(meta.version || ''),
+    note:String(meta.note || '由旧版“博士毕业论文进度”自动迁移'),
+    milestones:Array.isArray(thesis.milestones) ? thesis.milestones : undefined,
+    sections:Array.isArray(thesis.chapters) ? thesis.chapters : undefined,
+    logs:Array.isArray(thesis.logs) ? thesis.logs : [],
+    createdAt:nowDateTime(),
+    updatedAt:nowDateTime()
+  });
+}
+function normalizePapersState(papers, legacyThesis) {
+  const source = Array.isArray(papers) ? { items:papers } : (papers && typeof papers === 'object' ? papers : {});
+  let items = Array.isArray(source.items) ? source.items.map(normalizePaperItem).filter(Boolean) : [];
+  if (!items.length) {
+    const migrated = migrateLegacyThesisToPaper(legacyThesis);
+    if (migrated) items = [migrated];
+  }
+  return { items };
+}
+
+function normalizeTravelPlan(item) {
+  if (!item || typeof item !== 'object') return null;
+  const title = String(item.title || item.name || '').trim();
+  if (!title) return null;
+  const status = TRAVEL_PLAN_STATUSES.some(entry => entry.value === item.status) ? item.status : 'idea';
+  const currency = ACCOUNTING_CURRENCIES.some(entry => entry.value === item.currency) ? item.currency : 'CNY';
+  const tags = Array.isArray(item.tags) ? item.tags.map(v => String(v || '').trim()).filter(Boolean) : String(item.tags || '').split(/[,，;；]/).map(v => v.trim()).filter(Boolean);
+  return {
+    id:String(item.id || uid('trip')),
+    title,
+    destination:String(item.destination || ''),
+    status,
+    startDate:String(item.startDate || ''),
+    endDate:String(item.endDate || ''),
+    budget:Math.max(0, Number(item.budget) || 0),
+    currency,
+    companions:String(item.companions || ''),
+    tags:[...new Set(tags)].slice(0,20),
+    note:String(item.note || item.description || ''),
+    createdAt:String(item.createdAt || nowDateTime()),
+    updatedAt:String(item.updatedAt || item.createdAt || nowDateTime())
+  };
+}
+function normalizeTravelNote(item) {
+  if (!item || typeof item !== 'object') return null;
+  const title = String(item.title || '').trim();
+  const content = String(item.content || item.note || item.text || '').trim();
+  const url = String(item.url || item.link || '').trim();
+  if (!title && !content && !url) return null;
+  const type = TRAVEL_NOTE_TYPES.some(entry => entry.value === item.type) ? item.type : 'idea';
+  return {
+    id:String(item.id || uid('tripnote')),
+    planId:String(item.planId || ''),
+    type,
+    title,
+    content,
+    url,
+    createdAt:String(item.createdAt || item.at || nowDateTime()),
+    updatedAt:String(item.updatedAt || item.createdAt || item.at || nowDateTime())
+  };
+}
+function normalizeTravelState(travel) {
+  const source = travel && typeof travel === 'object' ? travel : {};
+  const plans = Array.isArray(source.plans) ? source.plans.map(normalizeTravelPlan).filter(Boolean) : [];
+  const planIds = new Set(plans.map(item => item.id));
+  const notes = Array.isArray(source.notes) ? source.notes.map(normalizeTravelNote).filter(Boolean).map(note => planIds.has(note.planId) ? note : { ...note, planId:'' }) : [];
+  return { plans, notes };
 }
 
 

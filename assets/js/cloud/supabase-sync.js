@@ -1,5 +1,5 @@
 /*
- * PhD Master Workspace · Supabase 登录与云同步插件
+ * Personal Workspace · Supabase 登录与云同步插件
  * 模块位置：assets/js/cloud/supabase-sync.js
  *
  * 说明：
@@ -10,7 +10,7 @@
 (() => {
   'use strict';
 
-  const config = window.PHD_SUPABASE_CONFIG || {};
+  const config = window.PERSONAL_SUPABASE_CONFIG || window.PHD_SUPABASE_CONFIG || {};
   const SUPABASE_URL = config.url;
   const SUPABASE_PUBLISHABLE_KEY = config.publishableKey;
   const CLOUD_TABLE = config.table || 'workspace_state';
@@ -29,7 +29,7 @@
   }
 
   // 模块化版本通过稳定桥接对象提供状态与保存接口。
-  const app = window.PHD_WORKSPACE_APP;
+  const app = window.PERSONAL_WORKSPACE_APP || window.PHD_WORKSPACE_APP;
   if (
     !app ||
     !app.storageKey ||
@@ -62,7 +62,7 @@
   );
 
   // 方便在浏览器控制台调试，但不包含任何管理员密钥。
-  window.phdSupabase = client;
+  window.personalWorkspaceSupabase = client;
 
   const SYNC_META_KEY = `${STORAGE_KEY}__supabase_sync_meta`;
   const originalSaveState = app.getSaveState();
@@ -226,7 +226,7 @@
       }
       .cloud-account-actions {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 7px;
         margin-top: 10px;
       }
@@ -254,10 +254,11 @@
     overlay.innerHTML = `
       <div class="cloud-auth-card">
         <div class="cloud-auth-logo">🐻</div>
-        <h1 class="cloud-auth-title">欢迎回到博士工作台 🌸</h1>
+        <h1 class="cloud-auth-title">欢迎回到Personal Workspace 🌸</h1>
         <p class="cloud-auth-subtitle">
-          登录后，任务、科研思路、论文、投稿和复盘会在电脑与手机之间温柔同步。
+          登录后，任务、科研思路、论文、旅行、财务、向上管理和复盘会在电脑与手机之间同步。
         </p>
+        <input id="cloudAuthName" class="cloud-field" type="text" autocomplete="name" placeholder="你的名称（注册必填，登录可选）">
         <input id="cloudAuthEmail" class="cloud-field" type="email"
                autocomplete="email" placeholder="邮箱">
         <input id="cloudAuthPassword" class="cloud-field" type="password"
@@ -288,9 +289,11 @@
       account.className = 'cloud-account-card';
       account.hidden = true;
       account.innerHTML = `
-        <div class="cloud-account-email" id="cloudAccountEmail">—</div>
+        <div class="cloud-account-email" id="cloudAccountName">—</div>
+        <div class="cloud-account-status" id="cloudAccountEmail">—</div>
         <div class="cloud-account-status" id="cloudAccountStatus">未同步</div>
         <div class="cloud-account-actions">
+          <button id="cloudEditNameBtn">修改名称</button>
           <button id="cloudSyncNowBtn">立即同步</button>
           <button id="cloudLogoutBtn">退出登录</button>
         </div>
@@ -304,6 +307,7 @@
       hideAuth();
       setStatus('离线模式：数据只保存在本机', 'warn');
     });
+    document.getElementById('cloudEditNameBtn')?.addEventListener('click', editDisplayName);
     document.getElementById('cloudSyncNowBtn')?.addEventListener('click', () => saveCloudState(true));
     document.getElementById('cloudLogoutBtn')?.addEventListener('click', signOut);
 
@@ -354,8 +358,24 @@
   function setAccount(user) {
     const card = document.getElementById('cloudAccountCard');
     const email = document.getElementById('cloudAccountEmail');
+    const name = document.getElementById('cloudAccountName');
     if (card) card.hidden = !user;
     if (email) email.textContent = user?.email || '已登录';
+    const displayName = String(user?.user_metadata?.display_name || user?.user_metadata?.name || '').trim();
+    if (name) name.textContent = displayName || String(user?.email || '').split('@')[0] || '个人用户';
+    window.PERSONAL_WORKSPACE_PROFILE?.applyUser?.(user);
+  }
+  async function editDisplayName() {
+    if (!currentUser) return;
+    const current = String(currentUser.user_metadata?.display_name || window.PERSONAL_WORKSPACE_PROFILE?.getName?.() || '').trim();
+    const next = window.prompt('设置你的显示名称：', current);
+    if (next == null) return;
+    const clean = next.trim();
+    if (!clean) { alert('名称不能为空。'); return; }
+    const { data, error } = await client.auth.updateUser({ data:{ display_name: clean } });
+    if (error) { alert(`修改名称失败：${error.message}`); return; }
+    currentUser = data.user || currentUser;
+    setAccount(currentUser);
   }
 
   function readMeta() {
@@ -390,11 +410,12 @@
       candidate.submissions?.length ||
       candidate.accounting?.transactions?.length ||
       Object.keys(candidate.accounting?.budgets || {}).length ||
-      candidate.thesis?.logs?.length ||
+      candidate.papers?.items?.length ||
+      candidate.travel?.plans?.length || candidate.travel?.notes?.length ||
       Object.keys(candidate.attendance || {}).length ||
       Object.keys(candidate.timeBlocks || {}).length ||
       candidate.researchIdeas?.ideas?.length ||
-      Object.keys(candidate.mentor?.entries || {}).length ||
+      Object.keys(candidate.upward?.entries || candidate.mentor?.entries || {}).length ||
       Object.keys(candidate.reviewDaily?.entries || {}).length
     );
   }
@@ -589,11 +610,12 @@
   }
 
   async function signUp() {
+    const displayName = document.getElementById('cloudAuthName')?.value.trim();
     const email = document.getElementById('cloudAuthEmail')?.value.trim();
     const password = document.getElementById('cloudAuthPassword')?.value || '';
 
-    if (!email || password.length < 6) {
-      setAuthMessage('请输入有效邮箱和至少 6 位密码。', 'error');
+    if (!displayName || !email || password.length < 6) {
+      setAuthMessage('首次注册请填写名称、有效邮箱和至少 6 位密码。', 'error');
       return;
     }
 
@@ -605,7 +627,7 @@
       const { data, error } = await client.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: redirectTo }
+        options: { emailRedirectTo: redirectTo, data:{ display_name: displayName } }
       });
       if (error) throw error;
 
@@ -622,6 +644,7 @@
   }
 
   async function signIn() {
+    const displayName = document.getElementById('cloudAuthName')?.value.trim();
     const email = document.getElementById('cloudAuthEmail')?.value.trim();
     const password = document.getElementById('cloudAuthPassword')?.value || '';
 
@@ -636,6 +659,10 @@
     try {
       const { error } = await client.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      if (displayName) {
+        const { error: nameError } = await client.auth.updateUser({ data:{ display_name: displayName } });
+        if (nameError) console.warn('[Cloud Sync] 登录成功，但显示名称更新失败：', nameError);
+      }
       setAuthMessage('登录成功，正在读取数据…', 'ok');
     } catch (error) {
       setAuthMessage(`登录失败：${error.message || '请检查邮箱和密码'}`, 'error');

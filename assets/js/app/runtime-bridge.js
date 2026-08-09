@@ -3,7 +3,7 @@
 
 (() => {
   const app = {
-    version: '14.0.0',
+    version: '15.0.0',
     storageKey: STORAGE_KEY,
     state,
     loadState,
@@ -19,6 +19,7 @@
     }
   };
 
-  window.PHD_WORKSPACE_APP = app;
-  window.dispatchEvent(new CustomEvent('phd-workspace:ready', { detail: app }));
+  window.PERSONAL_WORKSPACE_APP = app;
+  window.PHD_WORKSPACE_APP = app; // legacy alias for older sync plugins
+  window.dispatchEvent(new CustomEvent('personal-workspace:ready', { detail: app }));
 })();

@@ -1,4 +1,4 @@
--- PhD Master Workspace: one JSONB workspace per authenticated user.
+-- Personal Workspace: one JSONB workspace per authenticated user.
 create table if not exists public.workspace_state (
   user_id uuid primary key references auth.users(id) on delete cascade,
   state jsonb not null default '{}'::jsonb,
