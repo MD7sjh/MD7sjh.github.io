@@ -73,8 +73,7 @@ function bindEvents() {
   $('btnAddSubmissionLog').onclick = addSubmissionLog;
   $('btnDownloadSubmissionMd').onclick = downloadSubmissionMarkdown;
 
-  bindAccountingEvents();
-  bindSavingsEvents();
+  bindExperimentEvents();
   bindTravelEvents();
   bindResearchIdeaEvents();
 

@@ -84,18 +84,15 @@ function buildDailyDigest(date=todayStr()) {
   const ideaUpdated = researchIdeasUpdatedInRange(date, date).filter(item => dateFromDateTime(item.createdAt) !== date);
   const ideaSources = researchIdeaSourcesInRange(date, date);
   const ideaReferences = researchIdeaReferencesInRange(date, date);
+  const experimentToday = experimentRunsInRange(date, date);
+  const experimentCompleted = experimentToday.filter(item => item.status === 'completed').length;
+  const experimentMetricToday = experimentToday.reduce((sum,item) => sum + (item.metrics?.length || 0),0);
 
   const submissionCreated = state.submissions.filter(item => dateFromDateTime(item.createdAt) === date).length;
   const submissionUpdated = state.submissions.filter(item => dateFromDateTime(item.updatedAt) === date && dateFromDateTime(item.createdAt) !== date).length;
   const submissionDue = state.submissions.filter(item => item.deadline === date).length;
   const submissionMoves = submissionCreated + submissionUpdated;
   const submissionLogsToday = state.submissions.flatMap(item => (item.logs || []).filter(log => log.date === date).map(log => ({ item, log })));
-  const accountingToday = (state.accounting?.transactions || []).filter(item => item.date === date);
-  const accountingIncome = accountingToday.filter(item => item.type === 'income').reduce((sum,item)=>sum+item.amount,0);
-  const accountingExpense = accountingToday.filter(item => item.type === 'expense').reduce((sum,item)=>sum+item.amount,0);
-  const savingsToday = (state.savings?.entries || []).filter(item => item.date === date);
-  const savingsDeposit = savingsToday.filter(item => item.type === 'deposit').reduce((sum,item)=>sum+item.amount,0);
-  const savingsWithdrawal = savingsToday.filter(item => item.type === 'withdrawal').reduce((sum,item)=>sum+item.amount,0);
 
   const travelPlansToday = (state.travel?.plans || []).filter(item => dateFromDateTime(item.createdAt) === date);
   const travelNotesToday = (state.travel?.notes || []).filter(item => dateFromDateTime(item.createdAt) === date);
@@ -110,8 +107,7 @@ function buildDailyDigest(date=todayStr()) {
     { label:'科研思路', value:(ideaCreated.length + ideaUpdated.length) ? `${ideaCreated.length} 新 / ${ideaUpdated.length} 更` : '无更新', color:'text-dopamine-purple' },
     { label:'论文进度', value:`${paperLogs.length} 条`, color:'text-dopamine-purple' },
     { label:'投稿管理', value:`${submissionMoves} 动`, color:'text-dopamine-sky' },
-    { label:'记账管理', value:accountingToday.length ? `${accountingToday.length} 笔` : '未记录', color:'text-dopamine-pink' },
-    { label:'攒钱规划', value:savingsToday.length ? `${savingsToday.length} 笔` : '未记录', color:'text-dopamine-mint' },
+    { label:'实验结果', value:experimentToday.length ? `${experimentCompleted}/${experimentToday.length} 完成` : '无记录', color:'text-dopamine-mint' },
     { label:'旅行规划', value:(travelPlansToday.length + travelNotesToday.length) ? `${travelPlansToday.length} 计划 / ${travelNotesToday.length} 碎片` : '无新增', color:'text-dopamine-sky' },
     { label:'向上管理', value: upwardCountOn(date) ? `${upwardStatus.emoji} ${upwardStatus.label}` : '未记录', color:'text-dopamine-purple' },
     { label:'每日复盘', value: reviewCountOn(date) ? `${reviewEnergy.emoji} ${reviewTemplateCount(review)}/5` : '未写', color:'text-dopamine-yellow' }
@@ -132,6 +128,7 @@ function buildDailyDigest(date=todayStr()) {
       `新增参考资料：${ideaReferences.length} 条`,
       `当前推进中思路：${activeResearchIdeaCount()} 个`
     ]},
+    { title:'实验结果', lines:[`今日实验记录：${experimentToday.length} 条`,`已完成：${experimentCompleted} 条`,`指标记录：${experimentMetricToday} 项`,`重点结果：${experimentToday.filter(item=>item.starred).length} 条`] },
     { title:'论文进度', lines:[
       `推进日志：${paperLogs.length} 条，共 ${formatMinutes(paperMinutes)}${paperWords ? `，${paperWords} 字` : ''}`,
       `完成里程碑：${milestoneDone} 个`,
@@ -144,18 +141,6 @@ function buildDailyDigest(date=todayStr()) {
       `今日截止：${submissionDue} 个`,
       `进行中项目：${runningSubmissionCount()} 个`
     ]},
-    { title:'记账管理', lines:accountingToday.length ? [
-      `今日记录：${accountingToday.length} 笔`,
-      `收入：${formatAccountingMoney(accountingIncome)}`,
-      `支出：${formatAccountingMoney(accountingExpense)}`,
-      `当日结余：${formatAccountingMoney(accountingIncome - accountingExpense)}`
-    ] : ['今天还没有收支记录。'] },
-    { title:'攒钱规划', lines:savingsToday.length ? [
-      `今日存取记录：${savingsToday.length} 笔`,
-      `存入：${formatSavingsMoney(savingsDeposit)}`,
-      `取出：${formatSavingsMoney(savingsWithdrawal)}`,
-      `今日净攒入：${formatSavingsMoney(savingsDeposit - savingsWithdrawal)}`
-    ] : ['今天还没有为未来愿望存入记录。'] },
     { title:'旅行规划', lines:[`新增旅行计划：${travelPlansToday.length} 个`,`新增旅行碎片：${travelNotesToday.length} 条`,`当前进行中计划：${activeTravelPlans().length} 个`] },
     { title:'向上管理', lines:upwardCountOn(date) ? [
       `沟通状态：${upwardStatus.emoji} ${upwardStatus.label}`,

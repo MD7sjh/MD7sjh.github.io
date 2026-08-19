@@ -126,74 +126,78 @@ const REVIEW_ENERGY_OPTIONS = [
 ];
 
 
-const ACCOUNTING_TRANSACTION_TYPES = [
-  { value:'expense', label:'支出', icon:'↗', color:'text-rose-600', tone:'bg-rose-50 border-rose-100' },
-  { value:'income', label:'收入', icon:'↙', color:'text-emerald-600', tone:'bg-emerald-50 border-emerald-100' }
-];
-const ACCOUNTING_EXPENSE_CATEGORIES = [
-  { value:'food', label:'餐饮', icon:'🍜' },
-  { value:'transport', label:'交通', icon:'🚇' },
-  { value:'housing', label:'房租 / 住宿', icon:'🏠' },
-  { value:'utilities', label:'水电 / 通讯', icon:'💡' },
-  { value:'study', label:'学习 / 书籍', icon:'📚' },
-  { value:'research', label:'科研 / 实验', icon:'🧪' },
-  { value:'health', label:'医疗 / 健身', icon:'💊' },
-  { value:'shopping', label:'购物', icon:'🛍️' },
-  { value:'entertainment', label:'娱乐', icon:'🎬' },
-  { value:'social', label:'社交 / 礼物', icon:'🎁' },
-  { value:'travel', label:'旅行', icon:'🧳' },
-  { value:'other_expense', label:'其他支出', icon:'🧾' }
-];
-const ACCOUNTING_INCOME_CATEGORIES = [
-  { value:'salary', label:'工资 / 助研', icon:'💼' },
-  { value:'scholarship', label:'奖学金 / 津贴', icon:'🎓' },
-  { value:'reimbursement', label:'报销', icon:'🧾' },
-  { value:'bonus', label:'奖金 / 稿费', icon:'✨' },
-  { value:'transfer_in', label:'家人转入 / 其他转入', icon:'💌' },
-  { value:'other_income', label:'其他收入', icon:'🌱' }
-];
-const ACCOUNTING_ACCOUNTS = [
-  { value:'cash', label:'现金', icon:'💵' },
-  { value:'bank', label:'银行卡', icon:'🏦' },
-  { value:'mobile', label:'电子钱包', icon:'📱' },
-  { value:'credit', label:'信用卡', icon:'💳' },
-  { value:'other', label:'其他账户', icon:'🪙' }
-];
-const ACCOUNTING_CURRENCIES = [
+
+
+
+const CURRENCY_OPTIONS = [
   { value:'CNY', label:'CNY · 人民币', symbol:'¥' },
   { value:'MOP', label:'MOP · 澳门元', symbol:'MOP$' },
   { value:'HKD', label:'HKD · 港币', symbol:'HK$' },
   { value:'SGD', label:'SGD · 新加坡元', symbol:'S$' },
-  { value:'USD', label:'USD · 美元', symbol:'$' }
+  { value:'USD', label:'USD · 美元', symbol:'$' },
+  { value:'JPY', label:'JPY · 日元', symbol:'¥' },
+  { value:'EUR', label:'EUR · 欧元', symbol:'€' }
 ];
 
-
-const SAVINGS_GOAL_CATEGORIES = [
-  { value:'travel', label:'旅行 / 远方', icon:'✈️' },
-  { value:'education', label:'学习 / 深造', icon:'🎓' },
-  { value:'device', label:'数码 / 设备', icon:'💻' },
-  { value:'home', label:'住房 / 搬家', icon:'🏡' },
-  { value:'emergency', label:'应急储备', icon:'🛟' },
-  { value:'experience', label:'体验 / 兴趣', icon:'🎨' },
-  { value:'family', label:'家人 / 礼物', icon:'🎁' },
-  { value:'career', label:'职业 / 创业', icon:'🚀' },
-  { value:'other', label:'其他愿望', icon:'🌟' }
+const EXPERIMENT_TASK_TYPES = [
+  { value:'classification', label:'图像分类', icon:'🏷️' },
+  { value:'detection', label:'目标检测', icon:'🎯' },
+  { value:'segmentation', label:'语义 / 实例分割', icon:'🧩' },
+  { value:'tracking', label:'目标跟踪', icon:'🛰️' },
+  { value:'pose', label:'姿态估计', icon:'🕺' },
+  { value:'depth', label:'深度估计', icon:'📏' },
+  { value:'restoration', label:'图像恢复 / 超分', icon:'🪄' },
+  { value:'generation', label:'图像 / 视频生成', icon:'🎨' },
+  { value:'reconstruction', label:'3D / NVS / 重建', icon:'🧊' },
+  { value:'multimodal', label:'视觉语言 / 多模态', icon:'🧠' },
+  { value:'efficiency', label:'效率 / 部署', icon:'⚡' },
+  { value:'other', label:'其他 CV 实验', icon:'🧪' }
 ];
-const SAVINGS_GOAL_PRIORITIES = [
-  { value:'high', label:'优先实现', color:'bg-rose-100 text-rose-700' },
-  { value:'medium', label:'稳步推进', color:'bg-amber-100 text-amber-700' },
-  { value:'low', label:'从容准备', color:'bg-sky-100 text-sky-700' }
+const EXPERIMENT_STATUSES = [
+  { value:'planned', label:'待运行', color:'bg-slate-100 text-slate-600' },
+  { value:'running', label:'运行中', color:'bg-sky-100 text-sky-700' },
+  { value:'completed', label:'已完成', color:'bg-emerald-100 text-emerald-700' },
+  { value:'failed', label:'失败 / 无效', color:'bg-rose-100 text-rose-700' },
+  { value:'archived', label:'归档', color:'bg-gray-100 text-gray-600' }
 ];
-const SAVINGS_GOAL_STATUSES = [
-  { value:'active', label:'进行中', color:'bg-emerald-100 text-emerald-700' },
-  { value:'paused', label:'暂缓', color:'bg-gray-100 text-gray-600' },
-  { value:'completed', label:'已攒够', color:'bg-purple-100 text-purple-700' }
+const EXPERIMENT_ARTIFACT_TYPES = [
+  { value:'figure', label:'结果图 / 可视化', icon:'🖼️' },
+  { value:'table', label:'表格 / CSV', icon:'📊' },
+  { value:'checkpoint', label:'Checkpoint', icon:'💾' },
+  { value:'log', label:'训练日志', icon:'🧾' },
+  { value:'config', label:'配置文件', icon:'⚙️' },
+  { value:'code', label:'代码 / Commit', icon:'💻' },
+  { value:'tensorboard', label:'TensorBoard / W&B', icon:'📈' },
+  { value:'other', label:'其他结果资料', icon:'📎' }
 ];
-const SAVINGS_ENTRY_TYPES = [
-  { value:'deposit', label:'存入', icon:'🌱', color:'text-emerald-600', tone:'bg-emerald-50 border-emerald-100' },
-  { value:'withdrawal', label:'取出', icon:'↩️', color:'text-rose-600', tone:'bg-rose-50 border-rose-100' }
+const EXPERIMENT_METRIC_PRESETS = [
+  { name:'Top-1 Acc', unit:'%', direction:'higher' },
+  { name:'Top-5 Acc', unit:'%', direction:'higher' },
+  { name:'Precision', unit:'%', direction:'higher' },
+  { name:'Recall', unit:'%', direction:'higher' },
+  { name:'F1', unit:'%', direction:'higher' },
+  { name:'mAP@50', unit:'%', direction:'higher' },
+  { name:'mAP@50:95', unit:'%', direction:'higher' },
+  { name:'mIoU', unit:'%', direction:'higher' },
+  { name:'Dice', unit:'%', direction:'higher' },
+  { name:'HOTA', unit:'', direction:'higher' },
+  { name:'MOTA', unit:'', direction:'higher' },
+  { name:'IDF1', unit:'%', direction:'higher' },
+  { name:'AbsRel', unit:'', direction:'lower' },
+  { name:'RMSE', unit:'', direction:'lower' },
+  { name:'PSNR', unit:'dB', direction:'higher' },
+  { name:'SSIM', unit:'', direction:'higher' },
+  { name:'LPIPS', unit:'', direction:'lower' },
+  { name:'FID', unit:'', direction:'lower' },
+  { name:'CLIPScore', unit:'', direction:'higher' },
+  { name:'CD-L1', unit:'', direction:'lower' },
+  { name:'Chamfer Distance', unit:'', direction:'lower' },
+  { name:'FPS', unit:'fps', direction:'higher' },
+  { name:'Params', unit:'M', direction:'lower' },
+  { name:'FLOPs', unit:'G', direction:'lower' },
+  { name:'VRAM', unit:'GB', direction:'lower' },
+  { name:'Train Time', unit:'h', direction:'lower' }
 ];
-
 
 const RESEARCH_IDEA_AREAS = [
   { value:'3d_graphics', label:'3D / Graphics', icon:'🧊' },
@@ -238,8 +242,8 @@ const RESEARCH_IDEA_REFERENCE_TYPES = [
 ];
 
 const $ = (id) => document.getElementById(id);
-const sections = ['home-section','workflow-section','research-ideas-section','paper-section','submission-section','accounting-section','savings-section','travel-section','upward-section','review-section','dashboard-section','settings-section'];
-const charts = { focus:null, attendance:null, papers:null, support:null, submission:null, accountingTrend:null, accountingCategory:null, savingsTrend:null, savingsProgress:null, researchIdeaStatus:null, researchIdeaSources:null, researchIdeaDashboard:null, travelStatus:null, travelNotes:null };
+const sections = ['home-section','workflow-section','research-ideas-section','experiment-section','paper-section','submission-section','travel-section','upward-section','review-section','dashboard-section','settings-section'];
+const charts = { focus:null, attendance:null, papers:null, support:null, submission:null, experimentStatus:null, experimentTask:null, experimentDashboard:null, researchIdeaStatus:null, researchIdeaSources:null, researchIdeaDashboard:null, travelStatus:null, travelNotes:null };
 const PREF_SIDEBAR_HIDDEN_KEY = `${STORAGE_KEY}__sidebar_hidden`;
 const PREF_STATS_MODE_KEY = `${STORAGE_KEY}__stats_mode`;
 let currentSection = 'home-section';

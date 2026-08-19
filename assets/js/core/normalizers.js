@@ -434,7 +434,7 @@ function normalizeTravelPlan(item) {
   const title = String(item.title || item.name || '').trim();
   if (!title) return null;
   const status = TRAVEL_PLAN_STATUSES.some(entry => entry.value === item.status) ? item.status : 'idea';
-  const currency = ACCOUNTING_CURRENCIES.some(entry => entry.value === item.currency) ? item.currency : 'CNY';
+  const currency = CURRENCY_OPTIONS.some(entry => entry.value === item.currency) ? item.currency : 'CNY';
   const tags = Array.isArray(item.tags) ? item.tags.map(v => String(v || '').trim()).filter(Boolean) : String(item.tags || '').split(/[,，;；]/).map(v => v.trim()).filter(Boolean);
   return {
     id:String(item.id || uid('trip')),
@@ -478,133 +478,6 @@ function normalizeTravelState(travel) {
   return { plans, notes };
 }
 
-
-/* Accounting data compatibility and cleanup. */
-function accountingCategoriesForType(type='expense') {
-  return type === 'income' ? ACCOUNTING_INCOME_CATEGORIES : ACCOUNTING_EXPENSE_CATEGORIES;
-}
-function normalizeAccountingTransaction(item) {
-  if (!item || typeof item !== 'object') return null;
-  const type = item.type === 'income' ? 'income' : 'expense';
-  const amount = Math.abs(Number(item.amount) || 0);
-  if (!amount) return null;
-  const categories = accountingCategoriesForType(type);
-  const category = categories.some(entry => entry.value === item.category)
-    ? String(item.category)
-    : categories[categories.length - 1].value;
-  const account = ACCOUNTING_ACCOUNTS.some(entry => entry.value === item.account)
-    ? String(item.account)
-    : 'bank';
-  return {
-    id: String(item.id || uid('money')),
-    type,
-    amount: Math.round(amount * 100) / 100,
-    category,
-    account,
-    date: String(item.date || dateFromDateTime(item.createdAt || item.at) || todayStr()),
-    note: String(item.note || item.description || item.title || ''),
-    createdAt: String(item.createdAt || item.at || nowDateTime()),
-    updatedAt: String(item.updatedAt || item.createdAt || item.at || nowDateTime())
-  };
-}
-function normalizeAccountingBudget(item) {
-  const source = item && typeof item === 'object' ? item : {};
-  const categories = {};
-  if (source.categories && typeof source.categories === 'object') {
-    Object.entries(source.categories).forEach(([key, value]) => {
-      if (!ACCOUNTING_EXPENSE_CATEGORIES.some(entry => entry.value === key)) return;
-      const amount = Math.max(0, Number(value) || 0);
-      if (amount > 0) categories[key] = Math.round(amount * 100) / 100;
-    });
-  }
-  return {
-    total: Math.max(0, Math.round((Number(source.total) || 0) * 100) / 100),
-    categories
-  };
-}
-function normalizeAccountingState(accounting) {
-  const source = accounting && typeof accounting === 'object' ? accounting : {};
-  const budgets = {};
-  if (source.budgets && typeof source.budgets === 'object') {
-    Object.entries(source.budgets).forEach(([month, value]) => {
-      if (!/^\d{4}-\d{2}$/.test(month)) return;
-      budgets[month] = normalizeAccountingBudget(value);
-    });
-  }
-  const currency = ACCOUNTING_CURRENCIES.some(item => item.value === source.settings?.currency)
-    ? source.settings.currency
-    : 'CNY';
-  return {
-    transactions: Array.isArray(source.transactions)
-      ? source.transactions.map(normalizeAccountingTransaction).filter(Boolean)
-      : [],
-    budgets,
-    settings: { currency }
-  };
-}
-
-
-/* Savings planning data compatibility and cleanup. */
-function normalizeSavingsGoal(item) {
-  if (!item || typeof item !== 'object') return null;
-  const title = String(item.title || item.name || '').trim();
-  const targetAmount = Math.max(0, Number(item.targetAmount ?? item.target ?? 0) || 0);
-  if (!title || targetAmount <= 0) return null;
-  const category = SAVINGS_GOAL_CATEGORIES.some(entry => entry.value === item.category)
-    ? String(item.category)
-    : 'other';
-  const priority = SAVINGS_GOAL_PRIORITIES.some(entry => entry.value === item.priority)
-    ? String(item.priority)
-    : 'medium';
-  const status = SAVINGS_GOAL_STATUSES.some(entry => entry.value === item.status)
-    ? String(item.status)
-    : 'active';
-  const defaultIcon = SAVINGS_GOAL_CATEGORIES.find(entry => entry.value === category)?.icon || '🌟';
-  return {
-    id: String(item.id || uid('savegoal')),
-    title,
-    icon: String(item.icon || item.emoji || defaultIcon).trim() || defaultIcon,
-    category,
-    targetAmount: Math.round(targetAmount * 100) / 100,
-    initialAmount: Math.max(0, Math.round((Number(item.initialAmount ?? item.currentAmount ?? item.savedAmount ?? 0) || 0) * 100) / 100),
-    startDate: String(item.startDate || dateFromDateTime(item.createdAt) || todayStr()),
-    targetDate: String(item.targetDate || item.deadline || ''),
-    priority,
-    status,
-    note: String(item.note || item.description || ''),
-    createdAt: String(item.createdAt || nowDateTime()),
-    updatedAt: String(item.updatedAt || item.createdAt || nowDateTime()),
-    completedAt: String(item.completedAt || '')
-  };
-}
-function normalizeSavingsEntry(item) {
-  if (!item || typeof item !== 'object') return null;
-  const goalId = String(item.goalId || '').trim();
-  const amount = Math.max(0, Number(item.amount) || 0);
-  if (!goalId || amount <= 0) return null;
-  const type = item.type === 'withdrawal' ? 'withdrawal' : 'deposit';
-  return {
-    id: String(item.id || uid('saveentry')),
-    goalId,
-    type,
-    amount: Math.round(amount * 100) / 100,
-    date: String(item.date || dateFromDateTime(item.createdAt || item.at) || todayStr()),
-    note: String(item.note || item.description || ''),
-    createdAt: String(item.createdAt || item.at || nowDateTime()),
-    updatedAt: String(item.updatedAt || item.createdAt || item.at || nowDateTime())
-  };
-}
-function normalizeSavingsState(savings) {
-  const source = savings && typeof savings === 'object' ? savings : {};
-  const goals = Array.isArray(source.goals)
-    ? source.goals.map(normalizeSavingsGoal).filter(Boolean)
-    : [];
-  const goalIds = new Set(goals.map(goal => goal.id));
-  const entries = Array.isArray(source.entries)
-    ? source.entries.map(normalizeSavingsEntry).filter(entry => entry && goalIds.has(entry.goalId))
-    : [];
-  return { goals, entries };
-}
 
 
 /* Research idea data compatibility and cleanup. */
@@ -712,4 +585,85 @@ function normalizeResearchIdeasState(researchIdeas) {
       ? source.ideas.map(normalizeResearchIdea).filter(Boolean)
       : []
   };
+}
+
+
+/* Deep-learning / computer-vision experiment result data. */
+function normalizeExperimentMetric(item) {
+  if (!item || typeof item !== 'object') return null;
+  const name = String(item.name || item.metric || '').trim();
+  const value = Number(item.value);
+  if (!name || !Number.isFinite(value)) return null;
+  const preset = experimentMetricPreset(name);
+  const direction = ['higher','lower','neutral'].includes(item.direction)
+    ? item.direction
+    : (preset?.direction || 'neutral');
+  return {
+    id:String(item.id || uid('metric')),
+    name,
+    value,
+    unit:String(item.unit ?? preset?.unit ?? ''),
+    direction,
+    createdAt:String(item.createdAt || item.at || nowDateTime())
+  };
+}
+function normalizeExperimentArtifact(item) {
+  if (!item || typeof item !== 'object') return null;
+  const label = String(item.label || item.title || '').trim();
+  const url = String(item.url || item.path || item.link || '').trim();
+  if (!label && !url) return null;
+  const type = EXPERIMENT_ARTIFACT_TYPES.some(entry => entry.value === item.type) ? item.type : 'other';
+  return {
+    id:String(item.id || uid('artifact')),
+    type,
+    label:label || url,
+    url,
+    note:String(item.note || ''),
+    createdAt:String(item.createdAt || item.at || nowDateTime())
+  };
+}
+function normalizeExperimentRun(item) {
+  if (!item || typeof item !== 'object') return null;
+  const name = String(item.name || item.title || '').trim();
+  if (!name) return null;
+  const taskType = EXPERIMENT_TASK_TYPES.some(entry => entry.value === item.taskType) ? item.taskType : 'other';
+  const status = EXPERIMENT_STATUSES.some(entry => entry.value === item.status) ? item.status : 'completed';
+  const tags = Array.isArray(item.tags)
+    ? item.tags.map(tag => String(tag || '').trim()).filter(Boolean)
+    : String(item.tags || '').split(/[,，;；]/).map(tag => tag.trim()).filter(Boolean);
+  return {
+    id:String(item.id || uid('exprun')),
+    name,
+    taskType,
+    status,
+    date:String(item.date || dateFromDateTime(item.createdAt || item.at) || todayStr()),
+    projectId:String(item.projectId || ''),
+    ideaId:String(item.ideaId || item.researchIdeaId || ''),
+    paperId:String(item.paperId || ''),
+    dataset:String(item.dataset || ''),
+    model:String(item.model || ''),
+    variant:String(item.variant || item.ablation || ''),
+    seed:String(item.seed ?? ''),
+    hardware:String(item.hardware || item.gpu || ''),
+    inputSize:String(item.inputSize || item.resolution || ''),
+    epochs:String(item.epochs ?? ''),
+    batchSize:String(item.batchSize ?? ''),
+    learningRate:String(item.learningRate ?? item.lr ?? ''),
+    codeRef:String(item.codeRef || item.commit || item.code || ''),
+    checkpoint:String(item.checkpoint || item.ckpt || ''),
+    conclusion:String(item.conclusion || item.finding || ''),
+    notes:String(item.notes || item.note || ''),
+    tags:[...new Set(tags)].slice(0, 30),
+    starred:!!item.starred,
+    metrics:Array.isArray(item.metrics) ? item.metrics.map(normalizeExperimentMetric).filter(Boolean) : [],
+    artifacts:Array.isArray(item.artifacts) ? item.artifacts.map(normalizeExperimentArtifact).filter(Boolean) : [],
+    createdAt:String(item.createdAt || item.at || nowDateTime()),
+    updatedAt:String(item.updatedAt || item.createdAt || item.at || nowDateTime())
+  };
+}
+function normalizeExperimentsState(experiments) {
+  const source = Array.isArray(experiments)
+    ? { runs:experiments }
+    : (experiments && typeof experiments === 'object' ? experiments : {});
+  return { runs:Array.isArray(source.runs) ? source.runs.map(normalizeExperimentRun).filter(Boolean) : [] };
 }

@@ -3,7 +3,7 @@
 
 (() => {
   const app = {
-    version: '15.0.0',
+    version: '16.0.0',
     storageKey: STORAGE_KEY,
     state,
     loadState,

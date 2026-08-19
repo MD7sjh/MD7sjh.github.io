@@ -408,8 +408,7 @@
       candidate.projects?.length ||
       candidate.focus?.sessions?.length ||
       candidate.submissions?.length ||
-      candidate.accounting?.transactions?.length ||
-      Object.keys(candidate.accounting?.budgets || {}).length ||
+      candidate.experiments?.runs?.length ||
       candidate.papers?.items?.length ||
       candidate.travel?.plans?.length || candidate.travel?.notes?.length ||
       Object.keys(candidate.attendance || {}).length ||

@@ -1,7 +1,7 @@
 /* Travel planning: structured trips plus lightweight idea fragments. */
 'use strict';
 
-function travelCurrencyMeta(value='CNY'){return ACCOUNTING_CURRENCIES.find(item=>item.value===value)||ACCOUNTING_CURRENCIES[0];}
+function travelCurrencyMeta(value='CNY'){return CURRENCY_OPTIONS.find(item=>item.value===value)||CURRENCY_OPTIONS[0];}
 function formatTravelMoney(amount,currency='CNY'){const meta=travelCurrencyMeta(currency);return `${meta.symbol}${Number(amount||0).toLocaleString(undefined,{maximumFractionDigits:2})}`;}
 function renderTravelSummary(){
   const plans=state.travel?.plans||[], notes=state.travel?.notes||[]; const upcoming=plans.filter(item=>item.startDate&&item.startDate>=todayStr()&&item.status!=='completed').length;
@@ -27,7 +27,7 @@ function renderTravelPlans(){
 }
 function openTravelPlanEditor(id){
   const item=travelPlanById(id);if(!item)return;
-  openEditDialog({title:'修改旅行计划',desc:item.destination||'',fields:[{name:'title',label:'计划名称',value:item.title},{name:'destination',label:'目的地',value:item.destination},{name:'status',label:'状态',type:'select',value:item.status,options:TRAVEL_PLAN_STATUSES},{name:'startDate',label:'开始日期',type:'date',value:item.startDate},{name:'endDate',label:'结束日期',type:'date',value:item.endDate},{name:'budget',label:'预算',type:'number',value:String(item.budget||'')},{name:'currency',label:'币种',type:'select',value:item.currency,options:ACCOUNTING_CURRENCIES},{name:'companions',label:'同行对象',value:item.companions},{name:'tags',label:'标签（逗号分隔）',value:(item.tags||[]).join(', ')},{name:'note',label:'规划说明',type:'textarea',value:item.note}],onSave:vals=>{Object.assign(item,normalizeTravelPlan({...item,...vals,tags:vals.tags,updatedAt:nowDateTime()}));saveState();renderAll();},onDelete:()=>{state.travel.plans=state.travel.plans.filter(v=>v.id!==id);state.travel.notes=state.travel.notes.map(note=>note.planId===id?{...note,planId:''}:note);saveState();renderAll();}});
+  openEditDialog({title:'修改旅行计划',desc:item.destination||'',fields:[{name:'title',label:'计划名称',value:item.title},{name:'destination',label:'目的地',value:item.destination},{name:'status',label:'状态',type:'select',value:item.status,options:TRAVEL_PLAN_STATUSES},{name:'startDate',label:'开始日期',type:'date',value:item.startDate},{name:'endDate',label:'结束日期',type:'date',value:item.endDate},{name:'budget',label:'预算',type:'number',value:String(item.budget||'')},{name:'currency',label:'币种',type:'select',value:item.currency,options:CURRENCY_OPTIONS},{name:'companions',label:'同行对象',value:item.companions},{name:'tags',label:'标签（逗号分隔）',value:(item.tags||[]).join(', ')},{name:'note',label:'规划说明',type:'textarea',value:item.note}],onSave:vals=>{Object.assign(item,normalizeTravelPlan({...item,...vals,tags:vals.tags,updatedAt:nowDateTime()}));saveState();renderAll();},onDelete:()=>{state.travel.plans=state.travel.plans.filter(v=>v.id!==id);state.travel.notes=state.travel.notes.map(note=>note.planId===id?{...note,planId:''}:note);saveState();renderAll();}});
 }
 function renderTravelNotes(){
   const planId=$('travelFilterPlan').value, type=$('travelFilterType').value, query=$('travelNoteQuery').value.trim().toLowerCase();

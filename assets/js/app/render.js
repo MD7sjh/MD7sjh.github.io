@@ -10,6 +10,7 @@ function renderAll() {
   renderWorkflow();
   renderPapers();
   renderResearchIdeas();
+  renderExperiments();
   renderHomeAttendance();
   renderTasks();
   renderFocusTimeline();
@@ -21,8 +22,6 @@ function renderAll() {
   renderReview();
   renderReviewThemeStats();
   renderSubmissionBoard();
-  renderAccounting();
-  renderSavings();
   renderSettingsRangeStats();
   if (currentSection === 'dashboard-section') renderDashboard();
   if (currentSection === 'settings-section') refreshSettings();

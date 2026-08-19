@@ -1,0 +1,14 @@
+/* Experiment results module. */
+.experiment-run-card{border:1px solid #ECEEF5;border-radius:1.25rem;background:rgba(255,255,255,.95);box-shadow:0 14px 30px -26px rgba(69,73,95,.32);transition:.18s ease}
+.experiment-run-card:hover{transform:translateY(-1px);box-shadow:0 18px 38px -26px rgba(69,73,95,.36)}
+.experiment-run-card.starred{border-color:rgba(249,199,79,.7);background:linear-gradient(135deg,rgba(255,252,236,.98),rgba(255,255,255,.98))}
+.experiment-metric-chip,.experiment-artifact-chip{display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .65rem;border-radius:999px;border:1px solid #ECEEF5;background:#F8FAFF;font-size:.75rem;color:#45495F}
+.experiment-metric-chip button,.experiment-artifact-chip button{border:0;background:transparent;color:#A0A5B8;font-weight:900;cursor:pointer;padding:0 .1rem}
+.experiment-conclusion{border-radius:1rem;background:linear-gradient(135deg,rgba(155,93,229,.07),rgba(77,157,224,.06));border:1px dashed rgba(155,93,229,.2);font-size:.82rem;line-height:1.6}
+.experiment-link-note{padding:.55rem .75rem;border-radius:.9rem;background:#FFF8FB;border:1px solid #F7E7EF;font-size:.75rem;color:#8A8FA6}
+.experiment-manager-card{background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(249,251,255,.94));border:1px solid #ECEEF5;border-radius:1.25rem}
+.experiment-compare-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.78rem}
+.experiment-compare-table th{position:sticky;top:0;background:#F7F8FC;color:#8A8FA6;text-align:left;padding:.75rem;border-bottom:1px solid #ECEEF5;white-space:nowrap}
+.experiment-compare-table td{padding:.75rem;border-bottom:1px solid #F0F1F6;vertical-align:top;white-space:nowrap}
+.experiment-compare-table tbody tr:hover{background:#FFF9FB}
+@media(max-width:640px){.experiment-run-card{padding:1rem}.experiment-metric-chip,.experiment-artifact-chip{max-width:100%}}

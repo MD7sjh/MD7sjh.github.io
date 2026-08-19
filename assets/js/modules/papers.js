@@ -95,7 +95,7 @@ function renderPaperDetail() {
   subSelect.value=state.submissions.some(item=>item.id===current)?current:'';
   const progress=paperOverallProgressValue(paper);
   $('paperOverallText').textContent=`${progress}%`; $('paperOverallBar').style.width=`${progress}%`;
-  $('paperOverallHint').textContent=`里程碑 ${(paper.milestones||[]).filter(item=>item.done).length}/${paper.milestones?.length||0} · 内容部分 ${paper.sections?.length||0} 个`;
+  $('paperOverallHint').textContent=`里程碑 ${(paper.milestones||[]).filter(item=>item.done).length}/${paper.milestones?.length||0} · 内容部分 ${paper.sections?.length||0} 个 · 关联实验 ${experimentRunsForPaper(paper.id).length} 条`;
   $('paperSelectedName').textContent=paper.title;
   renderPaperMilestones(paper); renderPaperSections(paper); renderPaperLogs(paper);
 }

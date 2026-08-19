@@ -1,28 +1,9 @@
-Personal Workspace v15 · GitHub 上传清单
+v16 上传 GitHub：
 
-上传到仓库根目录：
+1. 建议先在旧网页下载一次 JSON 备份。
+2. 删除 GitHub 仓库旧的 index.html 和整个 assets/。
+3. 上传本包中的 index.html、assets/、.nojekyll、supabase/ 等到仓库根目录。
+4. 不需要重新运行 Supabase SQL，也不需要重新注册账号。
+5. GitHub Pages 部署后 Ctrl+F5 强制刷新。
 
-必须：
-- index.html
-- .nojekyll
-- assets/（完整文件夹）
-
-建议：
-- README.md
-- ARCHITECTURE.md
-- CHANGELOG_v15.md
-- FILE_MANIFEST.json
-- supabase/
-
-更新步骤：
-1. 先删除 GitHub 中旧的 assets/。
-2. 上传新版 assets/ 和 index.html。
-3. Commit changes。
-4. 等待 GitHub Pages 部署完成。
-5. 浏览器 Ctrl + F5 强制刷新；手机可先用无痕窗口验证。
-
-Supabase：
-- 不需要重新建表。
-- 不需要重新注册账号。
-- 不需要迁移云端 JSON。
-- 旧 thesis / mentor 数据由网页自动迁移。
+注意：v16 已移除记账与攒钱模块。新版首次正常保存到云端后，这两个旧字段将不再包含在云端 state 中。

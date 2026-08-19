@@ -1,6 +1,5 @@
 {
-  "version": "15.0.0",
-  "generated": "2026-08-10",
+  "version": "16.0.0",
   "files": [
     {
       "path": ".gitignore",
@@ -14,33 +13,33 @@
     },
     {
       "path": "ARCHITECTURE.md",
-      "size": 2448,
-      "sha256": "25731d6df63d90c98fbcc0accfb81ce5921938cb855a21e23abf7a52c41c5030"
+      "size": 691,
+      "sha256": "063e14441e370297194e04eee91e1986963b9cef244a04470623adc621d80060"
     },
     {
-      "path": "CHANGELOG_v15.md",
-      "size": 951,
-      "sha256": "caeecd363e6e47937ad5801e21efbfa9b1db080c049c1b03fea31c673c0eb7e8"
+      "path": "CHANGELOG_v16.md",
+      "size": 702,
+      "sha256": "6e931e40d8cc17586a82ac3741c260adaa6384b31416b00a311398aa07fac723"
     },
     {
       "path": "GITHUB_上传清单.txt",
-      "size": 628,
-      "sha256": "3dc8e60d6ecd27769590a027e117445079b51f5303676e664120b79fbcf7fc51"
+      "size": 494,
+      "sha256": "a2446a34bc8c76d70da7625dc2a20c256518b93fd569aa72604f7526f78e444e"
     },
     {
       "path": "README.md",
-      "size": 1962,
-      "sha256": "78dd64b29d4206b32a525294349be68c933d917b5f00e3949129cbecef8e1021"
-    },
-    {
-      "path": "assets/css/accounting.css",
-      "size": 1227,
-      "sha256": "1d44abf3ff7e0260a29c64c0d1543159348418a8ae9a203c05cb233118f7b3b0"
+      "size": 1013,
+      "sha256": "fd0a0921d3fc8fa700dcfad8f35880183be9792b6ec65beba5ee7cce113d9213"
     },
     {
       "path": "assets/css/base.css",
       "size": 3725,
       "sha256": "e2278e83b66a0f404e68478a03d10106f205b1f6510e305070594358b227e28e"
+    },
+    {
+      "path": "assets/css/experiments.css",
+      "size": 1873,
+      "sha256": "0712b81ca559f4628e5b4e6da810b649ea08a994694b93b66479cef611fce249"
     },
     {
       "path": "assets/css/papers.css",
@@ -58,34 +57,29 @@
       "sha256": "82cf8b925c9ef34ac3d1425bbd1aea3bd5ff82a70f9805607d4d9a230c71eb6d"
     },
     {
-      "path": "assets/css/savings.css",
-      "size": 1196,
-      "sha256": "79042d6a6acfdfb679e3e5314d0864fcdde335467cd340b94da02efa82d3643e"
-    },
-    {
       "path": "assets/css/travel.css",
       "size": 425,
       "sha256": "b982cb0a682a7c2d66131ab286f517fe1a6357fb85569956de91cdaa8abb7cb2"
     },
     {
       "path": "assets/js/app/bootstrap.js",
-      "size": 4980,
-      "sha256": "b27ed03a190ac49bfd6a344467b0d86ba49f13530b6a54e39d010aa50904690e"
+      "size": 4957,
+      "sha256": "ac734021ee498223705faa0bcf15926674cfb48a7e032ef0035b8de15583fa94"
     },
     {
       "path": "assets/js/app/render.js",
-      "size": 711,
-      "sha256": "cff28cd367610d228f5e5d1ee1411caecedf06fc21f1bff9dbbe5f20b59a9927"
+      "size": 693,
+      "sha256": "edabf3e0d647720383c73e49b6e18a6bcf38fae624e4aae7673e7444d2591cd3"
     },
     {
       "path": "assets/js/app/runtime-bridge.js",
       "size": 666,
-      "sha256": "7abdbe174ab42f579921db923a3cefbbb98b7dbfcf6290c8aa124d47f9187c88"
+      "sha256": "b9ec3420064adefcce1e8b8445406beadfe64262e8fef9c99f5528fc2fd6a18a"
     },
     {
       "path": "assets/js/cloud/supabase-sync.js",
-      "size": 26125,
-      "sha256": "d119d61cd89dbce5fda614abdd3405a6f2a1bb02f0c621aec3d6bc4b2d8148be"
+      "size": 26053,
+      "sha256": "95a57ffa971e2dabce3d499b97cf1186798e5d71461a4a743aaa66a07723cbf8"
     },
     {
       "path": "assets/js/config/supabase.config.js",
@@ -99,18 +93,18 @@
     },
     {
       "path": "assets/js/core/constants.js",
-      "size": 13592,
-      "sha256": "3771ebfc3a0cb772be1758ea73a6781ad653155a7f16385f75ea2e98059c6e2e"
+      "size": 13657,
+      "sha256": "35a5d6f604f0de1236b49957be46b7c6fe18f9e3c782fdd4b8f232a7fa0b437f"
     },
     {
       "path": "assets/js/core/meta.js",
-      "size": 1212,
-      "sha256": "1646600f8e4068fdde7ed31a375b2adf7791a017f5e33c0efd4959b29ffacca3"
+      "size": 1813,
+      "sha256": "adc32fb47ee29ad8bf3a556a152f21039881b2ea4496bcc37335978480d57ef1"
     },
     {
       "path": "assets/js/core/normalizers.js",
-      "size": 30456,
-      "sha256": "1bcd435076f4e79891a030aed883671e5a42a7bc296354b917ee979ac4236e6d"
+      "size": 28698,
+      "sha256": "c07255fbbdf7ca3e8757f633b5d637de27fdf052d7177f58f29d3f0f9d24543d"
     },
     {
       "path": "assets/js/core/preferences.js",
@@ -119,8 +113,8 @@
     },
     {
       "path": "assets/js/core/state.js",
-      "size": 11572,
-      "sha256": "acbf06e29dac7f2742b23513c5fafde219bfda10d762c577496f616d07457ff4"
+      "size": 10814,
+      "sha256": "de99a0e51a4f5c90caf76c52e2019327906f5b8d0cd0b3ced6c8b7bd273c1308"
     },
     {
       "path": "assets/js/core/utils.js",
@@ -128,14 +122,14 @@
       "sha256": "bd0b017939ebd8735bb9d71936ece4eeccf08f3d24935297dfb70d7203273290"
     },
     {
-      "path": "assets/js/modules/accounting.js",
-      "size": 18922,
-      "sha256": "7833e60efa29ed33941523123db14569a494f71184cd9ea28e74ca68550050bc"
+      "path": "assets/js/modules/dashboard.js",
+      "size": 9263,
+      "sha256": "0bf348e3d28d084b8bc6164ace4a16b76252fd71a9d2468c0ba3efe52211563d"
     },
     {
-      "path": "assets/js/modules/dashboard.js",
-      "size": 8684,
-      "sha256": "70292b2c9e45d50bcf108d8417f12aa6a71dff1fedbbf42fbb257bc723e0ab4b"
+      "path": "assets/js/modules/experiments.js",
+      "size": 20840,
+      "sha256": "3992cb40daf4ef941fe35de5ca4fb25c136308d30abc1e40f749bb433cc60a5f"
     },
     {
       "path": "assets/js/modules/focus-schedule.js",
@@ -144,13 +138,13 @@
     },
     {
       "path": "assets/js/modules/home.js",
-      "size": 9916,
-      "sha256": "7e6818f4a79e945d70539ee53f01b47eae0fb49de4b1eb285b5a670bcfa1da29"
+      "size": 9507,
+      "sha256": "69b9af66de57ae5de6189ce83150b59162948d103be86a3632549e673a63dce9"
     },
     {
       "path": "assets/js/modules/papers.js",
-      "size": 16435,
-      "sha256": "92b016449cc8622edc5d3917509451b94ad8e44bef7e0d5a37efdd1920ff0fd7"
+      "size": 16498,
+      "sha256": "d46d85357ed047de5408229ad508ccf07faf4236d28c220c70aca7ca4e6a4f31"
     },
     {
       "path": "assets/js/modules/profile.js",
@@ -159,23 +153,18 @@
     },
     {
       "path": "assets/js/modules/research-ideas.js",
-      "size": 30671,
-      "sha256": "b8304dc89ebe94796d99b3ccb8d5071db5edf2bd1cf0e919bb5ed2fd225e0ecc"
+      "size": 30843,
+      "sha256": "a4edd5377aa499e1522e80300ab592ee0cd7f6be97cb20a71e7e9a7dc93ae8e9"
     },
     {
       "path": "assets/js/modules/review.js",
-      "size": 16039,
-      "sha256": "cb8bfaa3f78f19cc5fc70d2a6f8baad96d49859670025e3b01263c213cc5b9ff"
-    },
-    {
-      "path": "assets/js/modules/savings.js",
-      "size": 22849,
-      "sha256": "b13dda6383602600d179da6b6f5a04d9565724103d2c9efea98c8045e6241fc6"
+      "size": 15034,
+      "sha256": "6949aff3fb8dae473a80f13f7a3c50128243d2f107c1774aefd49e3dec38a73d"
     },
     {
       "path": "assets/js/modules/settings.js",
-      "size": 5724,
-      "sha256": "2c4402054153fa61aa97547e4a4cf2756fd74eaee3a79ad181da45f2c84e15f5"
+      "size": 5396,
+      "sha256": "3155c3f2c957327157e1031809291c8d170d311f18ef7a70fa0ee11dbc7c3215"
     },
     {
       "path": "assets/js/modules/submissions.js",
@@ -189,8 +178,8 @@
     },
     {
       "path": "assets/js/modules/travel.js",
-      "size": 9633,
-      "sha256": "98f65d52ebdc51caf463c4cf77b79beffd12018d3688d4a74412f44ac6911930"
+      "size": 9618,
+      "sha256": "bd3db3e597d89d8fed57e6085b98a43348d2ca604c60ac39f789fdfad3471321"
     },
     {
       "path": "assets/js/modules/upward-management.js",
@@ -209,8 +198,8 @@
     },
     {
       "path": "index.html",
-      "size": 101284,
-      "sha256": "5632378033a047840226887f02feed2c20be05a2d9b9ccc9358a6bf403b86b93"
+      "size": 94548,
+      "sha256": "f5c9632129e868e2154fcc0aa4e47fb7e132589ba5b6548cbfa516ef863e2543"
     },
     {
       "path": "supabase/setup.sql",

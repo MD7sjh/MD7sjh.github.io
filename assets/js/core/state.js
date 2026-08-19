@@ -23,8 +23,7 @@ function loadState() {
       reviewDaily: normalizeDailyReviewState(parsed.reviewDaily, parsed.reflections),
       submissions: normalizeSubmissions(parsed.submissions),
       researchIdeas: normalizeResearchIdeasState(parsed.researchIdeas || parsed.ideas),
-      accounting: normalizeAccountingState(parsed.accounting),
-      savings: normalizeSavingsState(parsed.savings),
+      experiments: normalizeExperimentsState(parsed.experiments || parsed.experimentResults),
       travel: normalizeTravelState(parsed.travel),
       papers: normalizePapersState(parsed.papers, parsed.thesis)
     };
@@ -37,7 +36,7 @@ function loadState() {
     return {
       attendance:{}, timeBlocks:{}, tasks:[], projects:[], focus:{active:null,sessions:[]}, reflections:{},
       upward:normalizeUpwardState({}, {}), reviewDaily:normalizeDailyReviewState({}, {}), submissions:[],
-      researchIdeas:normalizeResearchIdeasState({}), accounting:normalizeAccountingState({}), savings:normalizeSavingsState({}),
+      researchIdeas:normalizeResearchIdeasState({}), experiments:normalizeExperimentsState({}),
       travel:normalizeTravelState({}), papers:normalizePapersState({}, {})
     };
   }
@@ -121,30 +120,19 @@ function activeTravelPlans() { return (state.travel?.plans || []).filter(item =>
 function travelNotesInRange(startDate,endDate) { return (state.travel?.notes || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
 function travelPlansCreatedInRange(startDate,endDate) { return (state.travel?.plans || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
 
-function accountingMonthKey(date=todayStr()) { return String(date || todayStr()).slice(0, 7); }
-function accountingTransactionsInMonth(month=accountingMonthKey()) { return (state.accounting?.transactions || []).filter(item => String(item.date || '').startsWith(month)); }
-function accountingMonthTotals(month=accountingMonthKey()) {
-  const transactions = accountingTransactionsInMonth(month);
-  const income = transactions.filter(item => item.type === 'income').reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-  const expense = transactions.filter(item => item.type === 'expense').reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-  return { income, expense, balance: income - expense, count: transactions.length };
-}
-function savingsGoalById(id='') { return state.savings?.goals?.find(item => item.id === id) || null; }
-function savingsEntriesForGoal(goalId='') { return (state.savings?.entries || []).filter(item => item.goalId === goalId); }
-function savingsGoalSavedAmount(goalOrId) {
-  const goal = typeof goalOrId === 'string' ? savingsGoalById(goalOrId) : goalOrId;
-  if (!goal) return 0;
-  const movement = savingsEntriesForGoal(goal.id).reduce((sum, item) => sum + (item.type === 'withdrawal' ? -Number(item.amount || 0) : Number(item.amount || 0)), 0);
-  return Math.max(0, Math.round((Number(goal.initialAmount || 0) + movement) * 100) / 100);
-}
-function savingsTotals() {
-  const goals = state.savings?.goals || [];
-  const target = goals.reduce((sum, goal) => sum + Number(goal.targetAmount || 0), 0);
-  const saved = goals.reduce((sum, goal) => sum + savingsGoalSavedAmount(goal), 0);
-  const remaining = goals.reduce((sum, goal) => sum + Math.max(0, Number(goal.targetAmount || 0) - savingsGoalSavedAmount(goal)), 0);
-  return { target, saved, remaining, active:goals.filter(goal => goal.status === 'active').length, completed:goals.filter(goal => goal.status === 'completed').length, count:goals.length };
-}
-function savingsEntriesInRange(startDate, endDate) { return (state.savings?.entries || []).filter(item => isDateInRange(item.date, startDate, endDate)); }
+
+
+function experimentRunById(id='') { return state.experiments?.runs?.find(item => item.id === id) || null; }
+function experimentRunsInRange(startDate,endDate) { return (state.experiments?.runs || []).filter(item => isDateInRange(item.date,startDate,endDate)); }
+function experimentRunsCreatedInRange(startDate,endDate) { return (state.experiments?.runs || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
+function experimentRunsUpdatedInRange(startDate,endDate) { return (state.experiments?.runs || []).filter(item => isDateInRange(dateFromDateTime(item.updatedAt),startDate,endDate)); }
+function completedExperimentRuns() { return (state.experiments?.runs || []).filter(item => item.status === 'completed'); }
+function runningExperimentRuns() { return (state.experiments?.runs || []).filter(item => item.status === 'running'); }
+function experimentMetricCount() { return (state.experiments?.runs || []).reduce((sum,item) => sum + (item.metrics?.length || 0),0); }
+function experimentArtifactCount() { return (state.experiments?.runs || []).reduce((sum,item) => sum + (item.artifacts?.length || 0),0); }
+function experimentRunsForPaper(paperId='') { return (state.experiments?.runs || []).filter(item => item.paperId === paperId); }
+function experimentRunsForIdea(ideaId='') { return (state.experiments?.runs || []).filter(item => item.ideaId === ideaId); }
+
 function totalAttendanceMinutes(date=todayStr()) { return (state.attendance[date]?.logs || []).reduce((sum,log)=>sum + (log.end ? minutesBetween(log.start, log.end) : 0), 0); }
 function todayOpenLogs(date=todayStr()) { return getDayAttendance(date).logs.filter(log => !log.end); }
 function ensureTaskCleanup() { state.tasks = normalizeTasksState(state.tasks); state.projects = normalizeProjectsState(state.projects); }

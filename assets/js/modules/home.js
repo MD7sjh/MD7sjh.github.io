@@ -5,9 +5,8 @@ function navTo(sectionId) {
   currentSection = sectionId;
   sections.forEach(id => $(id).classList.toggle('section-hidden', id !== sectionId));
   document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.target === sectionId));
-  if (sectionId === 'accounting-section') renderAccounting();
-  if (sectionId === 'savings-section') renderSavings();
   if (sectionId === 'research-ideas-section') renderResearchIdeas();
+  if (sectionId === 'experiment-section') renderExperiments();
   if (sectionId === 'paper-section') renderPapers();
   if (sectionId === 'travel-section') renderTravel();
   if (sectionId === 'upward-section') renderUpward();
@@ -27,19 +26,17 @@ function renderSidebarSnapshot() {
   $('sbFocus').textContent = formatMinutes(focusMinutesOn());
   $('sbTask').textContent = activeTask()?.title || '无';
   if ($('sbResearchIdeas')) $('sbResearchIdeas').textContent = String(activeResearchIdeaCount());
+  if ($('sbExperiments')) $('sbExperiments').textContent = String(completedExperimentRuns().length);
   $('sbReview').textContent = String(supportPageCountOn());
   if ($('sbTravel')) $('sbTravel').textContent = String(activeTravelPlans().length);
   $('sbSubmission').textContent = String(runningSubmissionCount());
-  if ($('sbExpense')) $('sbExpense').textContent = formatAccountingMoney(accountingMonthTotals().expense, { compact:true });
-  if ($('sbSavings')) $('sbSavings').textContent = formatSavingsMoney(savingsTotals().saved, { compact:true });
 }
 function renderHomeQuickLinks() {
   const cards = [
     { target:'workflow-section', label:'项目看板', value:`${openTasksList().length} 项`, color:'text-dopamine-pink', icon:'fa-diagram-project' },
     { target:'submission-section', label:'投稿项目', value:`${state.submissions.length} 项`, color:'text-dopamine-sky', icon:'fa-paper-plane' },
-    { target:'accounting-section', label:'记账管理', value:`本月 ${formatAccountingMoney(accountingMonthTotals().expense, { compact:true })}`, color:'text-dopamine-pink', icon:'fa-wallet' },
-    { target:'savings-section', label:'攒钱规划', value:`已攒 ${formatSavingsMoney(savingsTotals().saved, { compact:true })}`, color:'text-dopamine-mint', icon:'fa-piggy-bank' },
     { target:'research-ideas-section', label:'科研思路', value:`${activeResearchIdeaCount()} 个推进中`, color:'text-dopamine-purple', icon:'fa-lightbulb' },
+    { target:'experiment-section', label:'实验结果', value:`${completedExperimentRuns().length} 个已完成`, color:'text-dopamine-mint', icon:'fa-flask-vial' },
     { target:'paper-section', label:'论文进度', value:`${state.papers?.items?.length || 0} 篇 · ${papersAverageProgress()}%`, color:'text-dopamine-purple', icon:'fa-book-open' },
     { target:'travel-section', label:'旅行规划', value:`${activeTravelPlans().length} 个进行中`, color:'text-dopamine-sky', icon:'fa-plane-departure' },
     { target:'upward-section', label:'向上管理', value: upwardCountOn() ? '已梳理' : '待整理', color:'text-dopamine-purple', icon:'fa-user-tie' },
@@ -65,26 +62,27 @@ function renderHomeThemeStats() {
   const ideasUpdated = researchIdeasUpdatedInRange(range.start, range.end).length;
   const ideaReferences = researchIdeaReferencesInRange(range.start, range.end).length;
   const upwardEntries = range.dates.reduce((sum, d) => sum + upwardCountOn(d), 0);
+  const experiments = experimentRunsInRange(range.start, range.end);
+  const completedExperiments = experiments.filter(item => item.status === 'completed').length;
   const travelNew = travelPlansCreatedInRange(range.start, range.end).length;
   const travelNotes = travelNotesInRange(range.start, range.end).length;
   const reviewEntries = range.dates.reduce((sum, d) => sum + reviewCountOn(d), 0);
   const doneTasks = state.tasks.filter(t => t.doneAt && isDateInRange(dateFromDateTime(t.doneAt), range.start, range.end)).length;
   const newSubs = state.submissions.filter(s => s.createdAt && isDateInRange(dateFromDateTime(s.createdAt), range.start, range.end)).length;
-  const savingsRangeEntries = savingsEntriesInRange(range.start, range.end);
-  const savingsNet = savingsRangeEntries.reduce((sum, item) => sum + (item.type === 'withdrawal' ? -item.amount : item.amount), 0);
   const cards = [
     { label:`${statsModeText()}专注`, value: formatMinutes(focusMins), color:'text-dopamine-orange' },
     { label:`${statsModeText()}打卡`, value: formatMinutes(workMins), color:'text-dopamine-sky' },
     { label:`${statsModeText()}新增思路`, value: ideasCreated, color:'text-dopamine-purple' },
     { label:`${statsModeText()}思路更新`, value: ideasUpdated, color:'text-dopamine-sky' },
     { label:`${statsModeText()}新增参考`, value: ideaReferences, color:'text-dopamine-pink' },
+    { label:`${statsModeText()}实验记录`, value: experiments.length, color:'text-dopamine-mint' },
+    { label:`${statsModeText()}完成实验`, value: completedExperiments, color:'text-emerald-600' },
     { label:`${statsModeText()}向上管理`, value: upwardEntries, color:'text-dopamine-purple' },
     { label:`${statsModeText()}旅行计划`, value: travelNew, color:'text-dopamine-sky' },
     { label:`${statsModeText()}旅行碎片`, value: travelNotes, color:'text-dopamine-pink' },
     { label:`${statsModeText()}复盘`, value: reviewEntries, color:'text-dopamine-pink' },
     { label:`${statsModeText()}完成任务`, value: doneTasks, color:'text-dopamine-purple' },
-    { label:`${statsModeText()}新增投稿`, value: newSubs, color:'text-dopamine-sky' },
-    { label:`${statsModeText()}净攒入`, value: formatSavingsMoney(savingsNet, { compact:true }), color:savingsNet >= 0 ? 'text-emerald-600' : 'text-rose-600' }
+    { label:`${statsModeText()}新增投稿`, value: newSubs, color:'text-dopamine-sky' }
   ];
   $('homeThemeStats').innerHTML = cards.map(item => `
     <div class="small-stat p-4">

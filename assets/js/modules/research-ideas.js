@@ -342,9 +342,10 @@ function renderResearchIdeaList() {
       </div>
       <div class="text-sm leading-6 mt-3 text-calm-ink">${escapeHtml(idea.insight || idea.problem || '还没有补充核心思路。')}</div>
       <div class="flex flex-wrap gap-1.5 mt-3">${(idea.tags || []).slice(0,6).map(tag => `<span class="idea-tag">#${escapeHtml(tag)}</span>`).join('')}</div>
-      <div class="grid grid-cols-3 gap-2 mt-4 text-xs text-calm-mute">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4 text-xs text-calm-mute">
         <div>来源 <b class="text-calm-ink">${idea.sources?.length || 0}</b></div>
         <div>参考 <b class="text-calm-ink">${idea.references?.length || 0}</b></div>
+        <div>实验 <b class="text-calm-ink">${experimentRunsForIdea(idea.id).length}</b></div>
         <div>${project ? `项目 <b class="text-calm-ink">已关联</b>` : '项目 未关联'}</div>
       </div>
       ${idea.nextStep ? `<div class="idea-form-note p-3 mt-3 text-xs"><b>下一步：</b>${escapeHtml(idea.nextStep)}</div>` : ''}
@@ -400,7 +401,7 @@ function renderResearchIdeaDetail() {
       ${field('可能的方法 / 技术路线', idea.method)}
       ${field('预期贡献 / 价值', idea.expectedValue)}
       ${field('下一步验证动作', idea.nextStep)}
-      ${field('记录信息', `创建：${idea.createdAt || '—'}\n更新：${idea.updatedAt || '—'}${task ? `\n验证任务：${task.status === 'done' ? '已完成' : '未完成'}` : ''}`)}
+      ${field('记录信息', `创建：${idea.createdAt || '—'}\n更新：${idea.updatedAt || '—'}${task ? `\n验证任务：${task.status === 'done' ? '已完成' : '未完成'}` : ''}\n关联实验：${experimentRunsForIdea(idea.id).length} 条`)}
     </div>
   </div>`;
   $('researchIdeaDetail').querySelector('[data-detail-edit]').onclick = () => openResearchIdeaEditor(idea.id);
