@@ -1,8 +1,8 @@
-# Personal Workspace · Pastel Modular v16.1
+# Personal Workspace · Pastel Modular v16.1.1
 
 一个模块化的个人工作 / 科研 / 生活工作台，支持 GitHub Pages + Supabase 多设备同步。
 
-## v16.1 主要模块
+## v16.1.1 主要模块
 
 - 总览首页
 - 项目看板
@@ -35,3 +35,8 @@
 ## GitHub Pages
 
 将本目录内容直接上传到仓库根目录，保持 `index.html` 与 `assets/` 同级。Supabase 表结构无需修改。
+
+
+## v16.1.1 美食价位调整
+
+美食模块现在使用「人均消费 + 币种 + 价位定位」，不再使用 `$～$$$$`。旧记录会自动兼容迁移。

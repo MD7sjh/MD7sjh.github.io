@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Workspace · Pastel Modular v16.1</title>
+  <title>Personal Workspace · Pastel Modular v16.1.1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="./assets/js/config/tailwind.config.js?v=16.1.0"></script>
-  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.0">
+  <script src="./assets/js/config/tailwind.config.js?v=16.1.1"></script>
+  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.1">
 
-  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.0">
-  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.0">
-  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.0">
-  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.0">
-  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.0">
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.1">
+  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.1">
+  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.1">
+  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.1">
+  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.1">
 
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
@@ -629,7 +629,7 @@
             </div>
 
             <div class="travel-subview is-hidden" data-travel-subview="food">
-              <div class="soft-card p-5 md:p-6"><h2 class="text-xl font-black">🍜 美食推荐</h2><p class="text-sm text-calm-mute mt-1">把想吃的餐馆、小店和必吃菜集中收藏，按照“必吃 + 评分”形成优先列表。</p><div id="travelFoodRecommendation" class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4"></div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2 mt-5"><input id="travelFoodName" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="餐馆 / 美食名称"><input id="travelFoodCuisine" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="料理类型"><input id="travelFoodArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="区域"><input id="travelFoodMustTry" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="必吃菜 / 必点"><select id="travelFoodPriceLevel" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="$">$</option><option value="$$" selected>$$</option><option value="$$$">$$$</option><option value="$$$$">$$$$</option></select><input id="travelFoodRating" type="number" min="0" max="5" step="0.1" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="评分 0-5"><select id="travelFoodStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="want">想吃</option><option value="reserved">已预约</option><option value="visited">已打卡</option><option value="skip">暂不考虑</option></select><input id="travelFoodOpenNote" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="营业 / 排队 / 预约备注"><input id="travelFoodUrl" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="参考链接"><textarea id="travelFoodNote" rows="2" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="备注"></textarea></div><button id="btnAddTravelFood" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black">收藏美食</button></div>
+              <div class="soft-card p-5 md:p-6"><h2 class="text-xl font-black">🍜 美食推荐</h2><p class="text-sm text-calm-mute mt-1">把想吃的餐馆、小店和必吃菜集中收藏；价格改为“真实人均消费 + 币种 + 价位定位”，不再使用 $～$$$$。</p><div id="travelFoodRecommendation" class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4"></div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2 mt-5"><input id="travelFoodName" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="餐馆 / 美食名称"><input id="travelFoodCuisine" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="料理类型"><input id="travelFoodArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="区域"><input id="travelFoodMustTry" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="必吃菜 / 必点"><label class="block"><div class="text-xs font-bold text-calm-mute mb-1 ml-1">人均消费</div><input id="travelFoodAvgSpend" type="number" min="0" step="0.01" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：3500"></label><label class="block"><div class="text-xs font-bold text-calm-mute mb-1 ml-1">币种</div><select id="travelFoodCurrency" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="CNY">CNY · 人民币</option><option value="MOP">MOP · 澳门元</option><option value="HKD">HKD · 港币</option><option value="SGD">SGD · 新加坡元</option><option value="USD">USD · 美元</option><option value="JPY">JPY · 日元</option><option value="EUR">EUR · 欧元</option></select></label><label class="block"><div class="text-xs font-bold text-calm-mute mb-1 ml-1">价位定位</div><select id="travelFoodPriceTier" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="budget">💚 经济实惠</option><option value="moderate" selected>🙂 适中</option><option value="premium">✨ 偏高</option><option value="luxury">💎 高端</option></select></label><label class="block"><div class="text-xs font-bold text-calm-mute mb-1 ml-1">评分</div><input id="travelFoodRating" type="number" min="0" max="5" step="0.1" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="0-5"></label><select id="travelFoodStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="want">想吃</option><option value="reserved">已预约</option><option value="visited">已打卡</option><option value="skip">暂不考虑</option></select><input id="travelFoodOpenNote" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="营业 / 排队 / 预约备注"><input id="travelFoodUrl" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="参考链接"><textarea id="travelFoodNote" rows="2" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="备注"></textarea></div><div class="text-xs text-calm-mute mt-2">币种默认跟随当前旅行计划；例如日本旅行可直接记录“人均 ¥3500 JPY”，用于后续预算判断。</div><button id="btnAddTravelFood" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black">收藏美食</button></div>
               <div id="travelFoodList" class="space-y-3 mt-6"></div>
             </div>
 
@@ -994,34 +994,34 @@
     </div>
   </dialog>
 
-    <script src="./assets/js/core/constants.js?v=16.1.0"></script>
-  <script src="./assets/js/core/utils.js?v=16.1.0"></script>
-  <script src="./assets/js/core/preferences.js?v=16.1.0"></script>
-  <script src="./assets/js/core/normalizers.js?v=16.1.0"></script>
-  <script src="./assets/js/core/meta.js?v=16.1.0"></script>
-  <script src="./assets/js/core/state.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/profile.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/papers.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/research-ideas.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/experiments.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/home.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/tasks.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/focus-schedule.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/workflow.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/upward-management.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/review.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/submissions.js?v=16.1.0"></script>
-  <script src="./assets/js/services/travel-weather.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/travel.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/dashboard.js?v=16.1.0"></script>
-  <script src="./assets/js/modules/settings.js?v=16.1.0"></script>
-  <script src="./assets/js/ui/dialogs.js?v=16.1.0"></script>
-  <script src="./assets/js/app/render.js?v=16.1.0"></script>
-  <script src="./assets/js/app/runtime-bridge.js?v=16.1.0"></script>
-  <script src="./assets/js/app/bootstrap.js?v=16.1.0"></script>
+    <script src="./assets/js/core/constants.js?v=16.1.1"></script>
+  <script src="./assets/js/core/utils.js?v=16.1.1"></script>
+  <script src="./assets/js/core/preferences.js?v=16.1.1"></script>
+  <script src="./assets/js/core/normalizers.js?v=16.1.1"></script>
+  <script src="./assets/js/core/meta.js?v=16.1.1"></script>
+  <script src="./assets/js/core/state.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/profile.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/papers.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/research-ideas.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/experiments.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/home.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/tasks.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/focus-schedule.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/workflow.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/upward-management.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/review.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/submissions.js?v=16.1.1"></script>
+  <script src="./assets/js/services/travel-weather.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/travel.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/dashboard.js?v=16.1.1"></script>
+  <script src="./assets/js/modules/settings.js?v=16.1.1"></script>
+  <script src="./assets/js/ui/dialogs.js?v=16.1.1"></script>
+  <script src="./assets/js/app/render.js?v=16.1.1"></script>
+  <script src="./assets/js/app/runtime-bridge.js?v=16.1.1"></script>
+  <script src="./assets/js/app/bootstrap.js?v=16.1.1"></script>
 <!-- PERSONAL_WORKSPACE_SUPABASE_SYNC -->
-  <script src="./assets/js/config/supabase.config.js?v=16.1.0"></script>
+  <script src="./assets/js/config/supabase.config.js?v=16.1.1"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.0"></script>
+  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.1"></script>
 </body>
 </html>

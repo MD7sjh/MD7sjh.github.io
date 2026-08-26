@@ -491,7 +491,11 @@ function normalizeTravelStay(item){
 function normalizeTravelFood(item){
   if(!item||typeof item!=='object')return null; const name=String(item.name||item.title||'').trim();if(!name)return null;
   const status=TRAVEL_FOOD_STATUSES.some(v=>v.value===item.status)?item.status:'want';
-  return {id:String(item.id||uid('tripfood')),planId:String(item.planId||''),name,cuisine:String(item.cuisine||''),area:String(item.area||''),mustTry:String(item.mustTry||item.dish||''),priceLevel:String(item.priceLevel||'$$'),rating:clamp(item.rating||0,0,5),status,openNote:String(item.openNote||''),url:String(item.url||item.link||''),note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
+  const legacyTierMap={'$':'budget','$$':'moderate','$$$':'premium','$$$$':'luxury'};
+  const requestedTier=String(item.priceTier||legacyTierMap[String(item.priceLevel||'')]||'moderate');
+  const priceTier=TRAVEL_FOOD_PRICE_TIERS.some(v=>v.value===requestedTier)?requestedTier:'moderate';
+  const currency=CURRENCY_OPTIONS.some(v=>v.value===item.currency)?item.currency:'';
+  return {id:String(item.id||uid('tripfood')),planId:String(item.planId||''),name,cuisine:String(item.cuisine||''),area:String(item.area||''),mustTry:String(item.mustTry||item.dish||''),pricePerPerson:Math.max(0,Number(item.pricePerPerson??item.avgSpend??item.perPerson??0)||0),currency,priceTier,rating:clamp(item.rating||0,0,5),status,openNote:String(item.openNote||''),url:String(item.url||item.link||''),note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
 }
 function normalizeTravelPhotoSpot(item){
   if(!item||typeof item!=='object')return null; const name=String(item.name||item.title||'').trim();if(!name)return null;
@@ -513,7 +517,11 @@ function normalizeTravelState(travel) {
   const itinerary = normalizePlanArray(source.itinerary||source.itineraries,normalizeTravelItineraryItem);
   const preparations = normalizePlanArray(source.preparations||source.prep,normalizeTravelPrepItem);
   const stays = normalizePlanArray(source.stays||source.accommodations,normalizeTravelStay);
-  const foods = normalizePlanArray(source.foods||source.foodRecommendations,normalizeTravelFood);
+  const planById = new Map(plans.map(item => [item.id, item]));
+  const foods = normalizePlanArray(source.foods||source.foodRecommendations,normalizeTravelFood).map(item => ({
+    ...item,
+    currency: item.currency || planById.get(item.planId)?.currency || 'CNY'
+  }));
   const photoSpots = normalizePlanArray(source.photoSpots||source.photos,normalizeTravelPhotoSpot);
   const weatherCache={};
   const rawWeather=source.weatherCache&&typeof source.weatherCache==='object'?source.weatherCache:{};

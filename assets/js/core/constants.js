@@ -160,6 +160,12 @@ const TRAVEL_FOOD_STATUSES = [
   { value:'visited', label:'已打卡', color:'bg-emerald-100 text-emerald-700' },
   { value:'skip', label:'暂不考虑', color:'bg-gray-100 text-gray-600' }
 ];
+const TRAVEL_FOOD_PRICE_TIERS = [
+  { value:'budget', label:'经济实惠', icon:'💚' },
+  { value:'moderate', label:'适中', icon:'🙂' },
+  { value:'premium', label:'偏高', icon:'✨' },
+  { value:'luxury', label:'高端', icon:'💎' }
+];
 const TRAVEL_PHOTO_TIMES = [
   { value:'sunrise', label:'日出', icon:'🌅' },
   { value:'morning', label:'上午', icon:'☀️' },
