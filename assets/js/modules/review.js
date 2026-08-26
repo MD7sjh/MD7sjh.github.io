@@ -96,6 +96,12 @@ function buildDailyDigest(date=todayStr()) {
 
   const travelPlansToday = (state.travel?.plans || []).filter(item => dateFromDateTime(item.createdAt) === date);
   const travelNotesToday = (state.travel?.notes || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelItineraryToday = (state.travel?.itinerary || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelPrepToday = (state.travel?.preparations || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelStayToday = (state.travel?.stays || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelFoodToday = (state.travel?.foods || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelPhotoToday = (state.travel?.photoSpots || []).filter(item => dateFromDateTime(item.createdAt) === date);
+  const travelActivityToday = travelNotesToday.length + travelItineraryToday.length + travelPrepToday.length + travelStayToday.length + travelFoodToday.length + travelPhotoToday.length;
 
   const upward = upwardEntryOn(date);
   const review = dailyReviewEntryOn(date);
@@ -108,7 +114,7 @@ function buildDailyDigest(date=todayStr()) {
     { label:'论文进度', value:`${paperLogs.length} 条`, color:'text-dopamine-purple' },
     { label:'投稿管理', value:`${submissionMoves} 动`, color:'text-dopamine-sky' },
     { label:'实验结果', value:experimentToday.length ? `${experimentCompleted}/${experimentToday.length} 完成` : '无记录', color:'text-dopamine-mint' },
-    { label:'旅行规划', value:(travelPlansToday.length + travelNotesToday.length) ? `${travelPlansToday.length} 计划 / ${travelNotesToday.length} 碎片` : '无新增', color:'text-dopamine-sky' },
+    { label:'旅行规划', value:(travelPlansToday.length + travelActivityToday) ? `${travelPlansToday.length} 计划 / ${travelActivityToday} 记录` : '无新增', color:'text-dopamine-sky' },
     { label:'向上管理', value: upwardCountOn(date) ? `${upwardStatus.emoji} ${upwardStatus.label}` : '未记录', color:'text-dopamine-purple' },
     { label:'每日复盘', value: reviewCountOn(date) ? `${reviewEnergy.emoji} ${reviewTemplateCount(review)}/5` : '未写', color:'text-dopamine-yellow' }
   ];
@@ -141,7 +147,7 @@ function buildDailyDigest(date=todayStr()) {
       `今日截止：${submissionDue} 个`,
       `进行中项目：${runningSubmissionCount()} 个`
     ]},
-    { title:'旅行规划', lines:[`新增旅行计划：${travelPlansToday.length} 个`,`新增旅行碎片：${travelNotesToday.length} 条`,`当前进行中计划：${activeTravelPlans().length} 个`] },
+    { title:'旅行规划', lines:[`新增旅行计划：${travelPlansToday.length} 个`,`旅行碎片：${travelNotesToday.length} 条`,`行程安排：${travelItineraryToday.length} 条`,`出行准备：${travelPrepToday.length} 条`,`住宿 / 美食 / 拍照：${travelStayToday.length} / ${travelFoodToday.length} / ${travelPhotoToday.length}`,`当前进行中计划：${activeTravelPlans().length} 个`] },
     { title:'向上管理', lines:upwardCountOn(date) ? [
       `沟通状态：${upwardStatus.emoji} ${upwardStatus.label}`,
       `压力 / 清晰度：${upward.pressure}/5 · ${upward.clarity}/5`,

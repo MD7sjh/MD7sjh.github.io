@@ -410,7 +410,7 @@
       candidate.submissions?.length ||
       candidate.experiments?.runs?.length ||
       candidate.papers?.items?.length ||
-      candidate.travel?.plans?.length || candidate.travel?.notes?.length ||
+      candidate.travel?.plans?.length || candidate.travel?.notes?.length || candidate.travel?.itinerary?.length || candidate.travel?.preparations?.length || candidate.travel?.stays?.length || candidate.travel?.foods?.length || candidate.travel?.photoSpots?.length ||
       Object.keys(candidate.attendance || {}).length ||
       Object.keys(candidate.timeBlocks || {}).length ||
       candidate.researchIdeas?.ideas?.length ||

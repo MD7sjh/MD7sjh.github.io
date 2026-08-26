@@ -470,12 +470,55 @@ function normalizeTravelNote(item) {
     updatedAt:String(item.updatedAt || item.createdAt || item.at || nowDateTime())
   };
 }
+function normalizeTravelItineraryItem(item) {
+  if (!item || typeof item !== 'object') return null;
+  const title=String(item.title||item.name||'').trim(); if(!title) return null;
+  const category=TRAVEL_ITINERARY_CATEGORIES.some(v=>v.value===item.category)?item.category:'sightseeing';
+  const status=TRAVEL_ITINERARY_STATUSES.some(v=>v.value===item.status)?item.status:'planned';
+  const currency=CURRENCY_OPTIONS.some(v=>v.value===item.currency)?item.currency:'CNY';
+  return {id:String(item.id||uid('tripday')),planId:String(item.planId||''),date:String(item.date||''),startTime:parseHM(item.startTime)||'',endTime:parseHM(item.endTime)||'',category,status,title,location:String(item.location||''),reservation:String(item.reservation||''),cost:Math.max(0,Number(item.cost)||0),currency,note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
+}
+function normalizeTravelPrepItem(item) {
+  if(!item||typeof item!=='object') return null; const title=String(item.title||item.name||'').trim(); if(!title)return null;
+  const category=TRAVEL_PREP_CATEGORIES.some(v=>v.value===item.category)?item.category:'other';
+  return {id:String(item.id||uid('tripprep')),planId:String(item.planId||''),category,title,dueDate:String(item.dueDate||''),done:!!item.done,note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
+}
+function normalizeTravelStay(item){
+  if(!item||typeof item!=='object')return null; const name=String(item.name||item.title||'').trim();if(!name)return null;
+  const status=TRAVEL_STAY_STATUSES.some(v=>v.value===item.status)?item.status:'candidate'; const currency=CURRENCY_OPTIONS.some(v=>v.value===item.currency)?item.currency:'CNY';
+  return {id:String(item.id||uid('tripstay')),planId:String(item.planId||''),name,area:String(item.area||''),status,checkIn:String(item.checkIn||''),checkOut:String(item.checkOut||''),pricePerNight:Math.max(0,Number(item.pricePerNight||item.price)||0),currency,rating:clamp(item.rating||0,0,5),locationScore:clamp(item.locationScore||0,0,5),valueScore:clamp(item.valueScore||0,0,5),comfortScore:clamp(item.comfortScore||0,0,5),pros:String(item.pros||''),cons:String(item.cons||''),url:String(item.url||item.link||''),note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
+}
+function normalizeTravelFood(item){
+  if(!item||typeof item!=='object')return null; const name=String(item.name||item.title||'').trim();if(!name)return null;
+  const status=TRAVEL_FOOD_STATUSES.some(v=>v.value===item.status)?item.status:'want';
+  return {id:String(item.id||uid('tripfood')),planId:String(item.planId||''),name,cuisine:String(item.cuisine||''),area:String(item.area||''),mustTry:String(item.mustTry||item.dish||''),priceLevel:String(item.priceLevel||'$$'),rating:clamp(item.rating||0,0,5),status,openNote:String(item.openNote||''),url:String(item.url||item.link||''),note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
+}
+function normalizeTravelPhotoSpot(item){
+  if(!item||typeof item!=='object')return null; const name=String(item.name||item.title||'').trim();if(!name)return null;
+  const bestTime=TRAVEL_PHOTO_TIMES.some(v=>v.value===item.bestTime)?item.bestTime:'any'; const shotType=TRAVEL_PHOTO_TYPES.some(v=>v.value===item.shotType)?item.shotType:'other'; const status=TRAVEL_PHOTO_STATUSES.some(v=>v.value===item.status)?item.status:'want';
+  return {id:String(item.id||uid('tripphoto')),planId:String(item.planId||''),name,area:String(item.area||''),plannedDate:String(item.plannedDate||''),bestTime,shotType,status,shotIdeas:String(item.shotIdeas||item.idea||''),equipment:String(item.equipment||''),url:String(item.url||item.link||''),note:String(item.note||''),createdAt:String(item.createdAt||nowDateTime()),updatedAt:String(item.updatedAt||item.createdAt||nowDateTime())};
+}
+function normalizeTravelWeatherCacheItem(item){
+  if(!item||typeof item!=='object')return null;
+  const daily=Array.isArray(item.daily)?item.daily.map(day=>({date:String(day.date||''),weatherCode:Number(day.weatherCode??day.weather_code??0)||0,tempMax:Number(day.tempMax??day.temperature_2m_max??0),tempMin:Number(day.tempMin??day.temperature_2m_min??0),precipitationProbability:Number(day.precipitationProbability??day.precipitation_probability_max??0),sunrise:String(day.sunrise||''),sunset:String(day.sunset||''),windMax:Number(day.windMax??day.wind_speed_10m_max??0)})).filter(d=>d.date):[];
+  const current=item.current&&typeof item.current==='object'?{temperature:Number(item.current.temperature??item.current.temperature_2m??0),apparentTemperature:Number(item.current.apparentTemperature??item.current.apparent_temperature??0),humidity:Number(item.current.humidity??item.current.relative_humidity_2m??0),weatherCode:Number(item.current.weatherCode??item.current.weather_code??0)||0,windSpeed:Number(item.current.windSpeed??item.current.wind_speed_10m??0)}:null;
+  return {query:String(item.query||''),locationName:String(item.locationName||''),country:String(item.country||''),admin1:String(item.admin1||''),latitude:Number(item.latitude)||0,longitude:Number(item.longitude)||0,timezone:String(item.timezone||''),fetchedAt:String(item.fetchedAt||''),current,daily};
+}
 function normalizeTravelState(travel) {
   const source = travel && typeof travel === 'object' ? travel : {};
   const plans = Array.isArray(source.plans) ? source.plans.map(normalizeTravelPlan).filter(Boolean) : [];
   const planIds = new Set(plans.map(item => item.id));
-  const notes = Array.isArray(source.notes) ? source.notes.map(normalizeTravelNote).filter(Boolean).map(note => planIds.has(note.planId) ? note : { ...note, planId:'' }) : [];
-  return { plans, notes };
+  const normalizePlanArray=(items,normalizer)=>Array.isArray(items)?items.map(normalizer).filter(Boolean).map(item=>planIds.has(item.planId)?item:{...item,planId:''}):[];
+  const notes = normalizePlanArray(source.notes,normalizeTravelNote);
+  const itinerary = normalizePlanArray(source.itinerary||source.itineraries,normalizeTravelItineraryItem);
+  const preparations = normalizePlanArray(source.preparations||source.prep,normalizeTravelPrepItem);
+  const stays = normalizePlanArray(source.stays||source.accommodations,normalizeTravelStay);
+  const foods = normalizePlanArray(source.foods||source.foodRecommendations,normalizeTravelFood);
+  const photoSpots = normalizePlanArray(source.photoSpots||source.photos,normalizeTravelPhotoSpot);
+  const weatherCache={};
+  const rawWeather=source.weatherCache&&typeof source.weatherCache==='object'?source.weatherCache:{};
+  Object.entries(rawWeather).forEach(([planId,item])=>{if(planIds.has(planId)){const clean=normalizeTravelWeatherCacheItem(item);if(clean)weatherCache[planId]=clean;}});
+  return { plans, notes, itinerary, preparations, stays, foods, photoSpots, weatherCache };
 }
 
 

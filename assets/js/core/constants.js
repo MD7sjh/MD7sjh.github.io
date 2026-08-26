@@ -119,6 +119,71 @@ const TRAVEL_NOTE_TYPES = [
   { value:'link', label:'链接 / 攻略', icon:'🔗' },
   { value:'other', label:'其他', icon:'✨' }
 ];
+
+const TRAVEL_ITINERARY_CATEGORIES = [
+  { value:'sightseeing', label:'景点 / 体验', icon:'🎡' },
+  { value:'food', label:'美食', icon:'🍜' },
+  { value:'photo', label:'打卡拍照', icon:'📷' },
+  { value:'transport', label:'交通', icon:'🚆' },
+  { value:'stay', label:'入住 / 住宿', icon:'🏨' },
+  { value:'shopping', label:'购物', icon:'🛍️' },
+  { value:'free', label:'自由活动', icon:'🌿' },
+  { value:'other', label:'其他', icon:'✨' }
+];
+const TRAVEL_ITINERARY_STATUSES = [
+  { value:'planned', label:'计划中', color:'bg-sky-100 text-sky-700' },
+  { value:'booked', label:'已预约', color:'bg-purple-100 text-purple-700' },
+  { value:'done', label:'已完成', color:'bg-emerald-100 text-emerald-700' },
+  { value:'skipped', label:'已跳过', color:'bg-gray-100 text-gray-600' }
+];
+const TRAVEL_PREP_CATEGORIES = [
+  { value:'documents', label:'证件 / 签证', icon:'🪪' },
+  { value:'transport', label:'交通票务', icon:'🎫' },
+  { value:'stay', label:'住宿确认', icon:'🏨' },
+  { value:'money', label:'资金 / 支付', icon:'💳' },
+  { value:'clothing', label:'衣物', icon:'🧥' },
+  { value:'electronics', label:'电子设备', icon:'🔌' },
+  { value:'photo', label:'摄影装备', icon:'📷' },
+  { value:'health', label:'健康 / 药品', icon:'💊' },
+  { value:'work', label:'工作 / 学习', icon:'💻' },
+  { value:'other', label:'其他', icon:'🧳' }
+];
+const TRAVEL_STAY_STATUSES = [
+  { value:'candidate', label:'候选', color:'bg-sky-100 text-sky-700' },
+  { value:'shortlist', label:'重点考虑', color:'bg-amber-100 text-amber-700' },
+  { value:'booked', label:'已预订', color:'bg-emerald-100 text-emerald-700' },
+  { value:'rejected', label:'不考虑', color:'bg-gray-100 text-gray-600' }
+];
+const TRAVEL_FOOD_STATUSES = [
+  { value:'want', label:'想吃', color:'bg-pink-100 text-pink-700' },
+  { value:'reserved', label:'已预约', color:'bg-purple-100 text-purple-700' },
+  { value:'visited', label:'已打卡', color:'bg-emerald-100 text-emerald-700' },
+  { value:'skip', label:'暂不考虑', color:'bg-gray-100 text-gray-600' }
+];
+const TRAVEL_PHOTO_TIMES = [
+  { value:'sunrise', label:'日出', icon:'🌅' },
+  { value:'morning', label:'上午', icon:'☀️' },
+  { value:'day', label:'白天', icon:'🌤️' },
+  { value:'sunset', label:'日落 / 蓝调', icon:'🌇' },
+  { value:'night', label:'夜景', icon:'🌃' },
+  { value:'any', label:'任意时间', icon:'📷' }
+];
+const TRAVEL_PHOTO_TYPES = [
+  { value:'portrait', label:'人像', icon:'🧑‍🎨' },
+  { value:'landscape', label:'风景', icon:'🏞️' },
+  { value:'street', label:'街拍', icon:'🚶' },
+  { value:'architecture', label:'建筑', icon:'🏛️' },
+  { value:'food', label:'美食', icon:'🍽️' },
+  { value:'night', label:'夜景', icon:'🌙' },
+  { value:'other', label:'其他', icon:'✨' }
+];
+const TRAVEL_PHOTO_STATUSES = [
+  { value:'want', label:'想拍', color:'bg-pink-100 text-pink-700' },
+  { value:'planned', label:'已排期', color:'bg-sky-100 text-sky-700' },
+  { value:'shot', label:'已打卡', color:'bg-emerald-100 text-emerald-700' },
+  { value:'skip', label:'跳过', color:'bg-gray-100 text-gray-600' }
+];
+
 const REVIEW_ENERGY_OPTIONS = [
   { value:'high', emoji:'☀️', label:'高：可以攻坚', short:'高', color:'text-dopamine-orange' },
   { value:'medium', emoji:'😐', label:'中：稳定推进', short:'中', color:'text-dopamine-sky' },

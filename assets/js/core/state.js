@@ -120,6 +120,17 @@ function activeTravelPlans() { return (state.travel?.plans || []).filter(item =>
 function travelNotesInRange(startDate,endDate) { return (state.travel?.notes || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
 function travelPlansCreatedInRange(startDate,endDate) { return (state.travel?.plans || []).filter(item => isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)); }
 
+function travelItineraryForPlan(planId=''){return (state.travel?.itinerary||[]).filter(item=>item.planId===planId);}
+function travelPreparationsForPlan(planId=''){return (state.travel?.preparations||[]).filter(item=>item.planId===planId);}
+function travelStaysForPlan(planId=''){return (state.travel?.stays||[]).filter(item=>item.planId===planId);}
+function travelFoodsForPlan(planId=''){return (state.travel?.foods||[]).filter(item=>item.planId===planId);}
+function travelPhotoSpotsForPlan(planId=''){return (state.travel?.photoSpots||[]).filter(item=>item.planId===planId);}
+function travelStructuredItemsInRange(startDate,endDate){
+  const groups=['itinerary','preparations','stays','foods','photoSpots'];
+  return groups.flatMap(key=>(state.travel?.[key]||[]).filter(item=>isDateInRange(dateFromDateTime(item.createdAt),startDate,endDate)));
+}
+
+
 
 
 function experimentRunById(id='') { return state.experiments?.runs?.find(item => item.id === id) || null; }

@@ -1,5 +1,5 @@
 {
-  "version": "16.0.0",
+  "version": "16.1.0",
   "files": [
     {
       "path": ".gitignore",
@@ -13,8 +13,13 @@
     },
     {
       "path": "ARCHITECTURE.md",
-      "size": 691,
-      "sha256": "063e14441e370297194e04eee91e1986963b9cef244a04470623adc621d80060"
+      "size": 821,
+      "sha256": "430155b15ec9d48c7932829817ed2ac080fa62b067c4e485aa4344f43c98fd83"
+    },
+    {
+      "path": "CHANGELOG_v16.1.md",
+      "size": 741,
+      "sha256": "5a77eb86cf4ae004ebb774820ab516bb5ae448bac7d2a633aca868981d0bd3d0"
     },
     {
       "path": "CHANGELOG_v16.md",
@@ -23,13 +28,13 @@
     },
     {
       "path": "GITHUB_上传清单.txt",
-      "size": 494,
-      "sha256": "a2446a34bc8c76d70da7625dc2a20c256518b93fd569aa72604f7526f78e444e"
+      "size": 636,
+      "sha256": "6b33cc56a0091c7437f2ffd656fb972c21fc2b8f8a2341cd0c3d4053c7b1f25e"
     },
     {
       "path": "README.md",
-      "size": 1013,
-      "sha256": "fd0a0921d3fc8fa700dcfad8f35880183be9792b6ec65beba5ee7cce113d9213"
+      "size": 1508,
+      "sha256": "6f1b52e326bd9abd6481b98732a0821b11a4b1b5c1c8ad82b0b58f3a63a84267"
     },
     {
       "path": "assets/css/base.css",
@@ -58,8 +63,8 @@
     },
     {
       "path": "assets/css/travel.css",
-      "size": 425,
-      "sha256": "b982cb0a682a7c2d66131ab286f517fe1a6357fb85569956de91cdaa8abb7cb2"
+      "size": 2807,
+      "sha256": "fa2a8a3b0520308c81ebbc23d12ddb04c0614537030994b7d2b631b9969fff75"
     },
     {
       "path": "assets/js/app/bootstrap.js",
@@ -78,8 +83,8 @@
     },
     {
       "path": "assets/js/cloud/supabase-sync.js",
-      "size": 26053,
-      "sha256": "95a57ffa971e2dabce3d499b97cf1186798e5d71461a4a743aaa66a07723cbf8"
+      "size": 26244,
+      "sha256": "04bd9a31821ae9e610f13b505744e0e054c96c5326ce71197bb16db2df01f93f"
     },
     {
       "path": "assets/js/config/supabase.config.js",
@@ -93,8 +98,8 @@
     },
     {
       "path": "assets/js/core/constants.js",
-      "size": 13657,
-      "sha256": "35a5d6f604f0de1236b49957be46b7c6fe18f9e3c782fdd4b8f232a7fa0b437f"
+      "size": 16892,
+      "sha256": "416f6398baafabf1a5af0a914949716ef05c43aa436b6ad48cde9637d9d4b5a4"
     },
     {
       "path": "assets/js/core/meta.js",
@@ -103,8 +108,8 @@
     },
     {
       "path": "assets/js/core/normalizers.js",
-      "size": 28698,
-      "sha256": "c07255fbbdf7ca3e8757f633b5d637de27fdf052d7177f58f29d3f0f9d24543d"
+      "size": 35071,
+      "sha256": "250357c5d2a9bf342bc661cea8fc70f9c6580705717a35d82ea19a786f26a8f1"
     },
     {
       "path": "assets/js/core/preferences.js",
@@ -113,8 +118,8 @@
     },
     {
       "path": "assets/js/core/state.js",
-      "size": 10814,
-      "sha256": "de99a0e51a4f5c90caf76c52e2019327906f5b8d0cd0b3ced6c8b7bd273c1308"
+      "size": 11664,
+      "sha256": "96afad310e3ac73ab3505c1b34c17430eeeb7a7fac23ad874104febcdadae35b"
     },
     {
       "path": "assets/js/core/utils.js",
@@ -123,8 +128,8 @@
     },
     {
       "path": "assets/js/modules/dashboard.js",
-      "size": 9263,
-      "sha256": "0bf348e3d28d084b8bc6164ace4a16b76252fd71a9d2468c0ba3efe52211563d"
+      "size": 9451,
+      "sha256": "f6439acfe07b9c001dcb0f4bf1a34d66dde4bffd4acd738194cd0aab4ede7898"
     },
     {
       "path": "assets/js/modules/experiments.js",
@@ -138,8 +143,8 @@
     },
     {
       "path": "assets/js/modules/home.js",
-      "size": 9507,
-      "sha256": "69b9af66de57ae5de6189ce83150b59162948d103be86a3632549e673a63dce9"
+      "size": 9614,
+      "sha256": "249b64e92a02e653423d8b1ee1311d507a61112c62531c71883fd1a5bad8627d"
     },
     {
       "path": "assets/js/modules/papers.js",
@@ -158,13 +163,13 @@
     },
     {
       "path": "assets/js/modules/review.js",
-      "size": 15034,
-      "sha256": "6949aff3fb8dae473a80f13f7a3c50128243d2f107c1774aefd49e3dec38a73d"
+      "size": 16004,
+      "sha256": "b0533c229f3719155e09372b314f6fd85fb08c2baa00cf36623daf3950ee7e6f"
     },
     {
       "path": "assets/js/modules/settings.js",
-      "size": 5396,
-      "sha256": "3155c3f2c957327157e1031809291c8d170d311f18ef7a70fa0ee11dbc7c3215"
+      "size": 5743,
+      "sha256": "4d3011639d76f2a4e4b7d1103e89eeeca4255a37efbbbd0e1fda30749c560cb2"
     },
     {
       "path": "assets/js/modules/submissions.js",
@@ -178,8 +183,8 @@
     },
     {
       "path": "assets/js/modules/travel.js",
-      "size": 9618,
-      "sha256": "bd3db3e597d89d8fed57e6085b98a43348d2ca604c60ac39f789fdfad3471321"
+      "size": 50510,
+      "sha256": "e3d4ef6e9bcc5921da641c4348939c38c1ebc3b9632c2d39b8ffe1cc4dc3fa1a"
     },
     {
       "path": "assets/js/modules/upward-management.js",
@@ -192,14 +197,19 @@
       "sha256": "3ed19bd24f91eb5fac3930e56f0c13a7a6eac1652a5a56c14430124344cd9d95"
     },
     {
+      "path": "assets/js/services/travel-weather.js",
+      "size": 3802,
+      "sha256": "d5948481dbdeccca9d2712b5bc9bb0a6415115dc76347e4fc0db5d080c36a8f9"
+    },
+    {
       "path": "assets/js/ui/dialogs.js",
       "size": 9651,
       "sha256": "d49118e893ce9afe3b6feee6f4c9c8cf4ccff0c1936fdd1e3379a3422e154ed3"
     },
     {
       "path": "index.html",
-      "size": 94548,
-      "sha256": "f5c9632129e868e2154fcc0aa4e47fb7e132589ba5b6548cbfa516ef863e2543"
+      "size": 112790,
+      "sha256": "cbf31c4a60dbd7d5d31a85013558cfe31c8305d4409c863df1aa66a824cb3ee0"
     },
     {
       "path": "supabase/setup.sql",

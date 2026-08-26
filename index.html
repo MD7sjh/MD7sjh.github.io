@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Workspace · Pastel Modular v16</title>
+  <title>Personal Workspace · Pastel Modular v16.1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="./assets/js/config/tailwind.config.js?v=16.0.0"></script>
-  <link rel="stylesheet" href="./assets/css/base.css?v=16.0.0">
+  <script src="./assets/js/config/tailwind.config.js?v=16.1.0"></script>
+  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.0">
 
-  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.0.0">
-  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.0.0">
-  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.0.0">
-  <link rel="stylesheet" href="./assets/css/travel.css?v=16.0.0">
-  <link rel="stylesheet" href="./assets/css/papers.css?v=16.0.0">
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.0">
+  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.0">
+  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.0">
+  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.0">
+  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.0">
 
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
@@ -537,10 +537,122 @@
 
 
       <section id="travel-section" class="section-hidden space-y-6">
-        <div class="soft-card p-5 md:p-6"><div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"><div><h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-plane-departure text-dopamine-sky"></i> 旅行规划</h1><p class="text-calm-mute mt-1">既可以创建正式旅行计划，也可以把看到的地点、餐馆、酒店、路线、攻略和零碎想法先随手记下来。</p></div></div><div id="travelSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4"></div></div>
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6"><div class="soft-card p-5"><div class="font-black text-lg mb-3">新增旅行计划</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><input id="travelPlanTitle" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="计划名称，如：北海道冬季旅行"><input id="travelPlanDestination" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="目的地"><select id="travelPlanStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">想去 / 灵感</option><option value="planning">规划中</option><option value="booked">已预订 / 待出发</option><option value="completed">已完成</option><option value="paused">暂缓</option></select><input id="travelPlanCompanions" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="同行对象（可选）"><input id="travelPlanStart" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPlanEnd" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPlanBudget" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="预计预算"><select id="travelPlanCurrency" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="CNY">CNY · 人民币</option><option value="MOP">MOP · 澳门元</option><option value="HKD">HKD · 港币</option><option value="SGD">SGD · 新加坡元</option><option value="USD">USD · 美元</option></select><input id="travelPlanTags" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="标签：摄影、美食、温泉（逗号分隔）"><textarea id="travelPlanNote" rows="3" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="为什么想去、想体验什么、初步路线……"></textarea></div><button id="btnAddTravelPlan" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加旅行计划</button></div>
-          <div class="soft-card p-5"><div class="font-black text-lg mb-3">快速记录一个旅行碎片</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><select id="travelNotePlan" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></select><select id="travelNoteType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">💭 零碎想法</option><option value="place">📍 想去地点</option><option value="food">🍜 吃喝</option><option value="stay">🏡 住宿</option><option value="transport">🚆 交通</option><option value="todo">✅ 待办 / 准备</option><option value="link">🔗 链接 / 攻略</option><option value="other">✨ 其他</option></select><input id="travelNoteTitle" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="一个短标题（可选）"><textarea id="travelNoteContent" rows="4" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="想到什么就记什么，不要求完整"></textarea><input id="travelNoteUrl" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="链接（可选）"></div><button id="btnAddTravelNote" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black">保存旅行碎片</button></div></div>
-        <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6"><div class="soft-card p-5"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="font-black text-lg">旅行计划</div><div class="flex gap-2"><select id="travelFilterStatus" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><option value="">全部状态</option><option value="idea">想去 / 灵感</option><option value="planning">规划中</option><option value="booked">已预订</option><option value="completed">已完成</option><option value="paused">暂缓</option></select><input id="travelFilterQuery" class="px-3 py-2 rounded-2xl border border-calm-line bg-white" placeholder="搜索计划"></div></div><div id="travelPlanList" class="space-y-3"></div></div><div class="soft-card p-5"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="font-black text-lg">零碎内容</div><div class="flex flex-wrap gap-2"><select id="travelFilterPlan" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"></select><select id="travelFilterType" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><option value="">全部类型</option><option value="idea">零碎想法</option><option value="place">想去地点</option><option value="food">吃喝</option><option value="stay">住宿</option><option value="transport">交通</option><option value="todo">待办</option><option value="link">链接 / 攻略</option><option value="other">其他</option></select><input id="travelNoteQuery" class="px-3 py-2 rounded-2xl border border-calm-line bg-white" placeholder="搜索碎片"></div></div><div id="travelNoteList" class="space-y-3"></div></div></div>
+        <div class="soft-card p-5 md:p-6">
+          <div class="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-plane-departure text-dopamine-sky"></i> 旅行规划</h1>
+              <p class="text-calm-mute mt-1">从灵感到出发：统一管理每日行程、出行准备、天气、住宿、美食、打卡拍照和零碎攻略，不使用地图。</p>
+            </div>
+            <div class="w-full xl:w-[520px]">
+              <div class="text-xs font-bold text-calm-mute mb-1">当前旅行计划</div>
+              <div class="flex gap-2">
+                <select id="travelActivePlanSelect" class="flex-1 min-w-0 px-3 py-3 rounded-2xl border border-calm-line bg-white font-bold"></select>
+                <button id="btnTravelCreatePlanShortcut" class="px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black whitespace-nowrap">+ 新计划</button>
+              </div>
+              <div id="travelSelectedPlanCaption" class="text-xs text-calm-mute mt-2">-</div>
+            </div>
+          </div>
+          <div id="travelSummary" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 mt-5"></div>
+        </div>
+
+        <div class="travel-shell">
+          <aside class="travel-subnav">
+            <button class="travel-subnav-btn active" data-travel-view="overview"><span>🧭</span><span>行程总览</span></button>
+            <button class="travel-subnav-btn" data-travel-view="itinerary"><span>📅</span><span>行程安排</span></button>
+            <button class="travel-subnav-btn" data-travel-view="prep"><span>🧳</span><span>出行准备</span></button>
+            <button class="travel-subnav-btn" data-travel-view="weather"><span>🌤️</span><span>天气情况</span></button>
+            <button class="travel-subnav-btn" data-travel-view="stay"><span>🏨</span><span>住宿推荐</span></button>
+            <button class="travel-subnav-btn" data-travel-view="food"><span>🍜</span><span>美食推荐</span></button>
+            <button class="travel-subnav-btn" data-travel-view="photo"><span>📷</span><span>打卡拍照</span></button>
+            <button class="travel-subnav-btn" data-travel-view="notes"><span>💭</span><span>旅行碎片</span></button>
+            <button class="travel-subnav-btn" data-travel-view="plans"><span>🗂️</span><span>计划管理</span></button>
+          </aside>
+
+          <div class="min-w-0 space-y-6">
+            <div class="travel-subview" data-travel-subview="overview">
+              <div id="travelOverviewHero"></div>
+              <div id="travelOverviewStats" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mt-4"></div>
+              <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1.15fr)_360px] gap-6 mt-6">
+                <div class="space-y-6">
+                  <div class="soft-card p-5"><div class="flex items-center justify-between gap-3 mb-4"><div><h2 class="text-xl font-black">每日行程一览</h2><p class="text-sm text-calm-mute mt-1">先看每天的节奏，再去“行程安排”里细化。</p></div><button class="text-sm font-black text-dopamine-sky" onclick="setTravelView('itinerary')">编辑行程</button></div><div id="travelOverviewItinerary" class="space-y-3"></div></div>
+                  <div class="soft-card p-5"><div class="font-black text-lg mb-3">旅行亮点</div><div id="travelOverviewHighlights" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div></div>
+                </div>
+                <div class="soft-card p-5"><div class="font-black text-lg mb-1">出发前下一步</div><div class="text-sm text-calm-mute mb-4">根据当前计划自动提醒缺失项。</div><div id="travelOverviewNextSteps" class="space-y-2"></div></div>
+              </div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="itinerary">
+              <div class="soft-card p-5 md:p-6">
+                <div class="flex items-center justify-between gap-3 mb-4"><div><h2 class="text-xl font-black">📅 行程安排</h2><p class="text-sm text-calm-mute mt-1">按日期和时间安排景点、美食、交通、入住与拍照。</p></div><span id="travelItineraryCount" class="pill bg-sky-50 text-dopamine-sky">0 项</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2">
+                  <input id="travelItineraryDate" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
+                  <input id="travelItineraryStart" type="time" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
+                  <input id="travelItineraryEnd" type="time" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
+                  <select id="travelItineraryCategory" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="sightseeing">🎡 景点 / 体验</option><option value="food">🍜 美食</option><option value="photo">📷 打卡拍照</option><option value="transport">🚆 交通</option><option value="stay">🏨 入住 / 住宿</option><option value="shopping">🛍️ 购物</option><option value="free">🌿 自由活动</option><option value="other">✨ 其他</option></select>
+                  <select id="travelItineraryStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="planned">计划中</option><option value="booked">已预约</option><option value="done">已完成</option><option value="skipped">已跳过</option></select>
+                  <input id="travelItineraryTitle" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="行程内容，如：岚山竹林 + 渡月桥">
+                  <input id="travelItineraryLocation" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="地点 / 区域">
+                  <input id="travelItineraryReservation" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="预约、票务、集合信息（可选）">
+                  <input id="travelItineraryCost" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="预计费用">
+                  <textarea id="travelItineraryNote" rows="2" class="md:col-span-2 xl:col-span-4 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="备注：交通衔接、注意事项、备选方案……"></textarea>
+                </div>
+                <button id="btnAddTravelItinerary" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加到行程</button>
+              </div>
+              <div class="soft-card p-5 mt-6"><div id="travelItineraryList" class="space-y-4"></div></div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="prep">
+              <div class="soft-card p-5 md:p-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4"><div><h2 class="text-xl font-black">🧳 出行准备</h2><p class="text-sm text-calm-mute mt-1">证件、交通、住宿、支付、衣物、电子设备、摄影装备与药品都可以集中打勾。</p></div><button id="btnSeedTravelPrep" class="px-4 py-3 rounded-2xl bg-dopamine-mint text-white font-black">生成常用准备清单</button></div>
+                <div class="small-stat p-4 mb-4"><div class="flex items-center justify-between"><div class="font-black">准备进度</div><div id="travelPrepProgressText" class="font-black text-dopamine-mint">0/0</div></div><div class="travel-mini-progress mt-3"><div id="travelPrepProgressBar" style="width:0%"></div></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2"><select id="travelPrepCategory" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="documents">🪪 证件 / 签证</option><option value="transport">🎫 交通票务</option><option value="stay">🏨 住宿确认</option><option value="money">💳 资金 / 支付</option><option value="clothing">🧥 衣物</option><option value="electronics">🔌 电子设备</option><option value="photo">📷 摄影装备</option><option value="health">💊 健康 / 药品</option><option value="work">💻 工作 / 学习</option><option value="other">🧳 其他</option></select><input id="travelPrepTitle" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="准备事项"><input id="travelPrepDue" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPrepNote" class="md:col-span-2 xl:col-span-4 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="备注（可选）"></div>
+                <button id="btnAddTravelPrep" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-mint text-white font-black">添加准备事项</button>
+              </div>
+              <div id="travelPrepList" class="space-y-4 mt-6"></div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="weather">
+              <div class="soft-card p-5 md:p-6">
+                <h2 class="text-xl font-black">🌤️ 天气情况</h2><p class="text-sm text-calm-mute mt-1">按目的地自动查询当前天气和未来预报。行程超过未来 16 天时，先显示近期天气参考，出发前再刷新。</p>
+                <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_160px] gap-2 mt-4"><input id="travelWeatherQuery" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="城市，如：京都 / Tokyo / Singapore"><button id="btnRefreshTravelWeather" class="px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">刷新天气</button></div>
+                <div id="travelWeatherStatus" class="text-xs text-calm-mute mt-2">尚未获取天气。</div>
+                <div id="travelWeatherCurrent" class="mt-4"></div>
+                <div class="flex items-center justify-between mt-5 mb-3"><div id="travelWeatherForecastLabel" class="font-black">未来天气</div><a href="https://open-meteo.com/" target="_blank" rel="noopener" class="text-xs text-calm-mute">天气数据：Open-Meteo ↗</a></div>
+                <div id="travelWeatherForecast" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+              </div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="stay">
+              <div class="soft-card p-5 md:p-6"><div><h2 class="text-xl font-black">🏨 住宿推荐</h2><p class="text-sm text-calm-mute mt-1">记录多个候选，根据平台评分、位置、性价比和舒适度自动排序；最终选中的住宿标记“已预订”。</p></div><div id="travelStayRecommendation" class="mt-4"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2 mt-5"><input id="travelStayName" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="酒店 / 民宿名称"><input id="travelStayArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="区域 / 交通位置"><select id="travelStayStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="candidate">候选</option><option value="shortlist">重点考虑</option><option value="booked">已预订</option><option value="rejected">不考虑</option></select><input id="travelStayCheckIn" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelStayCheckOut" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelStayPrice" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="每晚价格"><input id="travelStayRating" type="number" min="0" max="5" step="0.1" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="平台评分 0-5"><input id="travelStayLocationScore" type="number" min="0" max="5" step="0.5" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="位置评分 0-5"><input id="travelStayValueScore" type="number" min="0" max="5" step="0.5" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="性价比 0-5"><input id="travelStayComfortScore" type="number" min="0" max="5" step="0.5" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="舒适度 0-5"><input id="travelStayUrl" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="预订 / 介绍链接"><textarea id="travelStayPros" rows="2" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="优点"></textarea><textarea id="travelStayCons" rows="2" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="顾虑 / 缺点"></textarea></div><button id="btnAddTravelStay" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">加入住宿候选</button></div>
+              <div id="travelStayList" class="space-y-3 mt-6"></div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="food">
+              <div class="soft-card p-5 md:p-6"><h2 class="text-xl font-black">🍜 美食推荐</h2><p class="text-sm text-calm-mute mt-1">把想吃的餐馆、小店和必吃菜集中收藏，按照“必吃 + 评分”形成优先列表。</p><div id="travelFoodRecommendation" class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4"></div><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2 mt-5"><input id="travelFoodName" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="餐馆 / 美食名称"><input id="travelFoodCuisine" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="料理类型"><input id="travelFoodArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="区域"><input id="travelFoodMustTry" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="必吃菜 / 必点"><select id="travelFoodPriceLevel" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="$">$</option><option value="$$" selected>$$</option><option value="$$$">$$$</option><option value="$$$$">$$$$</option></select><input id="travelFoodRating" type="number" min="0" max="5" step="0.1" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="评分 0-5"><select id="travelFoodStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="want">想吃</option><option value="reserved">已预约</option><option value="visited">已打卡</option><option value="skip">暂不考虑</option></select><input id="travelFoodOpenNote" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="营业 / 排队 / 预约备注"><input id="travelFoodUrl" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="参考链接"><textarea id="travelFoodNote" rows="2" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="备注"></textarea></div><button id="btnAddTravelFood" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black">收藏美食</button></div>
+              <div id="travelFoodList" class="space-y-3 mt-6"></div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="photo">
+              <div class="soft-card p-5 md:p-6"><h2 class="text-xl font-black">📷 打卡拍照</h2><p class="text-sm text-calm-mute mt-1">记录想拍的地点、最佳时间、拍摄类型、构图想法和建议器材，并可一键加入每日行程。</p><div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2 mt-4"><input id="travelPhotoName" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="拍照地点 / 机位"><input id="travelPhotoArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="区域 / 具体位置说明"><input id="travelPhotoDate" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><select id="travelPhotoBestTime" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="sunrise">🌅 日出</option><option value="morning">☀️ 上午</option><option value="day">🌤️ 白天</option><option value="sunset">🌇 日落 / 蓝调</option><option value="night">🌃 夜景</option><option value="any" selected>📷 任意时间</option></select><select id="travelPhotoType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="portrait">🧑‍🎨 人像</option><option value="landscape">🏞️ 风景</option><option value="street">🚶 街拍</option><option value="architecture">🏛️ 建筑</option><option value="food">🍽️ 美食</option><option value="night">🌙 夜景</option><option value="other" selected>✨ 其他</option></select><select id="travelPhotoStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="want">想拍</option><option value="planned">已排期</option><option value="shot">已打卡</option><option value="skip">跳过</option></select><input id="travelPhotoEquipment" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="建议器材 / 焦段"><textarea id="travelPhotoIdeas" rows="3" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="想拍的构图、动作、氛围、参考画面……"></textarea><input id="travelPhotoUrl" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="参考图 / 攻略链接"><textarea id="travelPhotoNote" rows="2" class="md:col-span-2 xl:col-span-4 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="其他备注"></textarea></div><button id="btnAddTravelPhoto" class="mt-3 w-full px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加拍照点</button></div>
+              <div id="travelPhotoList" class="space-y-3 mt-6"></div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="notes">
+              <div class="grid grid-cols-1 xl:grid-cols-[380px_minmax(0,1fr)] gap-6">
+                <div class="soft-card p-5"><div class="font-black text-lg mb-3">快速记录旅行碎片</div><div class="space-y-2"><select id="travelNotePlan" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></select><select id="travelNoteType" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">💭 零碎想法</option><option value="place">📍 想去地点</option><option value="food">🍜 吃喝</option><option value="stay">🏡 住宿</option><option value="transport">🚆 交通</option><option value="todo">✅ 待办 / 准备</option><option value="link">🔗 链接 / 攻略</option><option value="other">✨ 其他</option></select><input id="travelNoteTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="一个短标题（可选）"><textarea id="travelNoteContent" rows="6" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="想到什么就记什么，不要求完整"></textarea><input id="travelNoteUrl" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="链接（可选）"></div><button id="btnAddTravelNote" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-pink text-white font-black">保存旅行碎片</button></div>
+                <div class="soft-card p-5"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="font-black text-lg">零碎内容</div><div class="flex flex-wrap gap-2"><select id="travelFilterPlan" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"></select><select id="travelFilterType" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><option value="">全部类型</option><option value="idea">零碎想法</option><option value="place">想去地点</option><option value="food">吃喝</option><option value="stay">住宿</option><option value="transport">交通</option><option value="todo">待办</option><option value="link">链接 / 攻略</option><option value="other">其他</option></select><input id="travelNoteQuery" class="px-3 py-2 rounded-2xl border border-calm-line bg-white" placeholder="搜索碎片"></div></div><div id="travelNoteList" class="space-y-3"></div></div>
+              </div>
+            </div>
+
+            <div class="travel-subview is-hidden" data-travel-subview="plans">
+              <div class="grid grid-cols-1 xl:grid-cols-[420px_minmax(0,1fr)] gap-6">
+                <div class="soft-card p-5"><div class="font-black text-lg mb-3">新增旅行计划</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><input id="travelPlanTitle" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="计划名称，如：北海道冬季旅行"><input id="travelPlanDestination" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="目的地 / 城市"><select id="travelPlanStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">想去 / 灵感</option><option value="planning">规划中</option><option value="booked">已预订 / 待出发</option><option value="completed">已完成</option><option value="paused">暂缓</option></select><input id="travelPlanCompanions" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="同行对象（可选）"><input id="travelPlanStart" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPlanEnd" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><input id="travelPlanBudget" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="预计预算"><select id="travelPlanCurrency" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="CNY">CNY · 人民币</option><option value="MOP">MOP · 澳门元</option><option value="HKD">HKD · 港币</option><option value="SGD">SGD · 新加坡元</option><option value="USD">USD · 美元</option><option value="JPY">JPY · 日元</option><option value="EUR">EUR · 欧元</option></select><input id="travelPlanTags" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="标签：摄影、美食、温泉（逗号分隔）"><textarea id="travelPlanNote" rows="4" class="md:col-span-2 px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="为什么想去、想体验什么、初步路线……"></textarea></div><button id="btnAddTravelPlan" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加旅行计划</button></div>
+                <div class="soft-card p-5"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><div class="font-black text-lg">旅行计划</div><div class="flex gap-2"><select id="travelFilterStatus" class="px-3 py-2 rounded-2xl border border-calm-line bg-white"><option value="">全部状态</option><option value="idea">想去 / 灵感</option><option value="planning">规划中</option><option value="booked">已预订</option><option value="completed">已完成</option><option value="paused">暂缓</option></select><input id="travelFilterQuery" class="px-3 py-2 rounded-2xl border border-calm-line bg-white" placeholder="搜索计划"></div></div><div id="travelPlanList" class="space-y-3"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="research-ideas-section" class="section-hidden space-y-6">
@@ -882,33 +994,34 @@
     </div>
   </dialog>
 
-    <script src="./assets/js/core/constants.js?v=16.0.0"></script>
-  <script src="./assets/js/core/utils.js?v=16.0.0"></script>
-  <script src="./assets/js/core/preferences.js?v=16.0.0"></script>
-  <script src="./assets/js/core/normalizers.js?v=16.0.0"></script>
-  <script src="./assets/js/core/meta.js?v=16.0.0"></script>
-  <script src="./assets/js/core/state.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/profile.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/papers.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/research-ideas.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/experiments.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/home.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/tasks.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/focus-schedule.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/workflow.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/upward-management.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/review.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/submissions.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/travel.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/dashboard.js?v=16.0.0"></script>
-  <script src="./assets/js/modules/settings.js?v=16.0.0"></script>
-  <script src="./assets/js/ui/dialogs.js?v=16.0.0"></script>
-  <script src="./assets/js/app/render.js?v=16.0.0"></script>
-  <script src="./assets/js/app/runtime-bridge.js?v=16.0.0"></script>
-  <script src="./assets/js/app/bootstrap.js?v=16.0.0"></script>
+    <script src="./assets/js/core/constants.js?v=16.1.0"></script>
+  <script src="./assets/js/core/utils.js?v=16.1.0"></script>
+  <script src="./assets/js/core/preferences.js?v=16.1.0"></script>
+  <script src="./assets/js/core/normalizers.js?v=16.1.0"></script>
+  <script src="./assets/js/core/meta.js?v=16.1.0"></script>
+  <script src="./assets/js/core/state.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/profile.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/papers.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/research-ideas.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/experiments.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/home.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/tasks.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/focus-schedule.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/workflow.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/upward-management.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/review.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/submissions.js?v=16.1.0"></script>
+  <script src="./assets/js/services/travel-weather.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/travel.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/dashboard.js?v=16.1.0"></script>
+  <script src="./assets/js/modules/settings.js?v=16.1.0"></script>
+  <script src="./assets/js/ui/dialogs.js?v=16.1.0"></script>
+  <script src="./assets/js/app/render.js?v=16.1.0"></script>
+  <script src="./assets/js/app/runtime-bridge.js?v=16.1.0"></script>
+  <script src="./assets/js/app/bootstrap.js?v=16.1.0"></script>
 <!-- PERSONAL_WORKSPACE_SUPABASE_SYNC -->
-  <script src="./assets/js/config/supabase.config.js?v=16.0.0"></script>
+  <script src="./assets/js/config/supabase.config.js?v=16.1.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./assets/js/cloud/supabase-sync.js?v=16.0.0"></script>
+  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.0"></script>
 </body>
 </html>

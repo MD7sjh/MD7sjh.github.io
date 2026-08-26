@@ -66,6 +66,7 @@ function renderHomeThemeStats() {
   const completedExperiments = experiments.filter(item => item.status === 'completed').length;
   const travelNew = travelPlansCreatedInRange(range.start, range.end).length;
   const travelNotes = travelNotesInRange(range.start, range.end).length;
+  const travelStructured = travelStructuredItemsInRange(range.start, range.end).length;
   const reviewEntries = range.dates.reduce((sum, d) => sum + reviewCountOn(d), 0);
   const doneTasks = state.tasks.filter(t => t.doneAt && isDateInRange(dateFromDateTime(t.doneAt), range.start, range.end)).length;
   const newSubs = state.submissions.filter(s => s.createdAt && isDateInRange(dateFromDateTime(s.createdAt), range.start, range.end)).length;
@@ -79,7 +80,7 @@ function renderHomeThemeStats() {
     { label:`${statsModeText()}完成实验`, value: completedExperiments, color:'text-emerald-600' },
     { label:`${statsModeText()}向上管理`, value: upwardEntries, color:'text-dopamine-purple' },
     { label:`${statsModeText()}旅行计划`, value: travelNew, color:'text-dopamine-sky' },
-    { label:`${statsModeText()}旅行碎片`, value: travelNotes, color:'text-dopamine-pink' },
+    { label:`${statsModeText()}旅行记录`, value: travelNotes + travelStructured, color:'text-dopamine-pink' },
     { label:`${statsModeText()}复盘`, value: reviewEntries, color:'text-dopamine-pink' },
     { label:`${statsModeText()}完成任务`, value: doneTasks, color:'text-dopamine-purple' },
     { label:`${statsModeText()}新增投稿`, value: newSubs, color:'text-dopamine-sky' }

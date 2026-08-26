@@ -1,9 +1,10 @@
-v16 上传 GitHub：
+v16.1 Travel Pro 上传 GitHub：
 
-1. 建议先在旧网页下载一次 JSON 备份。
+1. 建议先在旧网页“数据管理”下载一次 JSON 备份。
 2. 删除 GitHub 仓库旧的 index.html 和整个 assets/。
-3. 上传本包中的 index.html、assets/、.nojekyll、supabase/ 等到仓库根目录。
+3. 将本包中的全部内容上传到仓库根目录（index.html 与 assets/ 同级）。
 4. 不需要重新运行 Supabase SQL，也不需要重新注册账号。
-5. GitHub Pages 部署后 Ctrl+F5 强制刷新。
+5. GitHub Pages 部署完成后，电脑 Ctrl+F5 强制刷新；手机建议首次用无痕窗口测试。
 
-注意：v16 已移除记账与攒钱模块。新版首次正常保存到云端后，这两个旧字段将不再包含在云端 state 中。
+旅行规划新增的数据仍放在 workspace_state.state 内，不增加 Supabase 表。
+天气使用 Open-Meteo 在线服务；无地图、无 Leaflet、无 OpenStreetMap/Nominatim 依赖。

@@ -11,16 +11,16 @@ function renderDashboard(){
   const submissionCreated=state.submissions.filter(i=>i.createdAt&&isDateInRange(dateFromDateTime(i.createdAt),start,end)).length;
   const submissionUpdated=state.submissions.filter(i=>i.updatedAt&&isDateInRange(dateFromDateTime(i.updatedAt),start,end)&&dateFromDateTime(i.createdAt)!==dateFromDateTime(i.updatedAt)).length;
   const upwardDays=dates.reduce((s,d)=>s+upwardCountOn(d),0), reviewDays=dates.reduce((s,d)=>s+reviewCountOn(d),0);
-  const travelPlans=travelPlansCreatedInRange(start,end), travelNotes=travelNotesInRange(start,end);
+  const travelPlans=travelPlansCreatedInRange(start,end), travelNotes=travelNotesInRange(start,end), travelStructured=travelStructuredItemsInRange(start,end);
   const stats=[
-    [`${rangeLabel}专注`,formatMinutes(focusTotal),'text-dopamine-orange'],[`${rangeLabel}打卡`,formatMinutes(workTotal),'text-dopamine-sky'],[`${rangeLabel}科研思路`,ideas.length,'text-dopamine-purple'],[`${rangeLabel}实验记录`,experiments.length,'text-dopamine-mint'],[`${rangeLabel}完成实验`,experimentCompleted,'text-emerald-600'],[`${rangeLabel}论文投入`,formatMinutes(paperMinutes),'text-dopamine-purple'],[`${rangeLabel}投稿动作`,submissionCreated+submissionUpdated,'text-dopamine-sky'],[`${rangeLabel}向上管理`,upwardDays,'text-dopamine-purple'],[`${rangeLabel}每日复盘`,reviewDays,'text-dopamine-pink'],[`${rangeLabel}旅行碎片`,travelNotes.length,'text-dopamine-sky']
+    [`${rangeLabel}专注`,formatMinutes(focusTotal),'text-dopamine-orange'],[`${rangeLabel}打卡`,formatMinutes(workTotal),'text-dopamine-sky'],[`${rangeLabel}科研思路`,ideas.length,'text-dopamine-purple'],[`${rangeLabel}实验记录`,experiments.length,'text-dopamine-mint'],[`${rangeLabel}完成实验`,experimentCompleted,'text-emerald-600'],[`${rangeLabel}论文投入`,formatMinutes(paperMinutes),'text-dopamine-purple'],[`${rangeLabel}投稿动作`,submissionCreated+submissionUpdated,'text-dopamine-sky'],[`${rangeLabel}向上管理`,upwardDays,'text-dopamine-purple'],[`${rangeLabel}每日复盘`,reviewDays,'text-dopamine-pink'],[`${rangeLabel}旅行记录`,travelNotes.length+travelStructured.length,'text-dopamine-sky']
   ];
   $('dashboardStats').innerHTML=stats.map(([label,value,color])=>`<div class="small-stat p-4"><div class="text-sm text-calm-mute">${label}</div><div class="text-2xl font-black mt-1 ${color}">${escapeHtml(String(value))}</div></div>`).join('');
   const highlights=[
     {title:'执行节奏',body:`累计专注 ${formatMinutes(focusTotal)}，工作记录 ${formatMinutes(workTotal)}。`,note:`完成任务 ${state.tasks.filter(i=>i.doneAt&&isDateInRange(dateFromDateTime(i.doneAt),start,end)).length} 项`},
     {title:'科研验证',body:`新增科研思路 ${ideas.length} 个、参考资料 ${ideaRefs.length} 条；实验记录 ${experiments.length} 条。`,note:`完成实验 ${experimentCompleted} 条 · 指标 ${experimentMetrics} 项 · 重点结果 ${experiments.filter(i=>i.starred).length} 条`},
     {title:'论文与投稿',body:`论文日志 ${paperLogs.length} 条，投稿动作 ${submissionCreated+submissionUpdated} 次。`,note:`论文投入 ${formatMinutes(paperMinutes)} · ${Math.round(paperWords)} 字 · 内容更新 ${paperSectionUpdates} 次 · 里程碑 ${paperMilestones} 个`},
-    {title:'生活与沟通',body:`旅行新增计划 ${travelPlans.length} 个、碎片 ${travelNotes.length} 条；向上管理 ${upwardDays} 天。`,note:`每日复盘 ${reviewDays} 天 · 进行中投稿 ${runningSubmissionCount()} 个`}
+    {title:'生活与沟通',body:`旅行新增计划 ${travelPlans.length} 个、记录 ${travelNotes.length+travelStructured.length} 条；向上管理 ${upwardDays} 天。`,note:`每日复盘 ${reviewDays} 天 · 进行中投稿 ${runningSubmissionCount()} 个`}
   ];
   $('dashboardHighlights').innerHTML=highlights.map(i=>`<div class="rounded-2xl bg-white border border-calm-line px-4 py-4"><div class="font-black">${i.title}</div><div class="text-sm leading-6 mt-2">${escapeHtml(i.body)}</div><div class="text-xs text-calm-mute mt-2">${escapeHtml(i.note)}</div></div>`).join('');
   const coverage=[
@@ -29,7 +29,7 @@ function renderDashboard(){
     ['实验结果',new Set(experiments.map(i=>i.date)).size,`实验 ${experiments.length} · 完成 ${experimentCompleted} · 指标 ${experimentMetrics}`],
     ['论文进度',new Set(paperLogs.map(i=>i.log.date)).size,`论文 ${state.papers?.items?.length||0} 篇 · 日志 ${paperLogs.length}`],
     ['投稿管理',Math.min(days,submissionCreated+submissionUpdated),`新增 ${submissionCreated} · 更新 ${submissionUpdated}`],
-    ['旅行规划',new Set([...travelPlans.map(i=>dateFromDateTime(i.createdAt)),...travelNotes.map(i=>dateFromDateTime(i.createdAt))]).size,`计划 ${travelPlans.length} · 碎片 ${travelNotes.length}`],
+    ['旅行规划',new Set([...travelPlans.map(i=>dateFromDateTime(i.createdAt)),...travelNotes.map(i=>dateFromDateTime(i.createdAt)),...travelStructured.map(i=>dateFromDateTime(i.createdAt))]).size,`计划 ${travelPlans.length} · 记录 ${travelNotes.length+travelStructured.length}`],
     ['向上管理',upwardDays,`记录 ${upwardDays} 天 · 待跟进 ${upwardPendingItems(end).length}`],
     ['每日复盘',reviewDays,`记录 ${reviewDays} 天`]
   ];
