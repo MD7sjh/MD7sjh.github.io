@@ -270,16 +270,20 @@ const EXPERIMENT_METRIC_PRESETS = [
   { name:'Train Time', unit:'h', direction:'lower' }
 ];
 
-const RESEARCH_IDEA_AREAS = [
-  { value:'3d_graphics', label:'3D / Graphics', icon:'🧊' },
-  { value:'image_video', label:'图像 / 视频生成', icon:'🎬' },
-  { value:'multimodal', label:'多模态理解与生成', icon:'🧩' },
-  { value:'robotics', label:'机器人 / 具身智能', icon:'🤖' },
-  { value:'photography', label:'计算摄影 / 相机智能', icon:'📷' },
-  { value:'systems', label:'系统 / 数据 / 工程', icon:'🛠️' },
-  { value:'theory', label:'理论 / 方法分析', icon:'📐' },
-  { value:'other', label:'其他研究方向', icon:'💡' }
-];
+// 科研思路的“研究方向”与实验结果中的 CV 大方向保持一致，避免两套分类体系。
+const RESEARCH_IDEA_AREAS = EXPERIMENT_TASK_TYPES.map(item => ({ ...item }));
+
+// v16.1.1 及更早版本的科研思路方向迁移到新的 CV 大方向。
+const LEGACY_RESEARCH_IDEA_AREA_MAP = {
+  '3d_graphics': 'reconstruction',
+  'image_video': 'generation',
+  'multimodal': 'multimodal',
+  'robotics': 'other',
+  'photography': 'other',
+  'systems': 'efficiency',
+  'theory': 'other',
+  'other': 'other'
+};
 const RESEARCH_IDEA_STATUSES = [
   { value:'captured', label:'灵感收集', color:'bg-pink-100 text-pink-700' },
   { value:'exploring', label:'调研中', color:'bg-sky-100 text-sky-700' },

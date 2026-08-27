@@ -49,7 +49,7 @@ function initializeResearchIdeaControls() {
     if ([...el.options].some(option => option.value === current)) el.value = current;
     else if ([...el.options].some(option => option.value === fallback)) el.value = fallback;
   };
-  refill('researchIdeaArea', areaOptions, '3d_graphics');
+  refill('researchIdeaArea', areaOptions, 'classification');
   refill('researchIdeaStatus', statusOptions, 'captured');
   refill('researchIdeaPriority', priorityOptions, 'medium');
   refill('researchIdeaFilterArea', `<option value="">全部方向</option>${areaOptions}`, '');

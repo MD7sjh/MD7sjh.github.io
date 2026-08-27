@@ -577,8 +577,10 @@ function normalizeResearchIdea(item) {
   if (!item || typeof item !== 'object') return null;
   const title = String(item.title || item.name || '').trim();
   if (!title) return null;
-  const area = RESEARCH_IDEA_AREAS.some(entry => entry.value === item.area)
-    ? String(item.area)
+  const rawArea = String(item.area || '');
+  const migratedArea = LEGACY_RESEARCH_IDEA_AREA_MAP[rawArea] || rawArea;
+  const area = RESEARCH_IDEA_AREAS.some(entry => entry.value === migratedArea)
+    ? migratedArea
     : 'other';
   const status = RESEARCH_IDEA_STATUSES.some(entry => entry.value === item.status)
     ? String(item.status)

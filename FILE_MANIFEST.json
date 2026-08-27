@@ -1,5 +1,5 @@
 {
-  "version": "16.1.1",
+  "version": "16.1.2",
   "files": [
     {
       "path": ".gitignore",
@@ -22,6 +22,11 @@
       "sha256": "fb505a25c515c8a1104a8da33d539c65e938782b0d6ffa0ecfaa419d104f93ab"
     },
     {
+      "path": "CHANGELOG_v16.1.2.md",
+      "size": 710,
+      "sha256": "c08febb8de8e0c40c8f0a4144f72107dacd35de044da33ed4600acd6e93d5768"
+    },
+    {
       "path": "CHANGELOG_v16.1.md",
       "size": 741,
       "sha256": "5a77eb86cf4ae004ebb774820ab516bb5ae448bac7d2a633aca868981d0bd3d0"
@@ -38,8 +43,8 @@
     },
     {
       "path": "README.md",
-      "size": 1674,
-      "sha256": "d0c87bd6a0dbc8164cb579789e663dc925eca402cb7cf75d2738e19def05ea31"
+      "size": 2211,
+      "sha256": "73b7231d3047ff67a898403dac8a2a08829ec1c10df09e1b4b958b1ccc7a8421"
     },
     {
       "path": "assets/css/base.css",
@@ -103,8 +108,8 @@
     },
     {
       "path": "assets/js/core/constants.js",
-      "size": 17140,
-      "sha256": "b6827f9860e6e80ead911d71676d88b8772681f83caa0a9632db7bf9b2f9fb9b"
+      "size": 17078,
+      "sha256": "f0c7f901ed4779b097dc6fa329c42fc5295af9784ae1014bac26a84f73489752"
     },
     {
       "path": "assets/js/core/meta.js",
@@ -113,8 +118,8 @@
     },
     {
       "path": "assets/js/core/normalizers.js",
-      "size": 35689,
-      "sha256": "ac6ff9077b594caf67ee155cfb1bcfc1ce64032273c8f51006544bb70e6359d9"
+      "size": 35804,
+      "sha256": "85f0f8d1a0114def9524ca58ca0a254ce82967a2237ce9ce6cea903632be942c"
     },
     {
       "path": "assets/js/core/preferences.js",
@@ -163,8 +168,8 @@
     },
     {
       "path": "assets/js/modules/research-ideas.js",
-      "size": 30843,
-      "sha256": "a4edd5377aa499e1522e80300ab592ee0cd7f6be97cb20a71e7e9a7dc93ae8e9"
+      "size": 30846,
+      "sha256": "736522342d01f88a7b417f21c851324203e7bf6220e848887620b0ae58dcc865"
     },
     {
       "path": "assets/js/modules/review.js",
@@ -214,7 +219,7 @@
     {
       "path": "index.html",
       "size": 114042,
-      "sha256": "750b32d8f0b4331d86003fae25c519c97319b00a4c6c0c3d3efb06bccc691881"
+      "sha256": "85a519dfffa6f3a14d98a741bf443d6222965fb8ba8d45529994e73c4c47dc9f"
     },
     {
       "path": "supabase/setup.sql",
