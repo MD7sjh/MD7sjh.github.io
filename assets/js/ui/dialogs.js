@@ -57,6 +57,7 @@ function openProjectEditor(id) {
     },
     onDelete:()=>{
       state.tasks = state.tasks.map(item => item.projectId === id ? { ...item, projectId:'' } : item);
+      (state.papers?.items || []).forEach(paper => { if (paper.projectId === id) paper.projectId = ''; });
       state.projects = state.projects.filter(item => item.id !== id);
       saveState(); renderAll();
     }

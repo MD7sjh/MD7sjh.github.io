@@ -1,5 +1,5 @@
 {
-  "version": "16.1.2",
+  "version": "16.1.3",
   "files": [
     {
       "path": ".gitignore",
@@ -13,8 +13,8 @@
     },
     {
       "path": "ARCHITECTURE.md",
-      "size": 821,
-      "sha256": "430155b15ec9d48c7932829817ed2ac080fa62b067c4e485aa4344f43c98fd83"
+      "size": 1116,
+      "sha256": "76d69bfe82ca37c09a3124429579d7c9fdb89764c7b7c07c500585eb4a78074d"
     },
     {
       "path": "CHANGELOG_v16.1.1.md",
@@ -25,6 +25,11 @@
       "path": "CHANGELOG_v16.1.2.md",
       "size": 710,
       "sha256": "c08febb8de8e0c40c8f0a4144f72107dacd35de044da33ed4600acd6e93d5768"
+    },
+    {
+      "path": "CHANGELOG_v16.1.3.md",
+      "size": 578,
+      "sha256": "a63d46a3c115881e379ed5790db1f6ccb899690938653ca000adfca052bbc6e6"
     },
     {
       "path": "CHANGELOG_v16.1.md",
@@ -43,8 +48,8 @@
     },
     {
       "path": "README.md",
-      "size": 2211,
-      "sha256": "73b7231d3047ff67a898403dac8a2a08829ec1c10df09e1b4b958b1ccc7a8421"
+      "size": 2784,
+      "sha256": "3f76460a13fef30c37966877e2f8808103c159514795f8c4eba6c1f76e0dbd56"
     },
     {
       "path": "assets/css/base.css",
@@ -58,8 +63,8 @@
     },
     {
       "path": "assets/css/papers.css",
-      "size": 452,
-      "sha256": "7823f06f03b025fc06910583f31f31cc1056c6b53df2b32e5ab47f0d2ed859d1"
+      "size": 663,
+      "sha256": "7b851eeb1c894bff9e5a15e07d8b9ef036911a637892fc4337855b02a634ff0c"
     },
     {
       "path": "assets/css/pastel-theme.css",
@@ -118,8 +123,8 @@
     },
     {
       "path": "assets/js/core/normalizers.js",
-      "size": 35804,
-      "sha256": "85f0f8d1a0114def9524ca58ca0a254ce82967a2237ce9ce6cea903632be942c"
+      "size": 35872,
+      "sha256": "6ba343b182d6ea64b8e0ddf247cf6bbecd05e869735807eba6948abcdba45167"
     },
     {
       "path": "assets/js/core/preferences.js",
@@ -128,8 +133,8 @@
     },
     {
       "path": "assets/js/core/state.js",
-      "size": 11664,
-      "sha256": "96afad310e3ac73ab3505c1b34c17430eeeb7a7fac23ad874104febcdadae35b"
+      "size": 12475,
+      "sha256": "5fefab00fc29b8946dbeeed3e4db1ed9d32bfc398473787011c6f182ba28d6bd"
     },
     {
       "path": "assets/js/core/utils.js",
@@ -158,8 +163,8 @@
     },
     {
       "path": "assets/js/modules/papers.js",
-      "size": 16498,
-      "sha256": "d46d85357ed047de5408229ad508ccf07faf4236d28c220c70aca7ca4e6a4f31"
+      "size": 19370,
+      "sha256": "32291f36f5c0267d3b9fb244996c8f738ee7a9c9ac91cfbc6efa1ef9c49076ba"
     },
     {
       "path": "assets/js/modules/profile.js",
@@ -178,8 +183,8 @@
     },
     {
       "path": "assets/js/modules/settings.js",
-      "size": 5743,
-      "sha256": "4d3011639d76f2a4e4b7d1103e89eeeca4255a37efbbbd0e1fda30749c560cb2"
+      "size": 5780,
+      "sha256": "6fd0b4be2d6cc210407a1f97bf11455a493cc2f6c977a9a193cecfa66551f795"
     },
     {
       "path": "assets/js/modules/submissions.js",
@@ -188,8 +193,8 @@
     },
     {
       "path": "assets/js/modules/tasks.js",
-      "size": 12854,
-      "sha256": "8ae120d365c262f536989970726e260f899bf66028c9c238e1275b373bba946e"
+      "size": 12322,
+      "sha256": "4e6b450fe5178d3143e3d1acbffc8ccac78478204022ffcfdb61f4be9b359d0a"
     },
     {
       "path": "assets/js/modules/travel.js",
@@ -203,8 +208,8 @@
     },
     {
       "path": "assets/js/modules/workflow.js",
-      "size": 23255,
-      "sha256": "3ed19bd24f91eb5fac3930e56f0c13a7a6eac1652a5a56c14430124344cd9d95"
+      "size": 23433,
+      "sha256": "e2c8153331e167b0b1b309c34ea8e4d39edae29e2977a1fe441e00ee3bf7ea94"
     },
     {
       "path": "assets/js/services/travel-weather.js",
@@ -213,13 +218,13 @@
     },
     {
       "path": "assets/js/ui/dialogs.js",
-      "size": 9651,
-      "sha256": "d49118e893ce9afe3b6feee6f4c9c8cf4ccff0c1936fdd1e3379a3422e154ed3"
+      "size": 9758,
+      "sha256": "fcc92cfb983f8c038866059742403c91ee28333b1b84d00f15c9f2c82ae5bc32"
     },
     {
       "path": "index.html",
-      "size": 114042,
-      "sha256": "85a519dfffa6f3a14d98a741bf443d6222965fb8ba8d45529994e73c4c47dc9f"
+      "size": 114749,
+      "sha256": "a354a8e21c5d3ca043c38836ff0ddc202bf2952975d5e548c141e1bde13c00eb"
     },
     {
       "path": "supabase/setup.sql",

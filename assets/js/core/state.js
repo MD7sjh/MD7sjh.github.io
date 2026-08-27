@@ -1,6 +1,20 @@
 /* Local state loading, persistence, and shared selectors. */
 'use strict';
 
+function migrateLegacyPaperProjectLinks(workspace) {
+  if (!workspace || typeof workspace !== 'object') return workspace;
+  const projects = Array.isArray(workspace.projects) ? workspace.projects : [];
+  (workspace.papers?.items || []).forEach(paper => {
+    if (paper.projectId && projects.some(project => project.id === paper.projectId)) return;
+    const legacyMarker = `paper:${paper.id}`;
+    const legacyProject = projects.find(project => String(project.note || '') === legacyMarker);
+    paper.projectId = legacyProject?.id || '';
+    // Remove the old hard-coupling marker so the user can later unlink the paper permanently.
+    if (legacyProject && String(legacyProject.note || '') === legacyMarker) legacyProject.note = '';
+  });
+  return workspace;
+}
+
 function loadState() {
   try {
     let sourceKey = STORAGE_KEY;
@@ -27,6 +41,7 @@ function loadState() {
       travel: normalizeTravelState(parsed.travel),
       papers: normalizePapersState(parsed.papers, parsed.thesis)
     };
+    migrateLegacyPaperProjectLinks(normalized);
     if (raw && sourceKey !== STORAGE_KEY) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     }

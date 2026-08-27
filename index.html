@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Workspace · Pastel Modular v16.1.2</title>
+  <title>Personal Workspace · Pastel Modular v16.1.3</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="./assets/js/config/tailwind.config.js?v=16.1.2"></script>
-  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.2">
+  <script src="./assets/js/config/tailwind.config.js?v=16.1.3"></script>
+  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.3">
 
-  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.2">
-  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.2">
-  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.2">
-  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.2">
-  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.2">
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.3">
+  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.3">
+  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.3">
+  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.3">
+  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.3">
 
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
@@ -421,19 +421,19 @@
             <div><h1 class="text-2xl font-black flex items-center gap-2"><i class="fa-solid fa-book-open text-dopamine-purple"></i> 论文进度</h1><p class="text-calm-mute mt-1">同时管理 Conference、Journal、Workshop、学位论文或技术报告；每篇论文独立记录里程碑、内容进度与推进日志。</p></div>
             <div class="inline-flex items-center rounded-full bg-white/80 border border-calm-line p-1"><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="day">每日</button><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="week">每周</button><button class="stats-mode-btn px-3 py-2 rounded-full text-sm font-black transition" data-stats-mode="month">每月</button></div>
           </div>
-          <div id="paperStatsRangeLabel" class="text-sm text-calm-mute mb-3">-</div><div id="paperThemeStats" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3"></div>
+          <div id="paperStatsRangeLabel" class="text-sm text-calm-mute mb-3">-</div><div id="paperThemeStats" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-9 gap-3"></div>
         </div>
         <div class="grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)] gap-6">
           <div class="space-y-6">
-            <div class="soft-card p-5"><div class="font-black text-lg mb-3">新增论文</div><div class="space-y-2"><input id="paperNewTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="论文名称 / 工作标题"><div class="grid grid-cols-2 gap-2"><select id="paperNewType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="conference">Conference</option><option value="journal">Journal</option><option value="workshop">Workshop</option><option value="thesis">Thesis / 学位论文</option><option value="report">Technical Report</option><option value="other">其他</option></select><input id="paperNewDeadline" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></div><input id="paperNewVenue" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="目标 Venue / 期刊 / 会议"><button id="btnAddPaper" class="w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">创建论文</button></div></div>
+            <div class="soft-card p-5"><div class="font-black text-lg mb-3">新增论文</div><div class="space-y-2"><input id="paperNewTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="论文名称 / 工作标题"><div class="grid grid-cols-2 gap-2"><select id="paperNewType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="conference">Conference</option><option value="journal">Journal</option><option value="workshop">Workshop</option><option value="thesis">Thesis / 学位论文</option><option value="report">Technical Report</option><option value="other">其他</option></select><input id="paperNewDeadline" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></div><input id="paperNewVenue" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="目标 Venue / 期刊 / 会议"><select id="paperNewProjectId" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="">独立论文（暂不关联项目）</option></select><div class="text-xs text-calm-mute px-1">关联是可选的：只引用已有项目的执行信息，不自动创建或同步项目。</div><button id="btnAddPaper" class="w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">创建论文</button></div></div>
             <div class="soft-card p-5"><div class="font-black mb-3">论文列表</div><div id="paperList" class="space-y-3 max-h-[720px] overflow-auto scroll-thin"></div></div>
           </div>
           <div>
             <div id="paperDetailEmpty" class="soft-card p-8 text-center text-calm-mute">先创建或选择一篇论文，再记录详细进度。</div>
             <div id="paperDetailContent" class="space-y-6 hidden">
               <div class="soft-card p-5 md:p-6"><div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3"><div><div class="text-sm text-calm-mute">当前论文</div><h2 id="paperSelectedName" class="text-xl font-black mt-1">-</h2></div><div class="flex gap-2"><button id="btnDeletePaper" class="px-4 py-3 rounded-2xl bg-rose-100 text-rose-600 font-black">删除</button><button id="btnSavePaperMeta" class="px-4 py-3 rounded-2xl bg-dopamine-orange text-white font-black">保存信息</button></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mt-4"><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">论文名称</div><input id="paperMetaTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">类型</div><select id="paperMetaType" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="conference">Conference</option><option value="journal">Journal</option><option value="workshop">Workshop</option><option value="thesis">Thesis / 学位论文</option><option value="report">Technical Report</option><option value="other">其他</option></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">Venue</div><input id="paperMetaVenue" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">截止日期</div><input id="paperMetaDeadline" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">状态</div><select id="paperMetaStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">构思中</option><option value="drafting">写作中</option><option value="experiment">实验 / 分析中</option><option value="polishing">修改 / 润色中</option><option value="submitted">已投稿 / 已提交</option><option value="revision">返修中</option><option value="accepted">已接收 / 已完成</option><option value="archived">归档 / 暂缓</option></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">当前版本</div><input id="paperMetaVersion" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="v2 / camera-ready"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">关联投稿项目</div><select id="paperMetaSubmissionId" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">备注</div><input id="paperMetaNote" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label></div>
-                <div class="mt-4 small-stat p-4"><div class="flex items-center justify-between gap-3"><div><div class="text-sm text-calm-mute">总体进度</div><div id="paperOverallText" class="text-2xl font-black">0%</div></div><div id="paperOverallHint" class="text-sm text-calm-mute">-</div></div><div class="mt-3 h-3 rounded-full bg-gray-100 overflow-hidden"><div id="paperOverallBar" class="h-full bg-gradient-to-r from-dopamine-purple to-dopamine-sky" style="width:0%"></div></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mt-4"><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">论文名称</div><input id="paperMetaTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">类型</div><select id="paperMetaType" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="conference">Conference</option><option value="journal">Journal</option><option value="workshop">Workshop</option><option value="thesis">Thesis / 学位论文</option><option value="report">Technical Report</option><option value="other">其他</option></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">Venue</div><input id="paperMetaVenue" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">截止日期</div><input id="paperMetaDeadline" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">状态</div><select id="paperMetaStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="idea">构思中</option><option value="drafting">写作中</option><option value="experiment">实验 / 分析中</option><option value="polishing">修改 / 润色中</option><option value="submitted">已投稿 / 已提交</option><option value="revision">返修中</option><option value="accepted">已接收 / 已完成</option><option value="archived">归档 / 暂缓</option></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">当前版本</div><input id="paperMetaVersion" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="v2 / camera-ready"></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">关联执行项目（可选）</div><select id="paperMetaProjectId" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></select><div class="text-xs text-calm-mute mt-2">仅弱关联，不同步论文/项目状态。</div></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">关联投稿项目</div><select id="paperMetaSubmissionId" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></select></label><label class="small-stat p-4"><div class="text-sm text-calm-mute font-bold mb-2">备注</div><input id="paperMetaNote" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label></div>
+                <div class="mt-4 small-stat p-4"><div class="flex items-center justify-between gap-3"><div><div class="text-sm text-calm-mute">总体进度</div><div id="paperOverallText" class="text-2xl font-black">0%</div></div><div id="paperOverallHint" class="text-sm text-calm-mute">-</div></div><div class="mt-3 h-3 rounded-full bg-gray-100 overflow-hidden"><div id="paperOverallBar" class="h-full bg-gradient-to-r from-dopamine-purple to-dopamine-sky" style="width:0%"></div></div></div><div id="paperProjectLinkPanel" class="mt-4 small-stat p-4"></div>
               </div>
               <div class="grid grid-cols-1 xl:grid-cols-2 gap-6"><div class="soft-card p-5"><div class="font-black text-lg mb-3">里程碑</div><div class="grid grid-cols-[minmax(0,1fr)_140px] gap-2"><input id="paperMilestoneName" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：完成主要实验"><input id="paperMilestoneDue" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"></div><button id="btnAddPaperMilestone" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">添加里程碑</button><div id="paperMilestoneList" class="mt-4 space-y-2"></div></div><div class="soft-card p-5"><div class="font-black text-lg mb-3">内容 / 章节进度</div><div class="grid grid-cols-[minmax(0,1fr)_140px] gap-2"><input id="paperSectionName" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：Method / Related Work"><select id="paperSectionStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="draft">草稿</option><option value="revise">修改</option><option value="done">完成</option></select></div><button id="btnAddPaperSection" class="mt-2 w-full px-4 py-3 rounded-2xl bg-dopamine-mint text-white font-black">添加内容部分</button><div id="paperSectionList" class="mt-4 space-y-3"></div></div></div>
               <div class="soft-card p-5 md:p-6"><div class="font-black text-lg mb-3">论文推进日志</div><div class="grid grid-cols-1 md:grid-cols-6 gap-2"><input id="paperLogDate" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><select id="paperLogType" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="writing">写作</option><option value="revise">修改</option><option value="experiment">实验</option><option value="analysis">分析</option><option value="meeting">讨论 / 会议</option><option value="submission">投稿材料</option><option value="other">其他</option></select><input id="paperLogMinutes" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="分钟"><input id="paperLogWords" type="number" min="0" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="字数"><input id="paperLogNote" class="px-3 py-3 rounded-2xl border border-calm-line bg-white md:col-span-2" placeholder="今天推进了什么"><button id="btnAddPaperLog" class="md:col-span-6 px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">添加日志</button></div><div id="paperLogList" class="mt-4 space-y-2 max-h-[360px] overflow-auto scroll-thin"></div></div>
@@ -994,34 +994,34 @@
     </div>
   </dialog>
 
-    <script src="./assets/js/core/constants.js?v=16.1.2"></script>
-  <script src="./assets/js/core/utils.js?v=16.1.2"></script>
-  <script src="./assets/js/core/preferences.js?v=16.1.2"></script>
-  <script src="./assets/js/core/normalizers.js?v=16.1.2"></script>
-  <script src="./assets/js/core/meta.js?v=16.1.2"></script>
-  <script src="./assets/js/core/state.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/profile.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/papers.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/research-ideas.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/experiments.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/home.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/tasks.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/focus-schedule.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/workflow.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/upward-management.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/review.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/submissions.js?v=16.1.2"></script>
-  <script src="./assets/js/services/travel-weather.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/travel.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/dashboard.js?v=16.1.2"></script>
-  <script src="./assets/js/modules/settings.js?v=16.1.2"></script>
-  <script src="./assets/js/ui/dialogs.js?v=16.1.2"></script>
-  <script src="./assets/js/app/render.js?v=16.1.2"></script>
-  <script src="./assets/js/app/runtime-bridge.js?v=16.1.2"></script>
-  <script src="./assets/js/app/bootstrap.js?v=16.1.2"></script>
+    <script src="./assets/js/core/constants.js?v=16.1.3"></script>
+  <script src="./assets/js/core/utils.js?v=16.1.3"></script>
+  <script src="./assets/js/core/preferences.js?v=16.1.3"></script>
+  <script src="./assets/js/core/normalizers.js?v=16.1.3"></script>
+  <script src="./assets/js/core/meta.js?v=16.1.3"></script>
+  <script src="./assets/js/core/state.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/profile.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/papers.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/research-ideas.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/experiments.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/home.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/tasks.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/focus-schedule.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/workflow.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/upward-management.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/review.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/submissions.js?v=16.1.3"></script>
+  <script src="./assets/js/services/travel-weather.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/travel.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/dashboard.js?v=16.1.3"></script>
+  <script src="./assets/js/modules/settings.js?v=16.1.3"></script>
+  <script src="./assets/js/ui/dialogs.js?v=16.1.3"></script>
+  <script src="./assets/js/app/render.js?v=16.1.3"></script>
+  <script src="./assets/js/app/runtime-bridge.js?v=16.1.3"></script>
+  <script src="./assets/js/app/bootstrap.js?v=16.1.3"></script>
 <!-- PERSONAL_WORKSPACE_SUPABASE_SYNC -->
-  <script src="./assets/js/config/supabase.config.js?v=16.1.2"></script>
+  <script src="./assets/js/config/supabase.config.js?v=16.1.3"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.2"></script>
+  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.3"></script>
 </body>
 </html>

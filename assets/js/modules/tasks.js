@@ -82,17 +82,6 @@ function recordProjectProgressFromTask(task) {
     note
   });
   project.updatedAt = nowDateTime();
-  const projectNote = String(project.note || '');
-  const paperMatch = projectNote.match(/^paper:(.+)$/) || String(task.note || '').match(/^paper:(.+)$/);
-  if (paperMatch) {
-    const paper = paperById(paperMatch[1]);
-    if (paper) {
-      paper.logs = Array.isArray(paper.logs) ? paper.logs : [];
-      addUniqueProgressLog(paper.logs, task.id, { date:doneDate, type:paperLogTypeForTask(task), minutes, words:0, note:`${note}${project.title ? `（${project.title}）` : ''}` });
-      paper.updatedAt = nowDateTime();
-    }
-  }
-
   const submission = submissionForCompletedTask(task, project);
   if (submission) {
     submission.logs = Array.isArray(submission.logs) ? submission.logs : [];

@@ -235,6 +235,7 @@ function renderWorkflow() {
       const openCount = tasks.filter(taskOpen).length;
       const doneCount = tasks.filter(item => item.status === 'done').length;
       const logCount = Array.isArray(project.logs) ? project.logs.length : 0;
+      const linkedPapers = (state.papers?.items || []).filter(paper => paper.projectId === project.id);
       const progress = projectProgress(project);
       const startDate = project.startDate || dateFromDateTime(project.createdAt) || '—';
       const remaining = projectRemainingLabel(project);
@@ -244,7 +245,7 @@ function renderWorkflow() {
         <div class="grid grid-cols-[minmax(220px,1.4fr)_140px_minmax(200px,1.2fr)_110px_150px_120px_120px_120px_90px] gap-3 px-4 py-3 border-t border-calm-line items-center text-sm hover:bg-calm-bg/70 ${activeClass}" data-workflow-focus-project="${project.id}">
           <div class="min-w-0">
             <div class="font-bold truncate">${escapeHtml(project.title)}</div>
-            <div class="text-xs text-calm-mute mt-1">任务 ${tasks.length} · 未完成 ${openCount} · 已完成 ${doneCount} · 日志 ${logCount}</div>
+            <div class="text-xs text-calm-mute mt-1">任务 ${tasks.length} · 未完成 ${openCount} · 已完成 ${doneCount} · 日志 ${logCount}${linkedPapers.length ? ` · 弱关联论文 ${linkedPapers.length}` : ''}</div>
           </div>
           <div class="text-calm-mute">${escapeHtml(area.label)}</div>
           <div class="min-w-0 text-calm-mute truncate" title="${escapeHtml(project.outcome || '')}">${escapeHtml(project.outcome || '未填写完成结果')}</div>

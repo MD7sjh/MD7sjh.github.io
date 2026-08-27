@@ -382,6 +382,7 @@ function normalizePaperItem(item) {
     deadline:String(item.deadline || item.targetDate || ''),
     status,
     version:String(item.version || ''),
+    projectId:String(item.projectId || item.linkedProjectId || ''),
     submissionId:String(item.submissionId || ''),
     note:String(item.note || ''),
     milestones:Array.isArray(item.milestones) ? item.milestones.map(normalizePaperMilestone).filter(Boolean) : defaultPaperMilestones(),
