@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Workspace · Pastel Modular v16.1.4</title>
+  <title>Personal Workspace · Pastel Modular v16.1.5</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="./assets/js/config/tailwind.config.js?v=16.1.4"></script>
-  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.4">
+  <script src="./assets/js/config/tailwind.config.js?v=16.1.5"></script>
+  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.5">
 
-  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.4">
-  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.4">
-  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.4">
-  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.4">
-  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.4">
-  <link rel="stylesheet" href="./assets/css/workflow-todo.css?v=16.1.4">
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.5">
+  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.5">
+  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.5">
+  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.5">
+  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.5">
+  <link rel="stylesheet" href="./assets/css/workflow-todo.css?v=16.1.5">
+  <link rel="stylesheet" href="./assets/css/workflow-projects.css?v=16.1.5">
 
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
@@ -26,7 +27,7 @@
           <span class="cute-mascot" aria-hidden="true">🐻</span>
         </div>
         <div>
-          <div class="font-black text-lg leading-tight">Personal<br>Workspace <span class="cute-version">v16</span></div>
+          <div class="font-black text-lg leading-tight">Personal<br>Workspace <span class="cute-version">v16.1.5</span></div>
           <div class="text-xs text-calm-mute">工作 · 科研 · 生活 · 未来</div>
         </div>
       </div>
@@ -277,48 +278,63 @@
               <button id="btnWorkflowJumpScheduleTop" class="px-3 py-2 rounded-2xl bg-dopamine-sky text-white font-semibold">去总览排时间块</button>
             </div>
           </div>
-          <div id="workflowStats" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3"></div>
-          <div id="workflowInsightCards" class="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-4"></div>
-          <div id="workflowQuadrantSummary" class="grid grid-cols-2 xl:grid-cols-6 gap-3 mt-4"></div>
+          <div id="workflowStats" class="grid grid-cols-2 xl:grid-cols-4 gap-3"></div>
         </div>
 
         <div class="soft-card p-5 md:p-6">
           <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5">
             <div>
-              <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-folder-tree text-dopamine-purple"></i> 项目</h2>
-              <p class="text-sm text-calm-mute mt-1">项目是长期目标：有结果、有阶段、有截止；任务只是项目下面的具体动作。</p>
+              <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-folder-tree text-dopamine-purple"></i> 项目列表</h2>
+              <p class="text-sm text-calm-mute mt-1">只保留项目真正需要扫一眼的信息；点击项目即可筛选下方任务。</p>
             </div>
-            <span id="workflowProjectBadge" class="pill bg-dopamine-purple/10 text-dopamine-purple">0 个</span>
+            <button id="btnToggleWorkflowProjectForm" class="workflow-project-new-btn"><i class="fa-solid fa-plus"></i> 新建项目</button>
           </div>
-          <div class="space-y-5">
-            <div class="small-stat p-4">
-              <div class="font-black mb-3">新建项目</div>
-              <div class="space-y-2">
-                <input id="workflowProjectTitle" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="项目名，如：Chapter 3 图表整理">
-                <input id="workflowProjectOutcome" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="完成结果，如：交出可投稿 / 可交付的版本">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-                  <select id="workflowProjectArea" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                    <option value="research">科研 / 实验</option>
-                    <option value="writing">写作 / 论文</option>
-                    <option value="submission">投稿 / 发表</option>
-                    <option value="admin">行政 / 沟通</option>
-                    <option value="life">生活 / 个人事务</option>
-                    <option value="other">其他 / 暂不好分类</option>
-                  </select>
-                  <input id="workflowProjectStartDate" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" title="开始日期">
-                  <input id="workflowProjectDeadline" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                </div>
-                <button id="btnAddWorkflowProject" class="w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">新增项目</button>
-              </div>
+
+          <div id="workflowProjectCreatePanel" class="workflow-project-create-panel hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.2fr)_170px_150px_150px] gap-2">
+              <input id="workflowProjectTitle" class="workflow-project-control" placeholder="项目名称">
+              <input id="workflowProjectOutcome" class="workflow-project-control" placeholder="完成结果 / 项目目标（可选）">
+              <select id="workflowProjectArea" class="workflow-project-control">
+                <option value="research">科研 / 实验</option>
+                <option value="writing">写作 / 论文</option>
+                <option value="submission">投稿 / 发表</option>
+                <option value="admin">行政 / 沟通</option>
+                <option value="life">生活 / 个人事务</option>
+                <option value="other">其他</option>
+              </select>
+              <input id="workflowProjectStartDate" type="date" class="workflow-project-control" title="开始日期">
+              <input id="workflowProjectDeadline" type="date" class="workflow-project-control" title="截止日期">
             </div>
-            <div class="min-w-0">
-              <div class="flex items-center justify-between gap-3 mb-3">
-                <div class="font-black">项目列表</div>
-                <div class="text-xs text-calm-mute">点击项目行可在任务清单中筛选该项目</div>
-              </div>
-              <div id="workflowProjectList" class="space-y-3"></div>
+            <div class="flex justify-end gap-2 mt-3">
+              <button id="btnCancelWorkflowProject" class="workflow-project-secondary-btn">取消</button>
+              <button id="btnAddWorkflowProject" class="workflow-project-primary-btn">创建项目</button>
             </div>
           </div>
+
+          <input id="workflowProjectListFilter" type="hidden" value="all">
+          <div class="workflow-project-toolbar">
+            <div class="workflow-project-tabs">
+              <button type="button" data-workflow-project-filter="all">全部项目</button>
+              <button type="button" data-workflow-project-filter="active">进行中</button>
+              <button type="button" data-workflow-project-filter="done">已完成</button>
+              <button type="button" data-workflow-project-filter="paused">已暂停</button>
+            </div>
+            <div class="workflow-project-tools">
+              <label class="workflow-project-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="workflowProjectSearch" placeholder="搜索项目…">
+              </label>
+              <select id="workflowProjectSort" class="workflow-project-sort" title="排序">
+                <option value="updated">按更新时间</option>
+                <option value="deadline">按截止日期</option>
+                <option value="progress">按完成进度</option>
+                <option value="created">按创建时间</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="workflowProjectList" class="workflow-project-list"></div>
+          <div id="workflowProjectListSummary" class="workflow-project-list-summary"></div>
         </div>
 
         <div class="soft-card p-5 md:p-6">
@@ -980,34 +996,34 @@
     </div>
   </dialog>
 
-    <script src="./assets/js/core/constants.js?v=16.1.4"></script>
-  <script src="./assets/js/core/utils.js?v=16.1.4"></script>
-  <script src="./assets/js/core/preferences.js?v=16.1.4"></script>
-  <script src="./assets/js/core/normalizers.js?v=16.1.4"></script>
-  <script src="./assets/js/core/meta.js?v=16.1.4"></script>
-  <script src="./assets/js/core/state.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/profile.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/papers.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/research-ideas.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/experiments.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/home.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/tasks.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/focus-schedule.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/workflow.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/upward-management.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/review.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/submissions.js?v=16.1.4"></script>
-  <script src="./assets/js/services/travel-weather.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/travel.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/dashboard.js?v=16.1.4"></script>
-  <script src="./assets/js/modules/settings.js?v=16.1.4"></script>
-  <script src="./assets/js/ui/dialogs.js?v=16.1.4"></script>
-  <script src="./assets/js/app/render.js?v=16.1.4"></script>
-  <script src="./assets/js/app/runtime-bridge.js?v=16.1.4"></script>
-  <script src="./assets/js/app/bootstrap.js?v=16.1.4"></script>
+    <script src="./assets/js/core/constants.js?v=16.1.5"></script>
+  <script src="./assets/js/core/utils.js?v=16.1.5"></script>
+  <script src="./assets/js/core/preferences.js?v=16.1.5"></script>
+  <script src="./assets/js/core/normalizers.js?v=16.1.5"></script>
+  <script src="./assets/js/core/meta.js?v=16.1.5"></script>
+  <script src="./assets/js/core/state.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/profile.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/papers.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/research-ideas.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/experiments.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/home.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/tasks.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/focus-schedule.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/workflow.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/upward-management.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/review.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/submissions.js?v=16.1.5"></script>
+  <script src="./assets/js/services/travel-weather.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/travel.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/dashboard.js?v=16.1.5"></script>
+  <script src="./assets/js/modules/settings.js?v=16.1.5"></script>
+  <script src="./assets/js/ui/dialogs.js?v=16.1.5"></script>
+  <script src="./assets/js/app/render.js?v=16.1.5"></script>
+  <script src="./assets/js/app/runtime-bridge.js?v=16.1.5"></script>
+  <script src="./assets/js/app/bootstrap.js?v=16.1.5"></script>
 <!-- PERSONAL_WORKSPACE_SUPABASE_SYNC -->
-  <script src="./assets/js/config/supabase.config.js?v=16.1.4"></script>
+  <script src="./assets/js/config/supabase.config.js?v=16.1.5"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.4"></script>
+  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.5"></script>
 </body>
 </html>

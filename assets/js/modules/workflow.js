@@ -19,6 +19,7 @@ function addWorkflowProject() {
   $('workflowProjectOutcome').value = '';
   if ($('workflowProjectStartDate')) $('workflowProjectStartDate').value = todayStr();
   $('workflowProjectDeadline').value = '';
+  $('workflowProjectCreatePanel')?.classList.add('hidden');
   saveState();
   renderAll();
 }
@@ -117,89 +118,75 @@ function renderWorkflow() {
   const allProjects = [...state.projects];
   if (workflowSelectedProjectId && !projectById(workflowSelectedProjectId)) workflowSelectedProjectId = '';
 
-  const openTasks = allTasks.filter(taskOpen);
+  function projectProgress(project) {
+    const tasks = tasksForProject(project.id);
+    if (project.status === 'done' && !tasks.length) return 100;
+    const doneCount = tasks.filter(item => item.status === 'done').length;
+    return tasks.length ? Math.round(doneCount / tasks.length * 100) : 0;
+  }
+
+  function projectAreaVisual(areaValue) {
+    return ({
+      research: { icon:'fa-flask-vial', className:'research' },
+      writing: { icon:'fa-file-pen', className:'writing' },
+      submission: { icon:'fa-paper-plane', className:'submission' },
+      admin: { icon:'fa-comments', className:'admin' },
+      life: { icon:'fa-seedling', className:'life' },
+      other: { icon:'fa-folder', className:'other' }
+    })[areaValue] || { icon:'fa-folder', className:'other' };
+  }
+
+  function projectStatusVisual(status) {
+    return ({
+      active: { label:'进行中', className:'active' },
+      paused: { label:'已暂停', className:'paused' },
+      done: { label:'已完成', className:'done' }
+    })[status] || { label:'进行中', className:'active' };
+  }
+
+  function projectUpdatedLabel(project) {
+    const raw = String(project.updatedAt || project.createdAt || '');
+    if (!raw) return '暂无更新';
+    const parsed = new Date(raw.includes('T') ? raw : raw.replace(' ', 'T'));
+    if (Number.isNaN(parsed.getTime())) return raw.slice(0, 10) || '暂无更新';
+    const diff = Math.max(0, Date.now() - parsed.getTime());
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return '刚刚更新';
+    if (mins < 60) return `${mins} 分钟前更新`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours} 小时前更新`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days} 天前更新`;
+    return `${parsed.getFullYear()}-${pad(parsed.getMonth()+1)}-${pad(parsed.getDate())} 更新`;
+  }
+
+  const projectProgressValues = allProjects.map(projectProgress);
   const activeProjects = allProjects.filter(item => item.status === 'active').length;
-  const unlinkedTasks = openTasks.filter(item => !item.projectId || item.gtdBucket === 'inbox');
-  const nextTasks = openTasks.filter(item => item.gtdBucket === 'next');
-  const waitingTasks = openTasks.filter(item => item.gtdBucket === 'waiting');
-  const mustTasks = openTasks.filter(item => item.todayBucket === 'must');
-  const shouldTasks = openTasks.filter(item => item.todayBucket === 'should');
-  const couldTasks = openTasks.filter(item => item.todayBucket === 'could');
-  const dueSoonTasks = openTasks.filter(item => item.dueDate && diffDays(date, item.dueDate) >= 0 && diffDays(date, item.dueDate) <= 7);
-  const doneTasks = allTasks.filter(item => item.status === 'done');
+  const doneProjects = allProjects.filter(item => item.status === 'done').length;
+  const totalProjectTasks = allProjects.reduce((sum, project) => sum + tasksForProject(project.id).length, 0);
+  const avgProjectProgress = projectProgressValues.length
+    ? Math.round(projectProgressValues.reduce((sum, value) => sum + value, 0) / projectProgressValues.length)
+    : 0;
 
   $('workflowStats').innerHTML = [
-    { label:'项目总数', value: allProjects.length, color:'text-dopamine-purple', note:'长期目标池' },
-    { label:'进行中项目', value: activeProjects, color:'text-dopamine-mint', note:'当前需要推进' },
-    { label:'任务总数', value: allTasks.length, color:'text-dopamine-sky', note:'全部任务记录' },
-    { label:'未完成任务', value: openTasks.length, color:'text-dopamine-pink', note:'计划中 / 没开始 / 进行中' },
-    { label:'7 天内到期', value: dueSoonTasks.length, color:'text-dopamine-yellow', note:'需要提前安排' },
-    { label:'未归项目', value: unlinkedTasks.length, color:'text-dopamine-orange', note:'需要归档清理' }
+    { label:'进行中', value:activeProjects, note:'正在推进的项目', icon:'fa-box-open', tone:'pink' },
+    { label:'已完成', value:doneProjects, note:'已经收尾的项目', icon:'fa-circle-check', tone:'yellow' },
+    { label:'项目任务', value:totalProjectTasks, note:'所有项目关联任务', icon:'fa-list-check', tone:'purple' },
+    { label:'平均进度', value:`${avgProjectProgress}%`, note:'按任务完成率估算', icon:'fa-chart-line', tone:'mint' }
   ].map(item => `
-    <div class="workflow-metric-card p-4">
-      <div class="text-sm text-calm-mute">${item.label}</div>
-      <div class="text-3xl font-black mt-1 ${item.color}">${escapeHtml(String(item.value))}</div>
-      <div class="text-xs text-calm-mute mt-2">${escapeHtml(item.note)}</div>
-    </div>
-  `).join('');
-
-  const projectDueSoon = [...allProjects]
-    .filter(item => item.status !== 'done' && item.deadline)
-    .sort((a, b) => a.deadline.localeCompare(b.deadline))
-    .slice(0, 3);
-  $('workflowInsightCards').innerHTML = [
-    {
-      tone:'from-purple-50 to-white border-purple-100',
-      icon:'fa-folder-open',
-      color:'text-dopamine-purple',
-      title:'项目层',
-      lines:[`进行中 ${activeProjects} 个`, `已完成 ${allProjects.filter(item => item.status === 'done').length} 个`, `暂停 ${allProjects.filter(item => item.status === 'paused').length} 个`]
-    },
-    {
-      tone:'from-amber-50 to-white border-amber-100',
-      icon:'fa-clock',
-      color:'text-dopamine-orange',
-      title:'近期截止',
-      lines: projectDueSoon.length ? projectDueSoon.map(item => `${item.title} · ${item.deadline}`) : ['暂无设置截止日期的项目']
-    },
-    {
-      tone:'from-sky-50 to-white border-sky-100',
-      icon:'fa-list-check',
-      color:'text-dopamine-sky',
-      title:'任务层',
-      lines:[`下一步 ${nextTasks.length} 项`, `等待反馈 ${waitingTasks.length} 项`, `已完成 ${doneTasks.length} 项`]
-    }
-  ].map(card => `
-    <div class="rounded-2xl border bg-gradient-to-r ${card.tone} p-4">
-      <div class="font-black flex items-center gap-2 ${card.color}"><i class="fa-solid ${card.icon}"></i> ${escapeHtml(card.title)}</div>
-      <div class="text-sm text-calm-mute mt-3 leading-6">${card.lines.map(line => escapeHtml(line)).join('<br>')}</div>
-    </div>
-  `).join('');
-
-  const quadrantStats = QUADRANT_OPTIONS.map(opt => ({
-    label: opt.short,
-    value: openTasks.filter(item => item.quadrant === opt.value).length,
-    color: opt.color,
-    note: opt.label
-  }));
-  const todayStats = [
-    { label:'今日必做', value: mustTasks.length, color:'bg-rose-100 text-rose-700', note:'Must' },
-    { label:'今日应该', value: shouldTasks.length + couldTasks.length, color:'bg-amber-100 text-amber-700', note:'Should / Could' }
-  ];
-  $('workflowQuadrantSummary').innerHTML = [...quadrantStats, ...todayStats].map(item => `
-    <div class="workflow-kpi-strip p-3">
-      <div class="flex items-center justify-between gap-2">
-        <span class="workflow-tag ${item.color}">${escapeHtml(item.label)}</span>
-        <span class="text-xl font-black">${escapeHtml(String(item.value))}</span>
+    <div class="workflow-project-stat ${item.tone}">
+      <div class="workflow-project-stat-icon"><i class="fa-solid ${item.icon}"></i></div>
+      <div>
+        <div class="workflow-project-stat-label">${escapeHtml(item.label)}</div>
+        <div class="workflow-project-stat-value">${escapeHtml(String(item.value))}</div>
+        <div class="workflow-project-stat-note">${escapeHtml(item.note)}</div>
       </div>
-      <div class="text-xs text-calm-mute mt-2">${escapeHtml(item.note)}</div>
     </div>
   `).join('');
 
-  $('workflowProjectBadge').textContent = `${allProjects.length} 个`;
   if ($('workflowCaptureProject')) {
     const current = $('workflowCaptureProject').value;
-    $('workflowCaptureProject').innerHTML = '<option value="">选择所属项目</option>' + allProjects.map(project => `<option value="${project.id}">${escapeHtml(project.title)}</option>`).join('');
+    $('workflowCaptureProject').innerHTML = '<option value="">未关联项目</option>' + allProjects.map(project => `<option value="${project.id}">${escapeHtml(project.title)}</option>`).join('');
     $('workflowCaptureProject').value = allProjects.some(project => project.id === current) ? current : (workflowSelectedProjectId || '');
   }
   if ($('workflowProjectFilterSelect')) {
@@ -207,87 +194,106 @@ function renderWorkflow() {
     $('workflowProjectFilterSelect').value = workflowSelectedProjectId || '';
   }
 
-  const sortedProjects = [...allProjects].sort((a, b) => {
-    const order = { active:0, paused:1, done:2 };
-    return (order[a.status] ?? 9) - (order[b.status] ?? 9) || (a.deadline || '9999-99-99').localeCompare(b.deadline || '9999-99-99');
+  const projectFilter = $('workflowProjectListFilter')?.value || 'all';
+  const projectSearch = String($('workflowProjectSearch')?.value || '').trim().toLowerCase();
+  const projectSort = $('workflowProjectSort')?.value || 'updated';
+
+  document.querySelectorAll('[data-workflow-project-filter]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.workflowProjectFilter === projectFilter);
   });
-  function projectProgress(project) {
+
+  const visibleProjects = allProjects.filter(project => {
+    if (projectFilter !== 'all' && project.status !== projectFilter) return false;
+    if (!projectSearch) return true;
+    const area = projectAreaMeta(project.area);
+    const searchable = `${project.title} ${project.outcome || ''} ${area.label || ''}`.toLowerCase();
+    return searchable.includes(projectSearch);
+  }).sort((a, b) => {
+    if (projectSort === 'deadline') {
+      return (a.deadline || '9999-99-99').localeCompare(b.deadline || '9999-99-99')
+        || (b.updatedAt || '').localeCompare(a.updatedAt || '');
+    }
+    if (projectSort === 'progress') {
+      return projectProgress(b) - projectProgress(a)
+        || (b.updatedAt || '').localeCompare(a.updatedAt || '');
+    }
+    if (projectSort === 'created') {
+      return (b.createdAt || '').localeCompare(a.createdAt || '');
+    }
+    return (b.updatedAt || b.createdAt || '').localeCompare(a.updatedAt || a.createdAt || '');
+  });
+
+  $('workflowProjectList').innerHTML = visibleProjects.map(project => {
+    const area = projectAreaMeta(project.area);
+    const visual = projectAreaVisual(project.area);
+    const status = projectStatusVisual(project.status);
     const tasks = tasksForProject(project.id);
-    const openCount = tasks.filter(taskOpen).length;
-    const doneCount = tasks.filter(item => item.status === 'done').length;
-    return Math.round(doneCount / Math.max(1, openCount + doneCount) * 100);
-  }
-  function projectRemainingLabel(project) {
-    if (project.status === 'done') return { text:'已完成', tone:'text-emerald-600' };
-    if (!project.deadline) return { text:'未设截止', tone:'text-calm-mute' };
-    const days = diffDays(date, project.deadline);
-    if (Number.isNaN(days)) return { text:'日期异常', tone:'text-calm-mute' };
-    if (days < 0) return { text:`逾期 ${Math.abs(days)} 天`, tone:'text-rose-600 font-bold' };
-    if (days === 0) return { text:'今日到期', tone:'text-dopamine-orange font-bold' };
-    return { text:`剩 ${days} 天`, tone:days <= 7 ? 'text-dopamine-orange font-bold' : 'text-calm-mute' };
-  }
-  function renderProjectRows(projects) {
-    if (!projects.length) return '<div class="px-4 py-5 text-sm text-calm-mute">暂无项目。</div>';
-    return projects.map(project => {
-      const area = projectAreaMeta(project.area);
-      const status = projectStatusMeta(project.status);
-      const tasks = tasksForProject(project.id);
-      const openCount = tasks.filter(taskOpen).length;
-      const doneCount = tasks.filter(item => item.status === 'done').length;
-      const logCount = Array.isArray(project.logs) ? project.logs.length : 0;
-      const linkedPapers = (state.papers?.items || []).filter(paper => paper.projectId === project.id);
-      const progress = projectProgress(project);
-      const startDate = project.startDate || dateFromDateTime(project.createdAt) || '—';
-      const remaining = projectRemainingLabel(project);
-      const statusTone = project.status === 'done' ? 'bg-emerald-100 text-emerald-700' : project.status === 'paused' ? 'bg-gray-100 text-gray-600' : 'bg-purple-100 text-purple-700';
-      const activeClass = workflowSelectedProjectId === project.id ? 'bg-sky-50' : 'bg-white';
-      return `
-        <div class="grid grid-cols-[minmax(220px,1.4fr)_140px_minmax(200px,1.2fr)_110px_150px_120px_120px_120px_90px] gap-3 px-4 py-3 border-t border-calm-line items-center text-sm hover:bg-calm-bg/70 ${activeClass}" data-workflow-focus-project="${project.id}">
+    const openCount = tasks.filter(task => task.status !== 'done').length;
+    const doneCount = tasks.filter(task => task.status === 'done').length;
+    const progress = projectProgress(project);
+    const linkedPapers = (state.papers?.items || []).filter(paper => paper.projectId === project.id).length;
+    const selected = workflowSelectedProjectId === project.id;
+    const dueText = project.deadline
+      ? (project.status === 'done' ? `截止 ${project.deadline}` : (() => {
+          const days = diffDays(date, project.deadline);
+          if (Number.isNaN(days)) return `截止 ${project.deadline}`;
+          if (days < 0) return `逾期 ${Math.abs(days)} 天`;
+          if (days === 0) return '今天截止';
+          if (days <= 7) return `${days} 天后截止`;
+          return `截止 ${project.deadline}`;
+        })())
+      : '';
+    return `
+      <div class="workflow-project-row ${selected ? 'selected' : ''}" data-workflow-focus-project="${project.id}">
+        <div class="workflow-project-main">
+          <div class="workflow-project-icon ${visual.className}"><i class="fa-solid ${visual.icon}"></i></div>
           <div class="min-w-0">
-            <div class="font-bold truncate">${escapeHtml(project.title)}</div>
-            <div class="text-xs text-calm-mute mt-1">任务 ${tasks.length} · 未完成 ${openCount} · 已完成 ${doneCount} · 日志 ${logCount}${linkedPapers.length ? ` · 弱关联论文 ${linkedPapers.length}` : ''}</div>
-          </div>
-          <div class="text-calm-mute">${escapeHtml(area.label)}</div>
-          <div class="min-w-0 text-calm-mute truncate" title="${escapeHtml(project.outcome || '')}">${escapeHtml(project.outcome || '未填写完成结果')}</div>
-          <span class="workflow-tag ${statusTone} justify-self-start">${escapeHtml(status.label)}</span>
-          <div>
-            <div class="flex items-center gap-2">
-              <div class="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden"><div class="h-full bg-dopamine-purple" style="width:${progress}%"></div></div>
-              <span class="text-xs font-black text-calm-mute">${progress}%</span>
+            <div class="workflow-project-title">${escapeHtml(project.title)}</div>
+            <div class="workflow-project-meta">
+              <span class="workflow-project-area ${visual.className}">${escapeHtml(area.label)}</span>
+              <span><i class="fa-regular fa-clock"></i>${escapeHtml(projectUpdatedLabel(project))}</span>
+              ${dueText ? `<span class="${dueText.startsWith('逾期') || dueText === '今天截止' ? 'danger' : ''}"><i class="fa-regular fa-calendar"></i>${escapeHtml(dueText)}</span>` : ''}
+              ${linkedPapers ? `<span><i class="fa-regular fa-file-lines"></i>关联论文 ${linkedPapers}</span>` : ''}
             </div>
           </div>
-          <div class="text-calm-mute">${project.deadline ? escapeHtml(project.deadline) : '—'}</div>
-          <div class="text-calm-mute">${escapeHtml(startDate)}</div>
-          <div class="${remaining.tone}">${escapeHtml(remaining.text)}</div>
-          <div class="text-right"><button class="text-xs font-bold text-dopamine-orange" data-project-edit="${project.id}">修改</button></div>
-        </div>`;
-    }).join('');
-  }
-  const projectGroups = PROJECT_AREAS.map(area => ({ ...area, items: sortedProjects.filter(project => project.area === area.value) }))
-    .filter(group => group.items.length);
-  $('workflowProjectList').innerHTML = projectGroups.map(group => `
-    <details class="rounded-2xl border border-calm-line bg-white overflow-hidden" open>
-      <summary class="cursor-pointer select-none px-4 py-3 bg-calm-bg font-black flex items-center justify-between gap-3">
-        <span>${escapeHtml(group.label)}</span>
-        <span class="pill bg-white border border-calm-line text-calm-mute">${group.items.length} 个</span>
-      </summary>
-      <div class="overflow-auto scroll-thin">
-        <div class="min-w-[1320px]">
-          <div class="grid grid-cols-[minmax(220px,1.4fr)_140px_minmax(200px,1.2fr)_110px_150px_120px_120px_120px_90px] gap-3 px-4 py-3 text-xs font-black tracking-wide text-calm-mute bg-white">
-            <div>项目名称</div>
-            <div>项目分类</div>
-            <div>完成结果</div>
-            <div>状态</div>
-            <div>进度</div>
-            <div>截止日期</div>
-            <div>开始日期</div>
-            <div>剩余日期</div>
-            <div class="text-right">操作</div>
-          </div>
-          ${renderProjectRows(group.items)}
         </div>
-      </div>
-    </details>`).join('') || '<div class="text-sm text-calm-mute">还没有项目。先创建一个需要多个动作才能完成的长期目标。</div>';
+        <div><span class="workflow-project-status ${status.className}">${status.label}</span></div>
+        <div class="workflow-project-progress">
+          <div class="workflow-project-progress-head"><strong>${progress}%</strong><span>${doneCount}/${tasks.length || 0} 完成</span></div>
+          <div class="workflow-project-progress-track"><span style="width:${progress}%"></span></div>
+        </div>
+        <div class="workflow-project-task-count">
+          <strong>${tasks.length}</strong><span>任务</span>
+          <small>${openCount} 未完成</small>
+        </div>
+        <button class="workflow-project-more" data-project-edit="${project.id}" title="修改项目"><i class="fa-solid fa-ellipsis"></i></button>
+      </div>`;
+  }).join('') || '<div class="workflow-project-empty">没有匹配的项目。你可以调整筛选条件，或新建一个项目。</div>';
+
+  if ($('workflowProjectListSummary')) {
+    const selectedText = workflowSelectedProjectId ? ` · 当前任务筛选：${projectById(workflowSelectedProjectId)?.title || '项目'}` : '';
+    $('workflowProjectListSummary').textContent = `显示 ${visibleProjects.length} / ${allProjects.length} 个项目${selectedText}`;
+  }
+
+  document.querySelectorAll('[data-workflow-project-filter]').forEach(btn => btn.onclick = () => {
+    if ($('workflowProjectListFilter')) $('workflowProjectListFilter').value = btn.dataset.workflowProjectFilter || 'all';
+    renderWorkflow();
+  });
+
+  $('workflowProjectList').querySelectorAll('[data-workflow-focus-project]').forEach(row => row.onclick = event => {
+    if (event.target.closest('button')) return;
+    const id = row.dataset.workflowFocusProject;
+    workflowSelectedProjectId = workflowSelectedProjectId === id ? '' : id;
+    if ($('workflowProjectFilterSelect')) $('workflowProjectFilterSelect').value = workflowSelectedProjectId;
+    renderWorkflow();
+  });
+  $('workflowProjectList').querySelectorAll('[data-project-edit]').forEach(btn => btn.onclick = () => openProjectEditor(btn.dataset.projectEdit));
+  if ($('workflowProjectFilterSelect')) {
+    $('workflowProjectFilterSelect').onchange = () => {
+      workflowSelectedProjectId = $('workflowProjectFilterSelect').value || '';
+      renderWorkflow();
+    };
+  }
 
   const filter = $('workflowTaskFilter')?.value || 'all';
   const scopedTasks = workflowSelectedProjectId
@@ -386,17 +392,4 @@ function renderWorkflow() {
     finishTask(task.id);
   });
   $('workflowTaskTable').querySelectorAll('[data-workflow-edit]').forEach(btn => btn.onclick = () => openTaskEditor(btn.dataset.workflowEdit));
-  $('workflowProjectList').querySelectorAll('[data-workflow-focus-project]').forEach(card => card.onclick = (event) => {
-    if (event.target.closest('button')) return;
-    workflowSelectedProjectId = card.dataset.workflowFocusProject;
-    if ($('workflowProjectFilterSelect')) $('workflowProjectFilterSelect').value = workflowSelectedProjectId;
-    renderWorkflow();
-  });
-  $('workflowProjectList').querySelectorAll('[data-project-edit]').forEach(btn => btn.onclick = () => openProjectEditor(btn.dataset.projectEdit));
-  if ($('workflowProjectFilterSelect')) {
-    $('workflowProjectFilterSelect').onchange = () => {
-      workflowSelectedProjectId = $('workflowProjectFilterSelect').value || '';
-      renderWorkflow();
-    };
-  }
 }

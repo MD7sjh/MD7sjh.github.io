@@ -21,6 +21,10 @@ function bindEvents() {
   $('btnWorkflowCapture').onclick = addWorkflowCaptureTask;
   $('workflowCaptureText').addEventListener('keydown', event => { if (event.key === 'Enter') addWorkflowCaptureTask(); });
   $('btnAddWorkflowProject').onclick = addWorkflowProject;
+  if ($('btnToggleWorkflowProjectForm')) $('btnToggleWorkflowProjectForm').onclick = () => $('workflowProjectCreatePanel')?.classList.toggle('hidden');
+  if ($('btnCancelWorkflowProject')) $('btnCancelWorkflowProject').onclick = () => $('workflowProjectCreatePanel')?.classList.add('hidden');
+  if ($('workflowProjectSearch')) $('workflowProjectSearch').oninput = renderWorkflow;
+  if ($('workflowProjectSort')) $('workflowProjectSort').onchange = renderWorkflow;
   $('workflowTaskFilter').onchange = renderWorkflow;
   if ($('workflowProjectFilterSelect')) $('workflowProjectFilterSelect').onchange = () => { workflowSelectedProjectId = $('workflowProjectFilterSelect').value || ''; renderWorkflow(); };
   const jumpWorkflowToSchedule = () => {

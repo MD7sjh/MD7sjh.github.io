@@ -1,5 +1,5 @@
 {
-  "version": "16.1.4",
+  "version": "16.1.5",
   "files": [
     {
       "path": ".gitignore",
@@ -13,8 +13,8 @@
     },
     {
       "path": "ARCHITECTURE.md",
-      "size": 1320,
-      "sha256": "5d5f2c76104335fce9606cfb2e35d9e7282c9a06849f63fe71b6a7a6ad469539"
+      "size": 1725,
+      "sha256": "635112d7d4406c1c03064c1ecbdc0719fbb70fa3e8d98578d1b93de95be4dcc5"
     },
     {
       "path": "CHANGELOG_v16.1.1.md",
@@ -37,6 +37,11 @@
       "sha256": "a61aa76811931f2fe01b5784ac0c37556dcbc4d5454b387f0a098402cd217399"
     },
     {
+      "path": "CHANGELOG_v16.1.5.md",
+      "size": 659,
+      "sha256": "8a7bff558993bca855221d1a4f5ec70c352a696edefceb2d1475050340c20e21"
+    },
+    {
       "path": "CHANGELOG_v16.1.md",
       "size": 741,
       "sha256": "5a77eb86cf4ae004ebb774820ab516bb5ae448bac7d2a633aca868981d0bd3d0"
@@ -53,8 +58,8 @@
     },
     {
       "path": "README.md",
-      "size": 3236,
-      "sha256": "2fbc153464ae96466cb4a18cd1be41092108a5655452d17fbba9f97b42397161"
+      "size": 4084,
+      "sha256": "4850f51c1fb864279734a95c500b955c3286c2d5e400347f3e84ffedf62ce804"
     },
     {
       "path": "assets/css/base.css",
@@ -87,14 +92,19 @@
       "sha256": "fa2a8a3b0520308c81ebbc23d12ddb04c0614537030994b7d2b631b9969fff75"
     },
     {
+      "path": "assets/css/workflow-projects.css",
+      "size": 9184,
+      "sha256": "2f61dfd28f1c017a9baa9a1c348a5f68b130d0b7b7a4c9711a931e4b2cf94792"
+    },
+    {
       "path": "assets/css/workflow-todo.css",
       "size": 4772,
       "sha256": "fdec4112829ae5e5cd0ffd70e61956b0c93b1d81d0e703c5fe73588baa4112ad"
     },
     {
       "path": "assets/js/app/bootstrap.js",
-      "size": 5080,
-      "sha256": "cfbff9df46ea84834a9695258b21524856b50d294bf218ebdbe23012ff3d5d05"
+      "size": 5544,
+      "sha256": "8aa1ca1afbb49d0d02852c90affe6d33d8165bba43e5b0d07eb0bec6466b7038"
     },
     {
       "path": "assets/js/app/render.js",
@@ -218,8 +228,8 @@
     },
     {
       "path": "assets/js/modules/workflow.js",
-      "size": 21996,
-      "sha256": "53875bf4e7244edf8e40ddd637e393f6e9b594ad610124f4195d7345dc0f6ad1"
+      "size": 20509,
+      "sha256": "6c17b3d7c4b71ef6cc5544ac6e9877d738a53045b0e6a436fdda82587d7415c4"
     },
     {
       "path": "assets/js/services/travel-weather.js",
@@ -233,8 +243,8 @@
     },
     {
       "path": "index.html",
-      "size": 113583,
-      "sha256": "71328d70f3ae053178544d35a99d762035e5433d0e9e0cef23e7124608931840"
+      "size": 114305,
+      "sha256": "5ccde5cdfb585da1dcce47a337e481ae00f15db93ee62d3e1b64fb1f9871cc86"
     },
     {
       "path": "supabase/setup.sql",

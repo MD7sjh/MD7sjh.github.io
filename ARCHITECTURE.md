@@ -10,6 +10,8 @@ assets/
     experiments.css
     travel.css
     papers.css
+    workflow-todo.css
+    workflow-projects.css
   js/
     config/
     core/
@@ -46,3 +48,7 @@ supabase/setup.sql
 
 ## v16.1.4 Workflow Todo UI
 `assets/js/modules/workflow.js` 继续负责项目与任务计划层；`assets/css/workflow-todo.css` 仅负责新的轻量 Todo List 呈现，不改变任务数据模型。
+
+
+## v16.1.5 Workflow Project List UI
+`assets/js/modules/workflow.js` 继续拥有项目筛选与项目选择逻辑；`assets/css/workflow-projects.css` 只负责轻量项目列表的视觉与响应式布局。项目数据模型没有增加强制字段，仍沿用 `projects[]` 的 title / outcome / area / status / startDate / deadline / logs 等结构。
