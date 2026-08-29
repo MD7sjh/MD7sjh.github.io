@@ -289,94 +289,103 @@ function renderWorkflow() {
       </div>
     </details>`).join('') || '<div class="text-sm text-calm-mute">还没有项目。先创建一个需要多个动作才能完成的长期目标。</div>';
 
-  const filter = $('workflowTaskFilter').value || 'all';
-  const scopedTasks = workflowSelectedProjectId ? allTasks.filter(item => item.projectId === workflowSelectedProjectId) : allTasks;
+  const filter = $('workflowTaskFilter')?.value || 'all';
+  const scopedTasks = workflowSelectedProjectId
+    ? allTasks.filter(item => item.projectId === workflowSelectedProjectId)
+    : allTasks;
+
   const filteredTasks = scopedTasks.filter(task => {
-    if (filter === 'today') return !!task.todayBucket && task.status !== 'done';
-    if (QUADRANT_OPTIONS.some(opt => opt.value === filter)) return task.quadrant === filter;
+    if (filter === 'open') return task.status !== 'done';
+    if (filter === 'done') return task.status === 'done';
+    if (filter === 'today') {
+      return task.status === 'active'
+        || (!!task.todayBucket && task.status !== 'done')
+        || (task.dueDate === date && task.status !== 'done');
+    }
     return true;
   }).sort((a, b) => {
-    const statusOrder = { planned:0, todo:1, active:2, done:3 };
-    return (statusOrder[a.status] ?? 9) - (statusOrder[b.status] ?? 9)
-      || (a.dueDate || '9999-99-99').localeCompare(b.dueDate || '9999-99-99')
+    const doneDiff = Number(a.status === 'done') - Number(b.status === 'done');
+    if (doneDiff) return doneDiff;
+    const activeDiff = Number(b.status === 'active') - Number(a.status === 'active');
+    if (activeDiff) return activeDiff;
+    const priorityOrder = { q1:0, q2:1, q3:2, q4:3 };
+    const priorityDiff = (priorityOrder[a.quadrant] ?? 9) - (priorityOrder[b.quadrant] ?? 9);
+    if (priorityDiff) return priorityDiff;
+    return (a.dueDate || '9999-99-99').localeCompare(b.dueDate || '9999-99-99')
       || (b.createdAt || '').localeCompare(a.createdAt || '');
   });
 
-  function taskCompletion(task) {
-    return taskStatusMeta(task.status).progress;
+  function todoPriorityMeta(task) {
+    if (task.quadrant === 'q1') return { label:'高', className:'high' };
+    if (task.quadrant === 'q4') return { label:'低', className:'low' };
+    return { label:'中', className:'medium' };
   }
-  function compactDateTime(ts) {
-    return ts ? escapeHtml(String(ts).slice(0, 16)) : '—';
-  }
-  function renderTaskRows(items) {
-    if (!items.length) return '<div class="px-4 py-6 text-sm text-calm-mute border-t border-calm-line">这一组暂无任务。</div>';
-    return items.map(task => {
-      const project = projectById(task.projectId);
-      const quadrant = taskQuadrantMeta(task.quadrant);
-      const today = todayBucketMeta(task.todayBucket);
-      const completion = taskCompletion(task);
-      return `
-        <div class="grid grid-cols-[minmax(220px,1.3fr)_minmax(160px,1fr)_150px_120px_120px_140px_150px_150px_120px] gap-3 px-4 py-3 border-t border-calm-line items-center text-sm hover:bg-calm-bg/70">
-          <div class="min-w-0">
-            <div class="font-bold truncate ${task.status === 'done' ? 'line-through text-calm-mute' : ''}">${escapeHtml(task.title)}</div>
-            <div class="text-xs text-calm-mute mt-1">${task.estimate ? `预计 ${task.estimate} 分钟` : '未设置预计时长'}</div>
-          </div>
-          <div class="truncate text-calm-mute">${escapeHtml(project?.title || '未关联项目')}</div>
-          <span class="workflow-tag ${quadrant.color} justify-self-start">${escapeHtml(quadrant.label)}</span>
-          <select class="px-3 py-2 rounded-xl border border-calm-line bg-white text-sm" data-workflow-status="${task.id}">
-            ${TASK_STATUS_OPTIONS.map(opt => `<option value="${opt.value}" ${task.status === opt.value ? 'selected' : ''}>${escapeHtml(opt.label)}</option>`).join('')}
-          </select>
-          <div class="text-calm-mute">${task.dueDate ? escapeHtml(task.dueDate) : '—'}</div>
-          <div class="text-calm-mute">${compactDateTime(task.startedAt)}</div>
-          <div>
-            <div class="flex items-center gap-2">
-              <div class="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden"><div class="h-full bg-dopamine-mint" style="width:${completion}%"></div></div>
-              <span class="text-xs font-black text-calm-mute">${completion}%</span>
-            </div>
-          </div>
-          <div>
-            <select class="w-full px-3 py-2 rounded-xl border border-calm-line bg-white text-sm" data-workflow-today-toggle="${task.id}" ${task.status === 'done' ? 'disabled' : ''}>
-              <option value="" ${task.todayBucket ? '' : 'selected'}>否</option>
-              <option value="should" ${task.todayBucket ? 'selected' : ''}>是</option>
-            </select>
-            <div class="text-[11px] text-calm-mute mt-1">${task.status === 'done' ? '已完成不加入' : today.value ? escapeHtml(today.label) : '不进入今日执行'}</div>
-          </div>
-          <div class="flex gap-2 justify-end">
-            ${task.status === 'done' ? '' : `<button class="text-xs font-bold text-dopamine-pink" data-workflow-start="${task.id}">${task.status === 'active' ? '结束' : '开始'}</button>`}
-            ${task.status === 'done' ? '' : `<button class="text-xs font-bold text-green-600" data-workflow-done="${task.id}">完成</button>`}
-            <button class="text-xs font-bold text-dopamine-orange" data-workflow-edit="${task.id}">修改</button>
-          </div>
-        </div>`;
-    }).join('');
-  }
-  const taskGroups = TASK_STATUS_OPTIONS.map(status => ({
-    ...status,
-    items: filteredTasks.filter(task => task.status === status.value)
-  }));
-  $('workflowTaskTable').innerHTML = taskGroups.map(group => `
-    <details class="border-t border-calm-line first:border-t-0" open>
-      <summary class="cursor-pointer select-none px-4 py-3 bg-calm-bg font-black flex items-center justify-between gap-3">
-        <span class="flex items-center gap-2"><span class="workflow-tag ${group.color}">${escapeHtml(group.label)}</span><span>任务</span></span>
-        <span class="pill bg-white border border-calm-line text-calm-mute">${group.items.length} 项</span>
-      </summary>
-      <div class="overflow-auto scroll-thin">
-        <div class="min-w-[1440px]">
-          <div class="grid grid-cols-[minmax(220px,1.3fr)_minmax(160px,1fr)_150px_120px_120px_140px_150px_150px_120px] gap-3 px-4 py-3 text-xs font-black tracking-wide text-calm-mute bg-white">
-            <div>任务名称</div>
-            <div>所属项目</div>
-            <div>紧急程度（4 象限）</div>
-            <div>状态</div>
-            <div>到期时间</div>
-            <div>开始时间</div>
-            <div>完成度</div>
-            <div>加入今日执行</div>
-            <div class="text-right">操作</div>
-          </div>
-          ${renderTaskRows(group.items)}
-        </div>
-      </div>
-    </details>`).join('');
 
+  function todoDueMeta(task) {
+    if (!task.dueDate) return null;
+    const days = diffDays(date, task.dueDate);
+    if (Number.isNaN(days)) return { text:task.dueDate, className:'' };
+    if (task.status !== 'done' && days < 0) return { text:`逾期 ${Math.abs(days)} 天`, className:'overdue' };
+    if (task.status !== 'done' && days === 0) return { text:'今天截止', className:'overdue' };
+    if (task.status !== 'done' && days <= 3) return { text:task.dueDate, className:'due-soon' };
+    return { text:task.dueDate, className:'' };
+  }
+
+  const scopedOpenCount = scopedTasks.filter(task => task.status !== 'done').length;
+  const scopedDoneCount = scopedTasks.filter(task => task.status === 'done').length;
+  const scopedTotal = scopedTasks.length;
+  const completion = scopedTotal ? Math.round(scopedDoneCount / scopedTotal * 100) : 0;
+  if ($('workflowTodoSummary')) {
+    const projectLabel = workflowSelectedProjectId ? `${projectById(workflowSelectedProjectId)?.title || '当前项目'} · ` : '';
+    $('workflowTodoSummary').textContent = `${projectLabel}未完成 ${scopedOpenCount} · 已完成 ${scopedDoneCount} · ${completion}%`;
+  }
+
+  document.querySelectorAll('[data-workflow-todo-filter]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.workflowTodoFilter === filter);
+  });
+
+  $('workflowTaskTable').innerHTML = filteredTasks.map(task => {
+    const project = projectById(task.projectId);
+    const priority = todoPriorityMeta(task);
+    const due = todoDueMeta(task);
+    const isDone = task.status === 'done';
+    return `
+      <div class="workflow-todo-row">
+        <button class="workflow-todo-check ${isDone ? 'done' : ''}" data-workflow-check="${task.id}" title="${isDone ? '恢复为未完成' : '标记完成'}">
+          ${isDone ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+        </button>
+        <div class="min-w-0">
+          <div class="workflow-todo-title ${isDone ? 'done' : ''}">${escapeHtml(task.title)}</div>
+          <div class="workflow-todo-meta">
+            ${project ? `<span class="workflow-todo-chip project"><i class="fa-regular fa-folder"></i>${escapeHtml(project.title)}</span>` : ''}
+            ${task.status === 'active' ? '<span class="workflow-todo-chip active"><i class="fa-solid fa-play"></i>进行中</span>' : ''}
+            ${task.todayBucket && !isDone ? '<span class="workflow-todo-chip today"><i class="fa-regular fa-sun"></i>今日</span>' : ''}
+            ${due ? `<span class="workflow-todo-chip ${due.className}"><i class="fa-regular fa-calendar"></i>${escapeHtml(due.text)}</span>` : ''}
+            <span class="workflow-todo-priority ${priority.className}"><i class="fa-solid fa-flag"></i>${priority.label}</span>
+          </div>
+        </div>
+        <button class="workflow-todo-more" data-workflow-edit="${task.id}" title="修改任务"><i class="fa-solid fa-ellipsis"></i></button>
+      </div>`;
+  }).join('') || '<div class="workflow-todo-empty">这一组还没有任务。可以在上方快速添加一条。</div>';
+
+  document.querySelectorAll('[data-workflow-todo-filter]').forEach(btn => btn.onclick = () => {
+    if ($('workflowTaskFilter')) $('workflowTaskFilter').value = btn.dataset.workflowTodoFilter || 'all';
+    renderWorkflow();
+  });
+  $('workflowTaskTable').querySelectorAll('[data-workflow-check]').forEach(btn => btn.onclick = () => {
+    const task = state.tasks.find(item => item.id === btn.dataset.workflowCheck);
+    if (!task) return;
+    if (task.status === 'done') {
+      task.status = 'todo';
+      task.gtdBucket = task.projectId ? 'next' : 'inbox';
+      task.doneAt = '';
+      saveState();
+      renderAll();
+      return;
+    }
+    finishTask(task.id);
+  });
+  $('workflowTaskTable').querySelectorAll('[data-workflow-edit]').forEach(btn => btn.onclick = () => openTaskEditor(btn.dataset.workflowEdit));
   $('workflowProjectList').querySelectorAll('[data-workflow-focus-project]').forEach(card => card.onclick = (event) => {
     if (event.target.closest('button')) return;
     workflowSelectedProjectId = card.dataset.workflowFocusProject;
@@ -390,22 +399,4 @@ function renderWorkflow() {
       renderWorkflow();
     };
   }
-  $('workflowTaskTable').querySelectorAll('[data-workflow-start]').forEach(btn => btn.onclick = () => toggleTaskStart(btn.dataset.workflowStart));
-  $('workflowTaskTable').querySelectorAll('[data-workflow-done]').forEach(btn => btn.onclick = () => finishTask(btn.dataset.workflowDone));
-  $('workflowTaskTable').querySelectorAll('[data-workflow-edit]').forEach(btn => btn.onclick = () => openTaskEditor(btn.dataset.workflowEdit));
-  $('workflowTaskTable').querySelectorAll('[data-workflow-today-toggle]').forEach(select => select.onchange = () => {
-    setTaskTodayBucket(select.dataset.workflowTodayToggle, select.value ? 'should' : '');
-  });
-  $('workflowTaskTable').querySelectorAll('[data-workflow-status]').forEach(select => select.onchange = () => {
-    const task = state.tasks.find(item => item.id === select.dataset.workflowStatus);
-    if (!task) return;
-    const nextStatus = taskStatusMeta(select.value).value;
-    if (nextStatus === 'done') return finishTask(task.id);
-    updateTaskField(task.id, {
-      status: nextStatus,
-      gtdBucket: task.gtdBucket === 'done' ? 'next' : task.gtdBucket,
-      doneAt: '',
-      startedAt: nextStatus === 'active' ? (task.startedAt || nowDateTime()) : task.startedAt
-    });
-  });
 }

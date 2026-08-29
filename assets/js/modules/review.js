@@ -154,7 +154,7 @@ function buildDailyDigest(date=todayStr()) {
       `明确请求：${upward.ask ? '已写' : '未写'}`,
       `对方反馈 / 决策：${upward.feedback ? '已写' : '未写'}`,
       `承诺留痕：${upward.commitment ? '已写' : '未写'}`,
-      `下一步动作：${upward.nextAction ? '已写' : '未写'}${upward.nextActionTaskId ? ' · 已加入任务总表' : ''}`
+      `下一步动作：${upward.nextAction ? '已写' : '未写'}${upward.nextActionTaskId ? ' · 已加入任务清单' : ''}`
     ] : ['今天还没有整理向上管理沟通。'] },
     { title:'每日复盘', lines:reviewCountOn(date) ? [
       `状态 / 能量：${reviewEnergy.emoji} ${reviewEnergy.label}${review.energyNote ? `｜${review.energyNote}` : ''}`,
@@ -163,7 +163,7 @@ function buildDailyDigest(date=todayStr()) {
       `学术洞见与新发现：${review.insights || '未写'}`,
       `障碍与对策：${review.obstacles || '未写'}`,
       `明日优先任务：${review.tomorrow.filter(item => item.trim()).join('；') || '未写'}`,
-      `任务联动：${(review.tomorrowTaskIds || []).filter(Boolean).length} 条已加入任务总表`
+      `任务联动：${(review.tomorrowTaskIds || []).filter(Boolean).length} 条已加入任务清单`
     ] : ['今天还没有保存结构化复盘。'] }
   ];
 

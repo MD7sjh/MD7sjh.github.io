@@ -1,0 +1,85 @@
+/* v16.1.4 · Simplified project Todo List */
+.workflow-todo-capture {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(160px,220px) 150px 92px;
+  gap: .65rem;
+  align-items: stretch;
+}
+.workflow-todo-capture-main {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: 0 1rem;
+  border: 1px solid #ECEEF5;
+  border-radius: 1rem;
+  background: rgba(255,255,255,.96);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.workflow-todo-capture-main:focus-within {
+  border-color: rgba(255,107,139,.45);
+  box-shadow: 0 0 0 4px rgba(255,107,139,.08);
+}
+.workflow-todo-capture-main input {
+  width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; padding: .86rem 0; color: #45495F;
+}
+.workflow-todo-compact-control {
+  min-width: 0; border: 1px solid #ECEEF5; border-radius: 1rem; background: white; padding: .78rem .85rem; color: #62677C; font-size: .875rem;
+}
+.workflow-todo-add-btn {
+  border: 0; border-radius: 1rem; padding: .78rem 1rem; color: white; font-weight: 900;
+  background: linear-gradient(90deg,#FF7F9F,#FF9B72); box-shadow: 0 12px 24px -16px rgba(255,107,139,.7);
+}
+.workflow-todo-add-btn:hover { transform: translateY(-1px); }
+.workflow-todo-toolbar {
+  display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.2rem 0 .75rem;
+}
+.workflow-todo-filter-group { display:flex; flex-wrap:wrap; gap:.5rem; }
+.workflow-todo-filter-group button {
+  padding:.5rem .85rem; border-radius:.8rem; border:1px solid #ECEEF5; background:white; color:#777C90; font-size:.82rem; font-weight:800; transition:.16s ease;
+}
+.workflow-todo-filter-group button:hover { background:#FFF7F9; }
+.workflow-todo-filter-group button.active { border-color:rgba(255,107,139,.18); color:#E85078; background:#FFF0F4; }
+.workflow-todo-summary { color:#8A8FA6; font-size:.8rem; font-weight:700; white-space:nowrap; }
+.workflow-todo-list { border:1px solid #ECEEF5; border-radius:1.15rem; background:#fff; overflow:hidden; }
+.workflow-todo-row {
+  display:grid; grid-template-columns:36px minmax(0,1fr) 42px; align-items:center; gap:.55rem;
+  min-height:62px; padding:.62rem .78rem; border-top:1px solid #F0F1F6; transition:background .15s ease;
+}
+.workflow-todo-row:first-child { border-top:0; }
+.workflow-todo-row:hover { background:#FFFBFC; }
+.workflow-todo-check {
+  width:23px; height:23px; border-radius:999px; display:grid; place-items:center; border:1.5px solid #D9DCE7; background:white; color:white; transition:.16s ease;
+}
+.workflow-todo-check:hover { border-color:#FF7F9F; transform:scale(1.05); }
+.workflow-todo-check.done { border-color:#FF7F9F; background:linear-gradient(135deg,#FF7F9F,#FF9B72); }
+.workflow-todo-title { font-size:.94rem; font-weight:800; color:#4D4650; line-height:1.35; }
+.workflow-todo-title.done { color:#A4A0AA; text-decoration:line-through; }
+.workflow-todo-meta { display:flex; align-items:center; flex-wrap:wrap; gap:.42rem; margin-top:.3rem; min-height:18px; }
+.workflow-todo-chip { display:inline-flex; align-items:center; gap:.28rem; padding:.2rem .48rem; border-radius:999px; font-size:.69rem; font-weight:800; background:#F7F8FC; color:#858A9C; }
+.workflow-todo-chip.project { background:#EEF7FF; color:#5488B7; }
+.workflow-todo-chip.today { background:#FFF1F5; color:#E85C83; }
+.workflow-todo-chip.active { background:#ECFBF5; color:#318B6C; }
+.workflow-todo-chip.overdue { background:#FFF0F0; color:#D95566; }
+.workflow-todo-chip.due-soon { background:#FFF7E8; color:#CC8A26; }
+.workflow-todo-priority { display:inline-flex; align-items:center; gap:.28rem; font-size:.7rem; font-weight:800; color:#8A8FA6; }
+.workflow-todo-priority.high { color:#E85C70; }
+.workflow-todo-priority.medium { color:#D89335; }
+.workflow-todo-priority.low { color:#5A9C79; }
+.workflow-todo-more { width:34px; height:34px; border-radius:.8rem; color:#9A9EAD; display:grid; place-items:center; }
+.workflow-todo-more:hover { background:#F7F8FC; color:#E85C83; }
+.workflow-todo-empty { padding:2.2rem 1rem; text-align:center; color:#9A9EAD; font-size:.88rem; }
+@media (max-width: 900px) {
+  .workflow-todo-capture { grid-template-columns:minmax(0,1fr) 92px; }
+  .workflow-todo-capture-main { grid-column:1/-1; }
+  .workflow-todo-compact-control { min-width:0; }
+  #workflowCaptureProject { grid-column:1/-1; }
+  #workflowCaptureDue { grid-column:1; }
+  #btnWorkflowCapture { grid-column:2; }
+}
+@media (max-width: 640px) {
+  .workflow-todo-toolbar { align-items:flex-start; flex-direction:column; }
+  .workflow-todo-summary { white-space:normal; }
+  .workflow-todo-row { grid-template-columns:32px minmax(0,1fr) 34px; padding:.62rem .55rem; }
+  .workflow-todo-meta .workflow-todo-chip.project { max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+}

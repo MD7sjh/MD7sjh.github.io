@@ -19,6 +19,7 @@ function bindEvents() {
   $('workflowDate').onchange = renderAll;
   $('btnWorkflowToday').onclick = () => { $('workflowDate').value = todayStr(); renderAll(); };
   $('btnWorkflowCapture').onclick = addWorkflowCaptureTask;
+  $('workflowCaptureText').addEventListener('keydown', event => { if (event.key === 'Enter') addWorkflowCaptureTask(); });
   $('btnAddWorkflowProject').onclick = addWorkflowProject;
   $('workflowTaskFilter').onchange = renderWorkflow;
   if ($('workflowProjectFilterSelect')) $('workflowProjectFilterSelect').onchange = () => { workflowSelectedProjectId = $('workflowProjectFilterSelect').value || ''; renderWorkflow(); };

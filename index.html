@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Workspace · Pastel Modular v16.1.3</title>
+  <title>Personal Workspace · Pastel Modular v16.1.4</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <script src="./assets/js/config/tailwind.config.js?v=16.1.3"></script>
-  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.3">
+  <script src="./assets/js/config/tailwind.config.js?v=16.1.4"></script>
+  <link rel="stylesheet" href="./assets/css/base.css?v=16.1.4">
 
-  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.3">
-  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.3">
-  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.3">
-  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.3">
-  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.3">
+  <link rel="stylesheet" href="./assets/css/pastel-theme.css?v=16.1.4">
+  <link rel="stylesheet" href="./assets/css/research-ideas.css?v=16.1.4">
+  <link rel="stylesheet" href="./assets/css/experiments.css?v=16.1.4">
+  <link rel="stylesheet" href="./assets/css/travel.css?v=16.1.4">
+  <link rel="stylesheet" href="./assets/css/papers.css?v=16.1.4">
+  <link rel="stylesheet" href="./assets/css/workflow-todo.css?v=16.1.4">
 
 </head>
 <body class="font-sans text-calm-ink p-4 md:p-6 lg:p-8">
@@ -313,7 +314,7 @@
             <div class="min-w-0">
               <div class="flex items-center justify-between gap-3 mb-3">
                 <div class="font-black">项目列表</div>
-                <div class="text-xs text-calm-mute">点击项目行可在任务表中筛选该项目</div>
+                <div class="text-xs text-calm-mute">点击项目行可在任务清单中筛选该项目</div>
               </div>
               <div id="workflowProjectList" class="space-y-3"></div>
             </div>
@@ -321,56 +322,41 @@
         </div>
 
         <div class="soft-card p-5 md:p-6">
-          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-3 mb-5">
             <div>
-              <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-list-check text-dopamine-sky"></i> 任务</h2>
-              <p class="text-sm text-calm-mute mt-1">任务是可执行动作：必须能归属项目、判断紧急程度、设置状态和关键时间。</p>
+              <h2 class="text-xl font-black flex items-center gap-2"><i class="fa-solid fa-list-check text-dopamine-pink"></i> 任务清单</h2>
+              <p class="text-sm text-calm-mute mt-1">像 Todo List 一样管理：快速添加、勾选完成；优先级、状态和今日执行等高级信息放到“修改”里。</p>
             </div>
-            <div class="flex flex-wrap gap-2 items-center">
-              <select id="workflowTaskFilter" class="px-3 py-2 rounded-2xl border border-calm-line bg-white">
-                <option value="all">显示全部</option>
-                <option value="today">只看今日候选</option>
-                <option value="q1">重要且紧急</option>
-                <option value="q2">重要不紧急</option>
-                <option value="q3">紧急不重要</option>
-                <option value="q4">不紧急不重要</option>
-              </select>
-              <select id="workflowProjectFilterSelect" class="px-3 py-2 rounded-2xl border border-calm-line bg-white min-w-[180px]"></select>
-            </div>
+            <select id="workflowProjectFilterSelect" class="px-3 py-2 rounded-2xl border border-calm-line bg-white min-w-[190px]"></select>
           </div>
 
-          <div class="small-stat p-4 mb-5">
-            <div class="font-black mb-3">新建任务</div>
-            <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1.3fr)_180px_170px_150px_150px_120px] gap-2">
-              <input id="workflowCaptureText" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="任务名称，如：重画 Figure 2 的误差棒">
-              <select id="workflowCaptureProject" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                <option value="">选择所属项目</option>
-              </select>
-              <select id="workflowCaptureQuadrant" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                <option value="q1">重要且紧急</option>
-                <option value="q2" selected>重要不紧急</option>
-                <option value="q3">紧急不重要</option>
-                <option value="q4">不紧急不重要</option>
-              </select>
-              <select id="workflowCaptureStatus" class="px-3 py-3 rounded-2xl border border-calm-line bg-white">
-                <option value="planned">计划中</option>
-                <option value="todo">没开始</option>
-                <option value="active">进行中</option>
-                <option value="done">完成</option>
-              </select>
-              <input id="workflowCaptureDue" type="date" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" title="到期时间">
-              <button id="btnWorkflowCapture" class="px-4 py-3 rounded-2xl bg-dopamine-sky text-white font-black">新增任务</button>
+          <div class="workflow-todo-capture mb-4">
+            <div class="workflow-todo-capture-main">
+              <i class="fa-solid fa-plus text-dopamine-pink"></i>
+              <input id="workflowCaptureText" placeholder="添加一个新任务…">
             </div>
-            <input id="workflowCaptureEstimate" type="hidden" value="25">
+            <select id="workflowCaptureProject" class="workflow-todo-compact-control" title="所属项目">
+              <option value="">未关联项目</option>
+            </select>
+            <input id="workflowCaptureDue" type="date" class="workflow-todo-compact-control" title="截止日期">
+            <button id="btnWorkflowCapture" class="workflow-todo-add-btn">添加</button>
+          </div>
+          <input id="workflowCaptureQuadrant" type="hidden" value="q2">
+          <input id="workflowCaptureStatus" type="hidden" value="todo">
+          <input id="workflowCaptureEstimate" type="hidden" value="25">
+          <input id="workflowTaskFilter" type="hidden" value="all">
+
+          <div class="workflow-todo-toolbar">
+            <div class="workflow-todo-filter-group">
+              <button type="button" data-workflow-todo-filter="all">全部</button>
+              <button type="button" data-workflow-todo-filter="open">未完成</button>
+              <button type="button" data-workflow-todo-filter="done">已完成</button>
+              <button type="button" data-workflow-todo-filter="today">今日</button>
+            </div>
+            <div id="workflowTodoSummary" class="workflow-todo-summary">—</div>
           </div>
 
-          <details id="workflowTaskTableDetails" class="rounded-2xl border border-calm-line bg-white overflow-hidden" open>
-            <summary class="cursor-pointer select-none px-4 py-4 bg-calm-bg font-black flex items-center justify-between gap-3">
-              <span><i class="fa-solid fa-table-list text-dopamine-sky mr-2"></i>任务总表</span>
-              <span class="text-xs text-calm-mute">点击这里折叠 / 展开</span>
-            </summary>
-            <div id="workflowTaskTable" class="workflow-table-wrap min-w-0"></div>
-          </details>
+          <div id="workflowTaskTable" class="workflow-todo-list"></div>
         </div>
       </section>
 
@@ -753,7 +739,7 @@
           <div class="small-stat p-4 mb-4"><div class="font-black mb-3">沟通对象与状态</div><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><label><div class="text-sm font-bold mb-1">对象名称</div><input id="upwardPersonName" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="如：张老师 / Alice / 王总"></label><label><div class="text-sm font-bold mb-1">对象角色</div><select id="upwardPersonRole" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="advisor">导师 / PI</option><option value="manager">直属领导 / Manager</option><option value="boss">老板 / 负责人</option><option value="project_lead">项目负责人</option><option value="client">客户 / 合作方负责人</option><option value="other">其他上级 / 关键对象</option></select></label><label><div class="text-sm font-bold mb-1">组织 / 团队</div><input id="upwardOrganization" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="实验室 / 公司 / 项目组"></label><label><div class="text-sm font-bold mb-1">当前状态</div><select id="upwardStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="drafting">准备沟通</option><option value="reported">已汇报 / 已发送</option><option value="meeting">已沟通 / 已开会</option><option value="waiting">等待反馈</option><option value="blocked">需要主动推进</option></select></label><label><div class="text-sm font-bold mb-1">沟通方式</div><select id="upwardChannel" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="">未指定</option><option value="面谈">面谈</option><option value="邮件 / 微信">邮件 / 微信</option><option value="文稿批注">文稿批注</option><option value="会议">会议</option><option value="电话 / 视频">电话 / 视频</option><option value="其他">其他</option></select></label><label><div class="text-sm font-bold mb-1">沟通压力 / 清晰度</div><div class="grid grid-cols-2 gap-2"><select id="upwardPressure" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="1">压力 1</option><option value="2">压力 2</option><option value="3" selected>压力 3</option><option value="4">压力 4</option><option value="5">压力 5</option></select><select id="upwardClarity" class="px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="1">清晰 1</option><option value="2">清晰 2</option><option value="3" selected>清晰 3</option><option value="4">清晰 4</option><option value="5">清晰 5</option></select></div></label></div></div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label><div class="text-sm font-bold mb-1">这次沟通主题</div><textarea id="upwardTopic" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">我准备好的进展 / 证据</div><textarea id="upwardEvidence" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">我希望对方给的支持 / 决策</div><textarea id="upwardAsk" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">当前卡点 / 风险</div><textarea id="upwardRisk" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label class="md:col-span-2"><div class="text-sm font-bold mb-1">对方反馈 / 决策</div><textarea id="upwardFeedback" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label></div>
           <div class="small-stat p-4 mt-3"><div class="font-black mb-3">承诺与防忘管理</div><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label><div class="text-sm font-bold mb-1">对方说过的话 / 承诺 / 计划</div><textarea id="upwardCommitment" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label><div class="text-sm font-bold mb-1">我复述确认 / 会后纪要</div><textarea id="upwardConfirmation" rows="4" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3"><label><div class="text-sm font-bold mb-1">下次核对日期</div><input id="upwardFollowupDate" type="date" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></label><label><div class="text-sm font-bold mb-1">追踪状态</div><select id="upwardPromiseStatus" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"><option value="open">待核对</option><option value="confirmed">已确认待兑现</option><option value="remind">需再次提醒</option><option value="resolved">已落实</option></select></label></div></div>
-          <label class="block mt-3"><div class="text-sm font-bold mb-1">我要守住的边界 / 沟通策略</div><textarea id="upwardBoundary" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label class="block mt-3"><div class="text-sm font-bold mb-1">下一次跟进动作 / 时间</div><textarea id="upwardNextAction" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea><div class="text-xs text-calm-mute mt-1">保存后可自动沉淀到项目看板 / 任务总表。</div></label><button id="btnSaveUpward" class="mt-4 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">保存向上管理记录</button></div>
+          <label class="block mt-3"><div class="text-sm font-bold mb-1">我要守住的边界 / 沟通策略</div><textarea id="upwardBoundary" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea></label><label class="block mt-3"><div class="text-sm font-bold mb-1">下一次跟进动作 / 时间</div><textarea id="upwardNextAction" rows="3" class="w-full px-3 py-3 rounded-2xl border border-calm-line bg-white"></textarea><div class="text-xs text-calm-mute mt-1">保存后可自动沉淀到项目看板 / 任务清单。</div></label><button id="btnSaveUpward" class="mt-4 w-full px-4 py-3 rounded-2xl bg-dopamine-purple text-white font-black">保存向上管理记录</button></div>
           <div class="space-y-6"><div class="soft-card p-5"><div class="font-black text-lg mb-1">今日沟通面板</div><div id="upwardSummary" class="space-y-3 text-sm mt-3"></div></div><div class="soft-card p-5"><div class="font-black text-lg mb-1">待追踪承诺</div><div class="text-sm text-calm-mute mb-3">把口头计划、承诺与核对日期固定下来。</div><div id="upwardPromiseList" class="space-y-2"></div></div><div class="soft-card p-5"><div class="font-black text-lg mb-1">最近 7 天互动</div><div id="upwardHistoryList" class="space-y-2 mt-3"></div></div></div></div>
       </section>
 
@@ -831,7 +817,7 @@
                   <input id="reviewTomorrow2" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="Priority 2">
                   <input id="reviewTomorrow3" class="px-3 py-3 rounded-2xl border border-calm-line bg-white" placeholder="Priority 3">
                 </div>
-                <div class="text-xs text-calm-mute mt-2">保存复盘后会自动加入“任务总表”，截止日期设为明天；到第二天会出现在“今日执行”。</div>
+                <div class="text-xs text-calm-mute mt-2">保存复盘后会自动加入“任务清单”，截止日期设为明天；到第二天会出现在“今日执行”。</div>
               </div>
             </div>
 
@@ -994,34 +980,34 @@
     </div>
   </dialog>
 
-    <script src="./assets/js/core/constants.js?v=16.1.3"></script>
-  <script src="./assets/js/core/utils.js?v=16.1.3"></script>
-  <script src="./assets/js/core/preferences.js?v=16.1.3"></script>
-  <script src="./assets/js/core/normalizers.js?v=16.1.3"></script>
-  <script src="./assets/js/core/meta.js?v=16.1.3"></script>
-  <script src="./assets/js/core/state.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/profile.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/papers.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/research-ideas.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/experiments.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/home.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/tasks.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/focus-schedule.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/workflow.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/upward-management.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/review.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/submissions.js?v=16.1.3"></script>
-  <script src="./assets/js/services/travel-weather.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/travel.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/dashboard.js?v=16.1.3"></script>
-  <script src="./assets/js/modules/settings.js?v=16.1.3"></script>
-  <script src="./assets/js/ui/dialogs.js?v=16.1.3"></script>
-  <script src="./assets/js/app/render.js?v=16.1.3"></script>
-  <script src="./assets/js/app/runtime-bridge.js?v=16.1.3"></script>
-  <script src="./assets/js/app/bootstrap.js?v=16.1.3"></script>
+    <script src="./assets/js/core/constants.js?v=16.1.4"></script>
+  <script src="./assets/js/core/utils.js?v=16.1.4"></script>
+  <script src="./assets/js/core/preferences.js?v=16.1.4"></script>
+  <script src="./assets/js/core/normalizers.js?v=16.1.4"></script>
+  <script src="./assets/js/core/meta.js?v=16.1.4"></script>
+  <script src="./assets/js/core/state.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/profile.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/papers.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/research-ideas.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/experiments.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/home.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/tasks.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/focus-schedule.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/workflow.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/upward-management.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/review.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/submissions.js?v=16.1.4"></script>
+  <script src="./assets/js/services/travel-weather.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/travel.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/dashboard.js?v=16.1.4"></script>
+  <script src="./assets/js/modules/settings.js?v=16.1.4"></script>
+  <script src="./assets/js/ui/dialogs.js?v=16.1.4"></script>
+  <script src="./assets/js/app/render.js?v=16.1.4"></script>
+  <script src="./assets/js/app/runtime-bridge.js?v=16.1.4"></script>
+  <script src="./assets/js/app/bootstrap.js?v=16.1.4"></script>
 <!-- PERSONAL_WORKSPACE_SUPABASE_SYNC -->
-  <script src="./assets/js/config/supabase.config.js?v=16.1.3"></script>
+  <script src="./assets/js/config/supabase.config.js?v=16.1.4"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.3"></script>
+  <script src="./assets/js/cloud/supabase-sync.js?v=16.1.4"></script>
 </body>
 </html>
