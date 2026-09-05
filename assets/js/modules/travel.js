@@ -3,9 +3,11 @@
 
 const TRAVEL_UI_PLAN_KEY = `${STORAGE_KEY}__travel_selected_plan`;
 const TRAVEL_UI_VIEW_KEY = `${STORAGE_KEY}__travel_view`;
+const TRAVEL_NOTE_FILTER_KEY = `${STORAGE_KEY}__travel_note_filter`;
 const TRAVEL_VIEWS = ['overview','itinerary','prep','weather','stay','food','photo','notes','plans'];
 let travelSelectedPlanId = localStorage.getItem(TRAVEL_UI_PLAN_KEY) || '';
 let travelActiveView = TRAVEL_VIEWS.includes(localStorage.getItem(TRAVEL_UI_VIEW_KEY)) ? localStorage.getItem(TRAVEL_UI_VIEW_KEY) : 'overview';
+let travelNotePlanFilter = localStorage.getItem(TRAVEL_NOTE_FILTER_KEY) || '__all__';
 
 function travelCurrencyMeta(value='CNY'){return CURRENCY_OPTIONS.find(item=>item.value===value)||CURRENCY_OPTIONS[0];}
 function formatTravelMoney(amount,currency='CNY'){const meta=travelCurrencyMeta(currency);return `${meta.symbol}${Number(amount||0).toLocaleString(undefined,{maximumFractionDigits:2})}`;}
@@ -37,6 +39,7 @@ function travelOptionHtml(list,current=''){return list.map(v=>`<option value="${
 
 function renderTravelSummary(){
   const plans=state.travel?.plans||[], notes=state.travel?.notes||[];
+  const unassigned=notes.filter(item=>!item.planId).length;
   const upcoming=plans.filter(item=>item.startDate&&item.startDate>=todayStr()&&item.status!=='completed').length;
   const itinerary=(state.travel?.itinerary||[]).length, prep=(state.travel?.preparations||[]), prepDone=prep.filter(v=>v.done).length;
   const cards=[
@@ -44,7 +47,8 @@ function renderTravelSummary(){
     {label:'未来行程',value:upcoming,color:'text-dopamine-orange'},
     {label:'行程安排',value:itinerary,color:'text-dopamine-purple'},
     {label:'准备完成',value:prep.length?`${prepDone}/${prep.length}`:'0/0',color:'text-dopamine-mint'},
-    {label:'旅行碎片',value:notes.length,color:'text-dopamine-pink'}
+    {label:'旅行碎片',value:notes.length,color:'text-dopamine-pink'},
+    {label:'灵感收集箱',value:unassigned,color:'text-dopamine-orange'}
   ];
   $('travelSummary').innerHTML=cards.map(item=>`<div class="small-stat p-4"><div class="text-sm text-calm-mute">${item.label}</div><div class="text-2xl font-black mt-1 ${item.color}">${escapeHtml(String(item.value))}</div></div>`).join('');
 }
@@ -70,7 +74,7 @@ function renderTravelOverview(){
     $('travelOverviewHero').querySelector('[data-travel-go-plans]').onclick=()=>setTravelView('plans');return;
   }
   const status=travelStatusMeta(plan.status);const itinerary=travelItineraryForPlan(plan.id);const prep=travelPreparationsForPlan(plan.id);const stays=travelStaysForPlan(plan.id);const foods=travelFoodsForPlan(plan.id);const photos=travelPhotoSpotsForPlan(plan.id);const notes=(state.travel?.notes||[]).filter(v=>v.planId===plan.id);
-  const donePrep=prep.filter(v=>v.done).length;const bookedStay=stays.find(v=>v.status==='booked');const weather=state.travel?.weatherCache?.[plan.id];
+  const donePrep=prep.filter(v=>v.done).length;const bookedStay=stays.find(v=>v.status==='booked');const weather=state.travel?.weatherCache?.[plan.id];const unassignedNotes=(state.travel?.notes||[]).filter(v=>!v.planId);
   $('travelOverviewHero').innerHTML=`<div class="travel-overview-hero"><div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4"><div><div class="flex flex-wrap items-center gap-2"><h2 class="text-2xl font-black">${escapeHtml(plan.title)}</h2><span class="pill ${status.color}">${escapeHtml(status.label)}</span></div><div class="text-calm-mute mt-2">📍 ${escapeHtml(plan.destination||'目的地待定')} ${plan.startDate?` · 📅 ${escapeHtml(plan.startDate)}${plan.endDate?` → ${escapeHtml(plan.endDate)}`:''}`:''}</div>${plan.note?`<div class="text-sm leading-6 mt-3 max-w-3xl">${escapeHtml(plan.note)}</div>`:''}</div><div class="flex gap-2"><button class="px-3 py-2 rounded-xl bg-white border border-calm-line font-bold text-sm" data-overview-edit-plan>编辑计划</button><button class="px-3 py-2 rounded-xl bg-dopamine-sky text-white font-bold text-sm" data-overview-add-itinerary>添加行程</button></div></div></div>`;
   $('travelOverviewHero').querySelector('[data-overview-edit-plan]').onclick=()=>openTravelPlanEditor(plan.id);
   $('travelOverviewHero').querySelector('[data-overview-add-itinerary]').onclick=()=>setTravelView('itinerary');
@@ -83,6 +87,7 @@ function renderTravelOverview(){
   if(!prep.length)next.push('生成常用出行准备清单。');else if(donePrep<prep.length)next.push(`还有 ${prep.length-donePrep} 项出行准备未完成。`);
   if(!bookedStay)next.push(stays.length?'从住宿候选中确定并标记已预订。':'添加住宿候选并做对比。');
   if(!weather)next.push('刷新一次目的地天气，出发前再更新即可。');
+  if(unassignedNotes.length)next.push(`灵感收集箱还有 ${unassignedNotes.length} 条碎片未归入任何计划。`);
   $('travelOverviewNextSteps').innerHTML=(next.length?next:['当前核心准备已经比较完整，可以继续细化每天的节奏。']).map((text,i)=>`<div class="rounded-2xl border border-calm-line bg-white px-4 py-3 flex gap-3"><span class="w-7 h-7 rounded-full bg-pink-50 text-dopamine-pink grid place-items-center font-black shrink-0">${i+1}</span><div class="text-sm leading-6">${escapeHtml(text)}</div></div>`).join('');
   const grouped=travelGroupItineraryByDate(itinerary).slice(0,4);
   $('travelOverviewItinerary').innerHTML=grouped.length?grouped.map(group=>`<div class="travel-day-group"><div class="travel-day-head">${escapeHtml(dayLabel(group.date))}</div><div class="p-3 space-y-2">${group.items.slice(0,4).map(item=>{const cat=travelItineraryCategoryMeta(item.category);return`<div class="flex items-start gap-3 text-sm"><span>${cat.icon}</span><div class="min-w-0"><div class="font-bold">${escapeHtml(item.startTime||'时间待定')} · ${escapeHtml(item.title)}</div><div class="text-xs text-calm-mute mt-1">${escapeHtml(item.location||cat.label)}</div></div></div>`;}).join('')}</div></div>`).join(''):'<div class="text-sm text-calm-mute">还没有行程安排。</div>';
@@ -162,10 +167,94 @@ function addPhotoSpotToItinerary(id){const spot=(state.travel.photoSpots||[]).fi
 function renderTravelPhotoSpots(){const plan=ensureTravelSelectedPlan();const wrap=$('travelPhotoList');if(!plan){wrap.innerHTML='<div class="text-sm text-calm-mute">请先选择旅行计划。</div>';return;}if(!$('travelPhotoDate').value)$('travelPhotoDate').value=plan.startDate||'';const order={planned:0,want:1,shot:2,skip:3};const items=[...travelPhotoSpotsForPlan(plan.id)].sort((a,b)=>(a.plannedDate||'9999').localeCompare(b.plannedDate||'9999')||(order[a.status]??9)-(order[b.status]??9));wrap.innerHTML=items.map(item=>{const time=travelPhotoTimeMeta(item.bestTime),type=travelPhotoTypeMeta(item.shotType),st=travelPhotoStatusMeta(item.status),url=travelSafeUrl(item.url);return `<div class="travel-item-card"><div class="flex items-start justify-between gap-3"><div><div class="font-black">📷 ${escapeHtml(item.name)}</div><div class="text-xs text-calm-mute mt-1">${type.icon} ${escapeHtml(type.label)} · ${time.icon} ${escapeHtml(time.label)}${item.plannedDate?` · ${escapeHtml(item.plannedDate)}`:''}</div></div><span class="pill ${st.color}">${escapeHtml(st.label)}</span></div>${item.area?`<div class="text-sm mt-3">📍 ${escapeHtml(item.area)}</div>`:''}${item.shotIdeas?`<div class="text-sm mt-2"><b>想拍：</b>${escapeHtml(item.shotIdeas)}</div>`:''}${item.equipment?`<div class="text-sm text-calm-mute mt-2">器材：${escapeHtml(item.equipment)}</div>`:''}<div class="flex flex-wrap gap-3 mt-3">${item.status!=='shot'?`<button class="text-sm font-bold text-dopamine-sky" data-photo-itinerary="${item.id}">加入行程</button>`:''}${url?`<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="text-sm font-bold text-dopamine-purple">参考链接 ↗</a>`:''}<button class="text-sm font-bold text-dopamine-orange" data-photo-edit="${item.id}">修改</button></div></div>`;}).join('')||'<div class="text-sm text-calm-mute">还没有打卡拍照点。</div>';wrap.querySelectorAll('[data-photo-itinerary]').forEach(btn=>btn.onclick=()=>addPhotoSpotToItinerary(btn.dataset.photoItinerary));wrap.querySelectorAll('[data-photo-edit]').forEach(btn=>btn.onclick=()=>openTravelPhotoEditor(btn.dataset.photoEdit));}
 function openTravelPhotoEditor(id){const item=(state.travel.photoSpots||[]).find(v=>v.id===id);if(!item)return;openEditDialog({title:'修改打卡拍照点',fields:[{name:'name',label:'地点',value:item.name},{name:'area',label:'区域 / 机位备注',value:item.area},{name:'plannedDate',label:'计划日期',type:'date',value:item.plannedDate},{name:'bestTime',label:'最佳时间',type:'select',value:item.bestTime,options:TRAVEL_PHOTO_TIMES},{name:'shotType',label:'拍摄类型',type:'select',value:item.shotType,options:TRAVEL_PHOTO_TYPES},{name:'status',label:'状态',type:'select',value:item.status,options:TRAVEL_PHOTO_STATUSES},{name:'shotIdeas',label:'构图 / 动作 / 想拍内容',type:'textarea',value:item.shotIdeas},{name:'equipment',label:'建议器材',value:item.equipment},{name:'url',label:'参考链接',value:item.url},{name:'note',label:'备注',type:'textarea',value:item.note}],onSave:vals=>{Object.assign(item,normalizeTravelPhotoSpot({...item,...vals,updatedAt:nowDateTime()}));saveState();renderAll();},onDelete:()=>{state.travel.photoSpots=state.travel.photoSpots.filter(v=>v.id!==id);saveState();renderAll();}});}
 
-function addTravelNote(){const plan=ensureTravelSelectedPlan();const title=$('travelNoteTitle').value.trim(),content=$('travelNoteContent').value.trim(),url=$('travelNoteUrl').value.trim();if(!title&&!content&&!url){alert('至少写一点旅行想法、内容或链接。');return;}state.travel.notes.unshift(normalizeTravelNote({id:uid('tripnote'),planId:$('travelNotePlan').value||(plan?.id||''),type:$('travelNoteType').value,title,content,url,createdAt:nowDateTime(),updatedAt:nowDateTime()}));$('travelNoteTitle').value='';$('travelNoteContent').value='';$('travelNoteUrl').value='';saveState();renderAll();}
-function renderTravelNotes(){const plan=ensureTravelSelectedPlan();const planId=$('travelFilterPlan').value||(plan?.id||''),type=$('travelFilterType').value,query=$('travelNoteQuery').value.trim().toLowerCase();let notes=[...(state.travel?.notes||[])];notes=notes.filter(item=>(!planId||item.planId===planId)&&(!type||item.type===type)&&(!query||`${item.title} ${item.content} ${item.url}`.toLowerCase().includes(query)));$('travelNoteList').innerHTML=notes.map(item=>{const meta=travelNoteTypeMeta(item.type),p=travelPlanById(item.planId),url=travelSafeUrl(item.url);return `<div class="travel-note-card"><div class="flex items-start justify-between gap-3"><div class="min-w-0"><div class="font-black">${meta.icon} ${escapeHtml(item.title||meta.label)}</div><div class="text-xs text-calm-mute mt-1">${escapeHtml(meta.label)}${p?` · ${escapeHtml(p.title)}`:' · 未归属计划'}</div></div><button class="text-sm font-bold text-dopamine-orange" data-travel-note-edit="${item.id}">修改</button></div>${item.content?`<div class="text-sm leading-6 mt-3 whitespace-pre-wrap">${escapeHtml(item.content)}</div>`:''}${url?`<a class="inline-flex mt-3 text-sm font-bold text-dopamine-sky break-all" href="${escapeHtml(url)}" target="_blank" rel="noopener">打开链接 ↗</a>`:''}</div>`;}).join('')||'<div class="text-sm text-calm-mute">还没有旅行碎片。看到地点、酒店、餐馆、攻略时随手记下来即可。</div>';$('travelNoteList').querySelectorAll('[data-travel-note-edit]').forEach(btn=>btn.onclick=()=>openTravelNoteEditor(btn.dataset.travelNoteEdit));}
-function openTravelNoteEditor(id){const item=(state.travel?.notes||[]).find(v=>v.id===id);if(!item)return;openEditDialog({title:'修改旅行碎片',desc:travelPlanById(item.planId)?.title||'未归属计划',fields:[{name:'planId',label:'关联计划',type:'select',value:item.planId,options:[{value:'',label:'未归属计划'},...(state.travel?.plans||[]).map(v=>({value:v.id,label:v.title}))]},{name:'type',label:'类型',type:'select',value:item.type,options:TRAVEL_NOTE_TYPES},{name:'title',label:'标题',value:item.title},{name:'content',label:'内容',type:'textarea',value:item.content},{name:'url',label:'链接',value:item.url}],onSave:vals=>{Object.assign(item,normalizeTravelNote({...item,...vals,updatedAt:nowDateTime()}));saveState();renderAll();},onDelete:()=>{state.travel.notes=state.travel.notes.filter(v=>v.id!==id);saveState();renderAll();}});}
-function renderTravelFilters(){const plans=state.travel?.plans||[];const selected=ensureTravelSelectedPlan();const currentNote=$('travelNotePlan').value,currentFilter=$('travelFilterPlan').value;const opts=plans.map(item=>`<option value="${item.id}">${escapeHtml(item.title)}</option>`).join('');$('travelNotePlan').innerHTML='<option value="">不关联具体计划</option>'+opts;$('travelFilterPlan').innerHTML='<option value="">全部计划</option>'+opts;if(plans.some(v=>v.id===currentNote))$('travelNotePlan').value=currentNote;else if(selected)$('travelNotePlan').value=selected.id;if(plans.some(v=>v.id===currentFilter))$('travelFilterPlan').value=currentFilter;else if(selected)$('travelFilterPlan').value=selected.id;}
+function addTravelNote(){
+  const title=$('travelNoteTitle').value.trim(),content=$('travelNoteContent').value.trim(),url=$('travelNoteUrl').value.trim();
+  if(!title&&!content&&!url){alert('至少写一点旅行想法、内容或链接。');return;}
+  state.travel.notes.unshift(normalizeTravelNote({
+    id:uid('tripnote'),
+    // 空值就是“灵感收集箱”，不再偷偷回退到当前旅行计划。
+    planId:$('travelNotePlan').value||'',
+    type:$('travelNoteType').value,
+    title,content,url,
+    createdAt:nowDateTime(),updatedAt:nowDateTime()
+  }));
+  $('travelNoteTitle').value='';$('travelNoteContent').value='';$('travelNoteUrl').value='';
+  saveState();renderAll();
+}
+
+function travelNoteMatchesCommonFilters(item,type,query){
+  return (!type||item.type===type)&&(!query||`${item.title} ${item.content} ${item.url}`.toLowerCase().includes(query));
+}
+function travelNoteCardHtml(item,{compact=false}={}){
+  const meta=travelNoteTypeMeta(item.type),p=travelPlanById(item.planId),url=travelSafeUrl(item.url);
+  return `<div class="travel-note-card ${!item.planId?'travel-note-unassigned':''}">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <div class="font-black">${meta.icon} ${escapeHtml(item.title||meta.label)}</div>
+        <div class="text-xs text-calm-mute mt-1">${escapeHtml(meta.label)}${p?` · ${escapeHtml(p.title)}`:' · 📥 灵感收集箱'}</div>
+      </div>
+      <button class="text-sm font-bold text-dopamine-orange" data-travel-note-edit="${item.id}">修改</button>
+    </div>
+    ${item.content?`<div class="text-sm leading-6 mt-3 whitespace-pre-wrap${compact?' line-clamp-3':''}">${escapeHtml(item.content)}</div>`:''}
+    ${url?`<a class="inline-flex mt-3 text-sm font-bold text-dopamine-sky break-all" href="${escapeHtml(url)}" target="_blank" rel="noopener">打开链接 ↗</a>`:''}
+  </div>`;
+}
+function bindTravelNoteEditButtons(container){
+  if(!container)return;
+  container.querySelectorAll('[data-travel-note-edit]').forEach(btn=>btn.onclick=()=>openTravelNoteEditor(btn.dataset.travelNoteEdit));
+}
+function renderTravelInbox(){
+  const type=$('travelFilterType').value,query=$('travelNoteQuery').value.trim().toLowerCase();
+  const all=(state.travel?.notes||[]).filter(item=>!item.planId);
+  const visible=all.filter(item=>travelNoteMatchesCommonFilters(item,type,query));
+  if($('travelUnassignedCount'))$('travelUnassignedCount').textContent=`${all.length} 条`;
+  if($('travelInboxHint'))$('travelInboxHint').textContent=all.length
+    ? `这里专门放还没决定去哪一趟旅行的灵感。当前共有 ${all.length} 条，之后可在“修改”里归入任意计划。`
+    : '这里专门放还没决定归属哪次旅行的零碎灵感。';
+  const wrap=$('travelUnassignedNoteList');
+  if(!wrap)return;
+  wrap.innerHTML=visible.length
+    ? visible.slice(0,4).map(item=>travelNoteCardHtml(item,{compact:true})).join('')
+    : '<div class="text-sm text-calm-mute">当前没有符合筛选条件的未归属碎片。</div>';
+  bindTravelNoteEditButtons(wrap);
+}
+function renderTravelNotes(){
+  const plan=ensureTravelSelectedPlan();
+  const filter=travelNotePlanFilter||'__all__',type=$('travelFilterType').value,query=$('travelNoteQuery').value.trim().toLowerCase();
+  let notes=[...(state.travel?.notes||[])];
+  notes=notes.filter(item=>{
+    let planMatch=true;
+    if(filter==='__unassigned__')planMatch=!item.planId;
+    else if(filter==='__current__')planMatch=!!plan&&item.planId===plan.id;
+    else if(filter!=='__all__')planMatch=item.planId===filter;
+    return planMatch&&travelNoteMatchesCommonFilters(item,type,query);
+  });
+  const label=filter==='__all__'?'全部碎片':filter==='__unassigned__'?'灵感收集箱':filter==='__current__'?(plan?`当前计划 · ${plan.title}`:'当前计划'):travelPlanById(filter)?.title||'旅行碎片';
+  if($('travelNoteListTitle'))$('travelNoteListTitle').textContent=label;
+  $('travelNoteList').innerHTML=notes.map(item=>travelNoteCardHtml(item)).join('')||'<div class="text-sm text-calm-mute">当前筛选条件下没有旅行碎片。</div>';
+  bindTravelNoteEditButtons($('travelNoteList'));
+  renderTravelInbox();
+}
+function openTravelNoteEditor(id){const item=(state.travel?.notes||[]).find(v=>v.id===id);if(!item)return;openEditDialog({title:'修改旅行碎片',desc:travelPlanById(item.planId)?.title||'灵感收集箱',fields:[{name:'planId',label:'关联计划',type:'select',value:item.planId,options:[{value:'',label:'📥 灵感收集箱（未归属计划）'},...(state.travel?.plans||[]).map(v=>({value:v.id,label:v.title}))]},{name:'type',label:'类型',type:'select',value:item.type,options:TRAVEL_NOTE_TYPES},{name:'title',label:'标题',value:item.title},{name:'content',label:'内容',type:'textarea',value:item.content},{name:'url',label:'链接',value:item.url}],onSave:vals=>{Object.assign(item,normalizeTravelNote({...item,...vals,updatedAt:nowDateTime()}));saveState();renderAll();},onDelete:()=>{state.travel.notes=state.travel.notes.filter(v=>v.id!==id);saveState();renderAll();}});}
+function renderTravelFilters(){
+  const plans=state.travel?.plans||[];
+  const currentNote=$('travelNotePlan').value;
+  const opts=plans.map(item=>`<option value="${item.id}">${escapeHtml(item.title)}</option>`).join('');
+  // 快速记录默认进入“灵感收集箱”。除非用户已经明确选了一个仍存在的计划。
+  $('travelNotePlan').innerHTML='<option value="">📥 灵感收集箱（暂不归属计划）</option>'+opts;
+  $('travelNotePlan').value=plans.some(v=>v.id===currentNote)?currentNote:'';
+
+  const validFilters=new Set(['__all__','__unassigned__','__current__',...plans.map(v=>v.id)]);
+  if(!validFilters.has(travelNotePlanFilter))travelNotePlanFilter='__all__';
+  $('travelFilterPlan').innerHTML=[
+    '<option value="__all__">全部碎片</option>',
+    '<option value="__unassigned__">📥 未归属计划</option>',
+    '<option value="__current__">当前旅行计划</option>',
+    opts
+  ].join('');
+  $('travelFilterPlan').value=travelNotePlanFilter;
+}
+
 
 function renderTravel(){renderTravelSummary();renderTravelPlanSelector();renderTravelSubviewState();renderTravelFilters();renderTravelOverview();renderTravelItinerary();renderTravelPrep();renderTravelWeather();renderTravelStays();renderTravelFoods();renderTravelPhotoSpots();renderTravelNotes();renderTravelPlans();}
 
@@ -174,5 +263,5 @@ function bindTravelEvents(){
   $('travelActivePlanSelect').onchange=()=>setTravelSelectedPlan($('travelActivePlanSelect').value);
   $('btnTravelCreatePlanShortcut').onclick=()=>setTravelView('plans');
   $('btnAddTravelPlan').onclick=addTravelPlan;$('btnAddTravelItinerary').onclick=addTravelItinerary;$('btnSeedTravelPrep').onclick=seedTravelPreparation;$('btnAddTravelPrep').onclick=addTravelPrep;$('btnRefreshTravelWeather').onclick=refreshTravelWeather;$('btnAddTravelStay').onclick=addTravelStay;$('btnAddTravelFood').onclick=addTravelFood;$('btnAddTravelPhoto').onclick=addTravelPhotoSpot;$('btnAddTravelNote').onclick=addTravelNote;
-  $('travelFilterStatus').onchange=renderTravelPlans;$('travelFilterQuery').oninput=renderTravelPlans;$('travelFilterPlan').onchange=renderTravelNotes;$('travelFilterType').onchange=renderTravelNotes;$('travelNoteQuery').oninput=renderTravelNotes;
+  $('travelFilterStatus').onchange=renderTravelPlans;$('travelFilterQuery').oninput=renderTravelPlans;$('travelFilterPlan').onchange=()=>{travelNotePlanFilter=$('travelFilterPlan').value||'__all__';localStorage.setItem(TRAVEL_NOTE_FILTER_KEY,travelNotePlanFilter);renderTravelNotes();};$('travelFilterType').onchange=renderTravelNotes;$('travelNoteQuery').oninput=renderTravelNotes;if($('btnTravelShowUnassigned'))$('btnTravelShowUnassigned').onclick=()=>{travelNotePlanFilter='__unassigned__';localStorage.setItem(TRAVEL_NOTE_FILTER_KEY,travelNotePlanFilter);renderTravelFilters();renderTravelNotes();};if($('btnTravelShowAllNotes'))$('btnTravelShowAllNotes').onclick=()=>{travelNotePlanFilter='__all__';localStorage.setItem(TRAVEL_NOTE_FILTER_KEY,travelNotePlanFilter);renderTravelFilters();renderTravelNotes();};
 }

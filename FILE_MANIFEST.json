@@ -1,5 +1,5 @@
 {
-  "version": "16.1.5",
+  "version": "16.1.6",
   "files": [
     {
       "path": ".gitignore",
@@ -13,8 +13,8 @@
     },
     {
       "path": "ARCHITECTURE.md",
-      "size": 1725,
-      "sha256": "635112d7d4406c1c03064c1ecbdc0719fbb70fa3e8d98578d1b93de95be4dcc5"
+      "size": 2007,
+      "sha256": "5cc592b7114798242db9e4c70a0201df064f5a27c3b749872ecbef63a9912d98"
     },
     {
       "path": "CHANGELOG_v16.1.1.md",
@@ -42,6 +42,11 @@
       "sha256": "8a7bff558993bca855221d1a4f5ec70c352a696edefceb2d1475050340c20e21"
     },
     {
+      "path": "CHANGELOG_v16.1.6.md",
+      "size": 386,
+      "sha256": "4aeda9b8000fba020b21f9a61f638fb071e759bfcbb532c53d87e537272668cb"
+    },
+    {
       "path": "CHANGELOG_v16.1.md",
       "size": 741,
       "sha256": "5a77eb86cf4ae004ebb774820ab516bb5ae448bac7d2a633aca868981d0bd3d0"
@@ -58,8 +63,8 @@
     },
     {
       "path": "README.md",
-      "size": 4084,
-      "sha256": "4850f51c1fb864279734a95c500b955c3286c2d5e400347f3e84ffedf62ce804"
+      "size": 4456,
+      "sha256": "923ce9166ddb81a885f5461e0e301b122a61cb2f4c0fed2064b9f638f37b14ec"
     },
     {
       "path": "assets/css/base.css",
@@ -88,8 +93,8 @@
     },
     {
       "path": "assets/css/travel.css",
-      "size": 2807,
-      "sha256": "fa2a8a3b0520308c81ebbc23d12ddb04c0614537030994b7d2b631b9969fff75"
+      "size": 3120,
+      "sha256": "10003d1d26741f11c92a249e92cecb584ec36fe261ad300b53c9a61696c67d00"
     },
     {
       "path": "assets/css/workflow-projects.css",
@@ -218,8 +223,8 @@
     },
     {
       "path": "assets/js/modules/travel.js",
-      "size": 52093,
-      "sha256": "2e517f4526f7873819a8d0e26b08618491c6402ee7ead03af9ec55e40fe4a356"
+      "size": 55438,
+      "sha256": "8fa7c11f65b1b1fa525355988be9a7edb98d3d7708a8c44ccf53a37c70493654"
     },
     {
       "path": "assets/js/modules/upward-management.js",
@@ -243,8 +248,8 @@
     },
     {
       "path": "index.html",
-      "size": 114305,
-      "sha256": "5ccde5cdfb585da1dcce47a337e481ae00f15db93ee62d3e1b64fb1f9871cc86"
+      "size": 115617,
+      "sha256": "841ae7106f05903e4d2c5f4fd0fa7e4cc92017e6e6b6a6b5bdcbc78631673abd"
     },
     {
       "path": "supabase/setup.sql",

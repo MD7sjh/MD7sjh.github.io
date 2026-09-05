@@ -52,3 +52,8 @@ supabase/setup.sql
 
 ## v16.1.5 Workflow Project List UI
 `assets/js/modules/workflow.js` 继续拥有项目筛选与项目选择逻辑；`assets/css/workflow-projects.css` 只负责轻量项目列表的视觉与响应式布局。项目数据模型没有增加强制字段，仍沿用 `projects[]` 的 title / outcome / area / status / startDate / deadline / logs 等结构。
+
+
+## v16.1.6 Travel Fragment Inbox
+
+`travel.notes[*].planId` 允许为空。空值代表独立的旅行灵感收集箱，不属于任何具体旅行计划。`assets/js/modules/travel.js` 负责其展示、筛选与后续归档，数据结构和 Supabase JSONB 同步方式不变。
